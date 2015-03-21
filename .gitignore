@@ -59,3 +59,6 @@ target/
 
 # database
 *.sqlite
+
+# npm
+node_modules
