@@ -1,6 +1,5 @@
 from sqlalchemy import (
     Column,
-    Index,
     Integer,
     BigInteger,
     SmallInteger,
@@ -13,7 +12,6 @@ from sqlalchemy import (
 from sqlalchemy.orm import (
     relationship,
 )
-
 from passlib.context import CryptContext
 
 from phitime.db import (
