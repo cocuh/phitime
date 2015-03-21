@@ -14,6 +14,10 @@ from sqlalchemy.orm import (
 )
 from passlib.context import CryptContext
 
+from phitime.exceptions import (
+    ValidationException,
+)
+
 from phitime.db import (
     Base,
     DBSession,
@@ -95,8 +99,21 @@ class _PeriodTime(object):
 
     @staticmethod
     def _validate_times(hour, minute):
-        # TODO write here
-        pass
+        """
+        validate hour and minute in range 00:00-24:00
+        
+        :param hour: 00-24
+        :type hour: int
+        :param minute: 00-59
+        :type minute: int
+        :return:
+        """
+        if not (0 <= minute < 60):
+            raise ValidationException('minutes should be 0 <= MM < 60')
+        if not (0 <= hour <= 24):
+            raise ValidationException('minutes should be 0 <= HH <= 24')
+        if hour == 24 and minute != 0:
+            raise ValidationException('hour=24 only accepted 24:00; minute should be 0')
 
 
 class ProposedTime(_PeriodTime, Base):
