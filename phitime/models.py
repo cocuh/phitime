@@ -125,8 +125,8 @@ class ProposedTime(_PeriodTime, Base):
     event = relationship(Event)
 
 
-class FeasibleTime(_PeriodTime, Base):
-    __tablename__ = 'feasible_times'
+class AvailableTime(_PeriodTime, Base):
+    __tablename__ = 'available_times'
     query = DBSession.query_property()
     id = Column(Integer, primary_key=True)
 
