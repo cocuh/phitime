@@ -18,6 +18,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'passlib',
+    'six',
 ]
 
 setup(name='phitime',
