@@ -62,3 +62,6 @@ target/
 
 # npm
 node_modules
+
+#ini
+/secret.ini
