@@ -19,6 +19,7 @@ requires = [
     'waitress',
     'passlib',
     'six',
+    'rauth',
 ]
 
 setup(name='phitime',
