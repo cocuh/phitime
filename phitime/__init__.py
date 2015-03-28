@@ -8,7 +8,7 @@ from phitime.db import (
 
 
 required_plugins = [
-    'pyramid_chameleon',
+    'pyramid_jinja2',
 ]
 
 
