@@ -1,6 +1,6 @@
 (function () {
-  var TimeTable = function ($timetable) {
-    this.$timetable = $timetable;
+  var TimeTable = function () {
+    this.$timetable = document.getElementById('main');
     this.columnHeaderElements = [
       document.getElementById('column_header_mon'),
       document.getElementById('column_header_tue'),
@@ -29,8 +29,7 @@
   })(TimeTable.prototype);
 
   var onload = function () {
-    var $timetable = document.getElementById('main');
-    document.timetable = new TimeTable($timetable);
+    document.timetable = new TimeTable();
   };
   window.addEventListener('load', onload);
 })();
