@@ -1,38 +1,36 @@
 (function () {
-  var TimeTable = {};
-  TimeTable.$main = document.getElementById('main');
-  TimeTable.columnHeaderElements = [
-    document.getElementById('column_header_mon'),
-    document.getElementById('column_header_tue'),
-    document.getElementById('column_header_wed'),
-    document.getElementById('column_header_thr'),
-    document.getElementById('column_header_fri'),
-    document.getElementById('column_header_sat'),
-    document.getElementById('column_header_sun')
-  ];
-  TimeTable.initCallbacks = function () {
-    document.callbacks = {
-      refresh: TimeTable.refresh,
-      setColumnHeaderTexts: TimeTable.setColumnHeaderTexts
+  var TimeTable = function ($timetable) {
+    this.$timetable = $timetable;
+    this.columnHeaderElements = [
+      document.getElementById('column_header_mon'),
+      document.getElementById('column_header_tue'),
+      document.getElementById('column_header_wed'),
+      document.getElementById('column_header_thr'),
+      document.getElementById('column_header_fri'),
+      document.getElementById('column_header_sat'),
+      document.getElementById('column_header_sun')
+    ];
+  };
+  (function (proto) {
+    proto.refresh = function () {
+      // TODO: implement here
+      alert('refresh!');
     };
-  };
-  TimeTable.refresh = function () {
-    // TODO: implement here
-    alert('refresh!');
-  };
-  TimeTable.setColumnHeaderTexts = function (headerTexts) {
-    for (var idx = 0; idx < TimeTable.columnHeaderElements.length; idx++) {
-      var headerText = headerTexts[idx];
-      if (headerText !== undefined) {
-        var $elem = TimeTable.columnHeaderElements[idx];
-        var $textElem = $elem.getElementsByTagName('text')[0];
-        $textElem.textContent = headerText;
+    proto.setColumnHeaderTexts = function (headerTexts) {
+      for (var idx = 0; idx < this.columnHeaderElements.length; idx++) {
+        var headerText = headerTexts[idx];
+        if (headerText !== undefined) {
+          var $elem = this.columnHeaderElements[idx];
+          var $textElem = $elem.getElementsByTagName('text')[0];
+          $textElem.textContent = headerText;
+        }
       }
-    }
-  };
+    };
+  })(TimeTable.prototype);
 
   var onload = function () {
-    TimeTable.initCallbacks();
+    var $timetable = document.getElementById('main');
+    document.timetable = new TimeTable($timetable);
   };
   window.addEventListener('load', onload);
 })();
