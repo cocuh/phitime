@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- TODO REMOVE THIS FILE -->
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        object {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<object id="timetable" data="univ_tsukuba_timetable.svg" type="image/svg+xml" height="100%"
+        width="100%"></object>
+
+<script>
+    $timetable = null;
+    window.onload = function () {
+        $timetable = document.getElementById('timetable');
+        var $svg = $timetable.contentDocument;
+        console.log($svg);
+        $svg.callbacks.setColumnHeaderTexts(['a','i','u'])
+    }
+</script>
+<!-- TODO REMOVE THIS FILE -->
+</body>
+</html>
