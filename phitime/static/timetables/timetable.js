@@ -12,10 +12,10 @@
     ];
   };
   (function (proto) {
-    proto.refresh = function () {
-      // TODO: implement here
-      alert('refresh!');
-    };
+    /**
+     * set column header texts
+     * @param {Array<string>} headerTexts [monday, tuesday, ... , sunday]
+     */
     proto.setColumnHeaderTexts = function (headerTexts) {
       for (var idx = 0; idx < this.columnHeaderElements.length; idx++) {
         var headerText = headerTexts[idx];
