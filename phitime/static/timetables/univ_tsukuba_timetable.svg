@@ -39,20 +39,20 @@
         <use xlink:href="#lesson75m" y="435"/>
         <use xlink:href="#rest15m" y="510"/>
         <use xlink:href="#lesson75m" y="525"/>
-        <use xlink:href="#cell30m_even" y="600"/>
         <!--18-->
+        <use xlink:href="#cell30m_even" y="600"/>
         <use xlink:href="#cell30m_even" y="630"/>
-        <use xlink:href="#cell30m_odd" y="660"/>
         <!--19-->
+        <use xlink:href="#cell30m_odd" y="660"/>
         <use xlink:href="#cell30m_odd" y="690"/>
-        <use xlink:href="#cell30m_even" y="720"/>
         <!--20-->
+        <use xlink:href="#cell30m_even" y="720"/>
         <use xlink:href="#cell30m_even" y="750"/>
-        <use xlink:href="#cell30m_odd" y="780"/>
         <!--21-->
+        <use xlink:href="#cell30m_odd" y="780"/>
         <use xlink:href="#cell30m_odd" y="810"/>
-        <use xlink:href="#cell30m_even" y="840"/>
         <!--22-->
+        <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
     <g data-day="tue" transform="translate(80,0)">
@@ -68,20 +68,20 @@
         <use xlink:href="#lesson75m" y="435"/>
         <use xlink:href="#rest15m" y="510"/>
         <use xlink:href="#lesson75m" y="525"/>
-        <use xlink:href="#cell30m_even" y="600"/>
         <!--18-->
+        <use xlink:href="#cell30m_even" y="600"/>
         <use xlink:href="#cell30m_even" y="630"/>
-        <use xlink:href="#cell30m_odd" y="660"/>
         <!--19-->
+        <use xlink:href="#cell30m_odd" y="660"/>
         <use xlink:href="#cell30m_odd" y="690"/>
-        <use xlink:href="#cell30m_even" y="720"/>
         <!--20-->
+        <use xlink:href="#cell30m_even" y="720"/>
         <use xlink:href="#cell30m_even" y="750"/>
-        <use xlink:href="#cell30m_odd" y="780"/>
         <!--21-->
+        <use xlink:href="#cell30m_odd" y="780"/>
         <use xlink:href="#cell30m_odd" y="810"/>
-        <use xlink:href="#cell30m_even" y="840"/>
         <!--22-->
+        <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
     <g data-day="wed" transform="translate(160,0)">
@@ -97,20 +97,20 @@
         <use xlink:href="#lesson75m" y="435"/>
         <use xlink:href="#rest15m" y="510"/>
         <use xlink:href="#lesson75m" y="525"/>
-        <use xlink:href="#cell30m_even" y="600"/>
         <!--18-->
+        <use xlink:href="#cell30m_even" y="600"/>
         <use xlink:href="#cell30m_even" y="630"/>
-        <use xlink:href="#cell30m_odd" y="660"/>
         <!--19-->
+        <use xlink:href="#cell30m_odd" y="660"/>
         <use xlink:href="#cell30m_odd" y="690"/>
-        <use xlink:href="#cell30m_even" y="720"/>
         <!--20-->
+        <use xlink:href="#cell30m_even" y="720"/>
         <use xlink:href="#cell30m_even" y="750"/>
-        <use xlink:href="#cell30m_odd" y="780"/>
         <!--21-->
+        <use xlink:href="#cell30m_odd" y="780"/>
         <use xlink:href="#cell30m_odd" y="810"/>
-        <use xlink:href="#cell30m_even" y="840"/>
         <!--22-->
+        <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
     <g data-day="tue" transform="translate(240,0)">
@@ -126,20 +126,20 @@
         <use xlink:href="#lesson75m" y="435"/>
         <use xlink:href="#rest15m" y="510"/>
         <use xlink:href="#lesson75m" y="525"/>
-        <use xlink:href="#cell30m_even" y="600"/>
         <!--18-->
+        <use xlink:href="#cell30m_even" y="600"/>
         <use xlink:href="#cell30m_even" y="630"/>
-        <use xlink:href="#cell30m_odd" y="660"/>
         <!--19-->
+        <use xlink:href="#cell30m_odd" y="660"/>
         <use xlink:href="#cell30m_odd" y="690"/>
-        <use xlink:href="#cell30m_even" y="720"/>
         <!--20-->
+        <use xlink:href="#cell30m_even" y="720"/>
         <use xlink:href="#cell30m_even" y="750"/>
-        <use xlink:href="#cell30m_odd" y="780"/>
         <!--21-->
+        <use xlink:href="#cell30m_odd" y="780"/>
         <use xlink:href="#cell30m_odd" y="810"/>
-        <use xlink:href="#cell30m_even" y="840"/>
         <!--22-->
+        <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
     <g data-day="fri" transform="translate(320,0)">
@@ -155,114 +155,114 @@
         <use xlink:href="#lesson75m" y="435"/>
         <use xlink:href="#rest15m" y="510"/>
         <use xlink:href="#lesson75m" y="525"/>
-        <use xlink:href="#cell30m_even" y="600"/>
         <!--18-->
+        <use xlink:href="#cell30m_even" y="600"/>
         <use xlink:href="#cell30m_even" y="630"/>
-        <use xlink:href="#cell30m_odd" y="660"/>
         <!--19-->
+        <use xlink:href="#cell30m_odd" y="660"/>
         <use xlink:href="#cell30m_odd" y="690"/>
-        <use xlink:href="#cell30m_even" y="720"/>
         <!--20-->
+        <use xlink:href="#cell30m_even" y="720"/>
         <use xlink:href="#cell30m_even" y="750"/>
-        <use xlink:href="#cell30m_odd" y="780"/>
         <!--21-->
+        <use xlink:href="#cell30m_odd" y="780"/>
         <use xlink:href="#cell30m_odd" y="810"/>
-        <use xlink:href="#cell30m_even" y="840"/>
         <!--22-->
+        <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
     <g data-day="mon" transform="translate(400,0)">
-        <use xlink:href="#cell30m_even" y="0"/>
         <!--8-->
+        <use xlink:href="#cell30m_even" y="0"/>
         <use xlink:href="#cell30m_even" y="30"/>
-        <use xlink:href="#cell30m_odd" y="60"/>
         <!--9-->
+        <use xlink:href="#cell30m_odd" y="60"/>
         <use xlink:href="#cell30m_odd" y="90"/>
-        <use xlink:href="#cell30m_even" y="120"/>
         <!--10-->
+        <use xlink:href="#cell30m_even" y="120"/>
         <use xlink:href="#cell30m_even" y="150"/>
-        <use xlink:href="#cell30m_odd" y="180"/>
         <!--11-->
+        <use xlink:href="#cell30m_odd" y="180"/>
         <use xlink:href="#cell30m_odd" y="210"/>
-        <use xlink:href="#cell30m_even" y="240"/>
         <!--12-->
+        <use xlink:href="#cell30m_even" y="240"/>
         <use xlink:href="#cell30m_even" y="270"/>
-        <use xlink:href="#cell30m_odd" y="300"/>
         <!--13-->
+        <use xlink:href="#cell30m_odd" y="300"/>
         <use xlink:href="#cell30m_odd" y="330"/>
-        <use xlink:href="#cell30m_even" y="360"/>
         <!--14-->
+        <use xlink:href="#cell30m_even" y="360"/>
         <use xlink:href="#cell30m_even" y="390"/>
-        <use xlink:href="#cell30m_odd" y="420"/>
         <!--15-->
+        <use xlink:href="#cell30m_odd" y="420"/>
         <use xlink:href="#cell30m_odd" y="450"/>
-        <use xlink:href="#cell30m_even" y="480"/>
         <!--16-->
+        <use xlink:href="#cell30m_even" y="480"/>
         <use xlink:href="#cell30m_even" y="510"/>
-        <use xlink:href="#cell30m_odd" y="540"/>
         <!--17-->
+        <use xlink:href="#cell30m_odd" y="540"/>
         <use xlink:href="#cell30m_odd" y="570"/>
-        <use xlink:href="#cell30m_even" y="600"/>
         <!--18-->
+        <use xlink:href="#cell30m_even" y="600"/>
         <use xlink:href="#cell30m_even" y="630"/>
-        <use xlink:href="#cell30m_odd" y="660"/>
         <!--19-->
+        <use xlink:href="#cell30m_odd" y="660"/>
         <use xlink:href="#cell30m_odd" y="690"/>
-        <use xlink:href="#cell30m_even" y="720"/>
         <!--20-->
+        <use xlink:href="#cell30m_even" y="720"/>
         <use xlink:href="#cell30m_even" y="750"/>
-        <use xlink:href="#cell30m_odd" y="780"/>
         <!--21-->
+        <use xlink:href="#cell30m_odd" y="780"/>
         <use xlink:href="#cell30m_odd" y="810"/>
-        <use xlink:href="#cell30m_even" y="840"/>
         <!--22-->
+        <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
     <g data-day="mon" transform="translate(480,0)">
-        <use xlink:href="#cell30m_even" y="0"/>
         <!--8-->
+        <use xlink:href="#cell30m_even" y="0"/>
         <use xlink:href="#cell30m_even" y="30"/>
-        <use xlink:href="#cell30m_odd" y="60"/>
         <!--9-->
+        <use xlink:href="#cell30m_odd" y="60"/>
         <use xlink:href="#cell30m_odd" y="90"/>
-        <use xlink:href="#cell30m_even" y="120"/>
         <!--10-->
+        <use xlink:href="#cell30m_even" y="120"/>
         <use xlink:href="#cell30m_even" y="150"/>
-        <use xlink:href="#cell30m_odd" y="180"/>
         <!--11-->
+        <use xlink:href="#cell30m_odd" y="180"/>
         <use xlink:href="#cell30m_odd" y="210"/>
-        <use xlink:href="#cell30m_even" y="240"/>
         <!--12-->
+        <use xlink:href="#cell30m_even" y="240"/>
         <use xlink:href="#cell30m_even" y="270"/>
-        <use xlink:href="#cell30m_odd" y="300"/>
         <!--13-->
+        <use xlink:href="#cell30m_odd" y="300"/>
         <use xlink:href="#cell30m_odd" y="330"/>
-        <use xlink:href="#cell30m_even" y="360"/>
         <!--14-->
+        <use xlink:href="#cell30m_even" y="360"/>
         <use xlink:href="#cell30m_even" y="390"/>
-        <use xlink:href="#cell30m_odd" y="420"/>
         <!--15-->
+        <use xlink:href="#cell30m_odd" y="420"/>
         <use xlink:href="#cell30m_odd" y="450"/>
-        <use xlink:href="#cell30m_even" y="480"/>
         <!--16-->
+        <use xlink:href="#cell30m_even" y="480"/>
         <use xlink:href="#cell30m_even" y="510"/>
-        <use xlink:href="#cell30m_odd" y="540"/>
         <!--17-->
+        <use xlink:href="#cell30m_odd" y="540"/>
         <use xlink:href="#cell30m_odd" y="570"/>
-        <use xlink:href="#cell30m_even" y="600"/>
         <!--18-->
+        <use xlink:href="#cell30m_even" y="600"/>
         <use xlink:href="#cell30m_even" y="630"/>
-        <use xlink:href="#cell30m_odd" y="660"/>
         <!--19-->
+        <use xlink:href="#cell30m_odd" y="660"/>
         <use xlink:href="#cell30m_odd" y="690"/>
-        <use xlink:href="#cell30m_even" y="720"/>
         <!--20-->
+        <use xlink:href="#cell30m_even" y="720"/>
         <use xlink:href="#cell30m_even" y="750"/>
-        <use xlink:href="#cell30m_odd" y="780"/>
         <!--21-->
+        <use xlink:href="#cell30m_odd" y="780"/>
         <use xlink:href="#cell30m_odd" y="810"/>
-        <use xlink:href="#cell30m_even" y="840"/>
         <!--22-->
+        <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
 </svg>
