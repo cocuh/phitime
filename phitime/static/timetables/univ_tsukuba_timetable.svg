@@ -171,7 +171,7 @@
         <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
-    <g data-day="mon" transform="translate(400,0)">
+    <g data-day="sat" transform="translate(400,0)">
         <!--8-->
         <use xlink:href="#cell30m_even" y="0"/>
         <use xlink:href="#cell30m_even" y="30"/>
@@ -218,7 +218,7 @@
         <use xlink:href="#cell30m_even" y="840"/>
         <use xlink:href="#cell30m_even" y="870"/>
     </g>
-    <g data-day="mon" transform="translate(480,0)">
+    <g data-day="sun" transform="translate(480,0)">
         <!--8-->
         <use xlink:href="#cell30m_even" y="0"/>
         <use xlink:href="#cell30m_even" y="30"/>
