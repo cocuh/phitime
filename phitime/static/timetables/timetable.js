@@ -13,14 +13,14 @@
   TimeTable.initCallbacks = function () {
     document.callbacks = {
       refresh: TimeTable.refresh,
-      setColumnHeaders: TimeTable.setColumnHeaders
+      setColumnHeaderTexts: TimeTable.setColumnHeaderTexts
     };
   };
   TimeTable.refresh = function () {
     // TODO: implement here
     alert('refresh!');
   };
-  TimeTable.setColumnHeaders = function (headerTexts) {
+  TimeTable.setColumnHeaderTexts = function (headerTexts) {
     for (var idx = 0; idx < TimeTable.columnHeaderElements.length; idx++) {
       var headerText = headerTexts[idx];
       if (headerText !== undefined) {
