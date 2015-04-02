@@ -3,7 +3,6 @@
 <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        data-start="800"
         >
     <defs>
         <g id="lesson75m" class="cell lesson">
@@ -27,9 +26,17 @@
         <g id="cell30m_odd" class="cell cell_odd">
             <rect width="80" height="30"/>
         </g>
+        
+        <g id="header_column_mon" class="header">
+            <rect width="80" height="30"/>
+        </g>
     </defs>
-    <g id="main">
-        <g data-day="mon" transform="translate(0,0)">
+    <g id="main" data-start="800">
+        <g data-day="mon" transform="translate(0,30)">
+            <g class="column_header" transform="translate(0,-30)">
+                <rect width="80" height="30"/>
+                <text x="40" y="15">mon</text>
+            </g>
             <use xlink:href="#rest40m"/>
             <use xlink:href="#lesson75m" y="40"/>
             <use xlink:href="#rest15m" y="115"/>
@@ -58,7 +65,11 @@
             <use xlink:href="#cell30m_even" y="840"/>
             <use xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="tue" transform="translate(80,0)">
+        <g data-day="tue" transform="translate(80,30)">
+            <g class="column_header" transform="translate(0,-30)">
+                <rect width="80" height="30"/>
+                <text x="40" y="15">tue</text>
+            </g>
             <use xlink:href="#rest40m"/>
             <use xlink:href="#lesson75m" y="40"/>
             <use xlink:href="#rest15m" y="115"/>
@@ -87,7 +98,11 @@
             <use xlink:href="#cell30m_even" y="840"/>
             <use xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="wed" transform="translate(160,0)">
+        <g data-day="wed" transform="translate(160,30)">
+            <g class="column_header" transform="translate(0,-30)">
+                <rect width="80" height="30"/>
+                <text x="40" y="15">wed</text>
+            </g>
             <use xlink:href="#rest40m"/>
             <use xlink:href="#lesson75m" y="40"/>
             <use xlink:href="#rest15m" y="115"/>
@@ -116,7 +131,11 @@
             <use xlink:href="#cell30m_even" y="840"/>
             <use xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="tue" transform="translate(240,0)">
+        <g data-day="thu" transform="translate(240,30)">
+            <g class="column_header" transform="translate(0,-30)">
+                <rect width="80" height="30"/>
+                <text x="40" y="15">thu</text>
+            </g>
             <use xlink:href="#rest40m"/>
             <use xlink:href="#lesson75m" y="40"/>
             <use xlink:href="#rest15m" y="115"/>
@@ -145,7 +164,11 @@
             <use xlink:href="#cell30m_even" y="840"/>
             <use xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="fri" transform="translate(320,0)">
+        <g data-day="fri" transform="translate(320,30)">
+            <g class="column_header" transform="translate(0,-30)">
+                <rect width="80" height="30"/>
+                <text x="40" y="15">fri</text>
+            </g>
             <use xlink:href="#rest40m"/>
             <use xlink:href="#lesson75m" y="40"/>
             <use xlink:href="#rest15m" y="115"/>
@@ -174,7 +197,11 @@
             <use xlink:href="#cell30m_even" y="840"/>
             <use xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="sat" transform="translate(400,0)">
+        <g data-day="sat" transform="translate(400,30)">
+            <g class="column_header" transform="translate(0,-30)">
+                <rect width="80" height="30"/>
+                <text x="40" y="15">sat</text>
+            </g>
             <!--8-->
             <use xlink:href="#cell30m_even" y="0"/>
             <use xlink:href="#cell30m_even" y="30"/>
@@ -221,7 +248,11 @@
             <use xlink:href="#cell30m_even" y="840"/>
             <use xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="sun" transform="translate(480,0)">
+        <g data-day="sun" transform="translate(480,30)">
+            <g class="column_header" transform="translate(0,-30)">
+                <rect width="80" height="30"/>
+                <text x="40" y="15">sun</text>
+            </g>
             <!--8-->
             <use xlink:href="#cell30m_even" y="0"/>
             <use xlink:href="#cell30m_even" y="30"/>
@@ -269,4 +300,5 @@
             <use xlink:href="#cell30m_even" y="870"/>
         </g>
     </g>
+    <script xlink:href="timetable.js" type="application/javascript"/>
 </svg>

@@ -9,3 +9,13 @@
 .cell_odd rect {
   fill: pink;
 }
+.column_header rect {
+  fill: pink;
+  stroke: #000;
+  stroke-width: 0.3;
+}
+.column_header text {
+  fill: red;
+  dominant-baseline: central;
+  text-anchor: middle;
+}
