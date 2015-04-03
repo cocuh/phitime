@@ -10,6 +10,18 @@
       document.getElementById('column_header_sat'),
       document.getElementById('column_header_sun')
     ];
+    this.isEditable = false;
+    this.status = {
+      start: {
+        col: null,
+        row: null
+      },
+      end: {
+        col: null,
+        row: null
+      },
+      isSelecting: false
+    };
   };
   (function (proto) {
     /**
