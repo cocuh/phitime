@@ -102,7 +102,7 @@
         </g>
     </g>
     <g id="main" data-start="800">
-        <g data-day="mon" transform="translate(0,0)">
+        <g id="column_mon" data-day="mon" transform="translate(0,0)">
             <g id="column_header_mon" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">mon</text>
@@ -135,7 +135,7 @@
             <use class="cell" xlink:href="#cell30m_even" y="840"/>
             <use class="cell" xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="tue" transform="translate(80,0)">
+        <g id="column_tue" data-day="tue" transform="translate(80,0)">
             <g id="column_header_tue" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">tue</text>
@@ -168,7 +168,7 @@
             <use class="cell" xlink:href="#cell30m_even" y="840"/>
             <use class="cell" xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="wed" transform="translate(160,0)">
+        <g id="column_wed" data-day="wed" transform="translate(160,0)">
             <g id="column_header_wed" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">wed</text>
@@ -201,7 +201,7 @@
             <use class="cell" xlink:href="#cell30m_even" y="840"/>
             <use class="cell" xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="thr" transform="translate(240,0)">
+        <g id="column_thr" data-day="thr" transform="translate(240,0)">
             <g id="column_header_thr" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">thr</text>
@@ -234,7 +234,7 @@
             <use class="cell" xlink:href="#cell30m_even" y="840"/>
             <use class="cell" xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="fri" transform="translate(320,0)">
+        <g id="column_fri" data-day="fri" transform="translate(320,0)">
             <g id="column_header_fri" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">fri</text>
@@ -267,7 +267,7 @@
             <use class="cell" xlink:href="#cell30m_even" y="840"/>
             <use class="cell" xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="sat" transform="translate(400,0)">
+        <g id="column_sat" data-day="sat" transform="translate(400,0)">
             <g id="column_header_sat" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">sat</text>
@@ -318,7 +318,7 @@
             <use class="cell" xlink:href="#cell30m_even" y="840"/>
             <use class="cell" xlink:href="#cell30m_even" y="870"/>
         </g>
-        <g data-day="sun" transform="translate(480,0)">
+        <g id="column_sun" data-day="sun" transform="translate(480,0)">
             <g id="column_header_sun" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">sun</text>
