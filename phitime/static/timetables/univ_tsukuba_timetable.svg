@@ -10,25 +10,25 @@
     <!-- height = 900 + columnHeader.height-->
     <!-- width = 80px * 7day + rowHeaderWidth.height-->
     <defs>
-        <g id="lesson75m" class="cell lesson">
+        <g id="lesson75m" class="the-cell lesson">
             <rect width="80" height="75"/>
         </g>
-        <g id="lesson75m" class="cell lesson">
+        <g id="lesson75m" class="the-cell lesson">
             <rect width="80" height="75"/>
         </g>
-        <g id="rest40m" class="cell break">
+        <g id="rest40m" class="the-cell break">
             <rect width="80" height="40"/>
         </g>
-        <g id="rest15m" class="cell break">
+        <g id="rest15m" class="the-cell break">
             <rect width="80" height="15"/>
         </g>
-        <g id="rest50m" class="cell break">
+        <g id="rest50m" class="the-cell break">
             <rect width="80" height="50"/>
         </g>
-        <g id="cell30m_even" class="cell even">
+        <g id="cell30m_even" class="the-cell even">
             <rect width="80" height="30"/>
         </g>
-        <g id="cell30m_odd" class="cell odd">
+        <g id="cell30m_odd" class="the-cell odd">
             <rect width="80" height="30"/>
         </g>
 
