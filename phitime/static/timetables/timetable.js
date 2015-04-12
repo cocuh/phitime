@@ -45,6 +45,7 @@
       },
       isSelecting: false
     };
+    this._initCellData();
     this._initEventHandler();
   };
   (function (proto) {
@@ -79,6 +80,7 @@
         var cellArray = $oneDay.getElementsByClassName(this.classes.cell);
         for (var cellIdx = 0; cellIdx < cellArray.length; cellIdx++) {
           var $cell = cellArray[cellIdx];
+          $cell.dataset.day = dayIdx;
         }
       }
     };
@@ -134,7 +136,8 @@
       for (var cellIdx = 0; cellIdx < this.cells.length; cellIdx++) {
         var $cell = this.cells[cellIdx];
         if (this._isInSelecting($cell)) {
-          this._toggleClass($cell, className, toggle);
+          this._addClass($cell, 'youjo');
+//          this._toggleClass($cell, className, toggle);
         }
       }
     };
@@ -150,7 +153,7 @@
     };
     proto._addClass = function ($elem, className) {
       if (!this._hasClass($elem, className)) {
-        $elem.className = $elem.className + ' ' + className;
+        $elem.className += ' ' + className;
       }
     };
     proto._removeClass = function ($elem, className) {
@@ -165,12 +168,32 @@
      * @return {boolean} is the cell selecting
      */
     proto._isInSelecting = function ($cell) {
-      // TODO implement here
-      minDay = Math.min(this.status.start.day, this.status.end.day);
-      maxDay = Math.max(this.status.start.day, this.status.end.day);
+      var minDay = Math.min(this.status.start.day, this.status.end.day);
+      var maxDay = Math.max(this.status.start.day, this.status.end.day);
+      var theDay = $cell.dataset.day;
+
+      if (theDay < minDay || maxDay < theDay) {
+        return false;
+      }
+      // else
+      // minDay <= theDay <= maxDay
+
+      console.log("youjo");
+      return true;
+      
+      var minY = Math.min(this.status.start.minY, this.status.end.minY);
+      var maxY = Math.min(this.status.start.maxY, this.status.end.maxY);
+      var theY = $cell.getAttribute('y');
+      var height = $cell.getAttribute('height');
+
+      if (theY < minY || maxY < theY) {
+        return false;
+      } else if (minY <= theY && theY + height <= maxY) {
+        return true;
+      }
+      return false;
     }
-  })
-  (TimeTable.prototype);
+  })(TimeTable.prototype);
 
   var onload = function () {
     document.timetable = new TimeTable();
