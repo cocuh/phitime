@@ -63,21 +63,37 @@
       }
     };
     // private method
-    proto._initEventHandler = function () {
+    proto._mapEachCell = function (func) {
       for (var dayIdx = 0; dayIdx < this.columnElements.length; dayIdx++) {
         var $oneDay = this.columnElements[dayIdx];
         var cellArray = $oneDay.getElementsByClassName(this.classes.cell);
         for (var cellIdx = 0; cellIdx < cellArray.length; cellIdx++) {
           var $cell = cellArray[cellIdx];
-          var minY = $cell.getAttribute('y');
-          var height = $cell.getBBox().height;
-          var eventHandler = this._genEventHandler(dayIdx, minY, height);
-          $cell.addEventListener('mousedown', eventHandler.mousedown);
-          $cell.addEventListener('mouseover', eventHandler.mouseover);
+          func($cell, cellIdx, $oneDay, dayIdx);
         }
       }
     };
-    proto._genEventHandler = function (dayIdx, minY, height) {
+    proto._initCellData = function () {
+      for (var dayIdx = 0; dayIdx < this.columnElements.length; dayIdx++) {
+        var $oneDay = this.columnElements[dayIdx];
+        var cellArray = $oneDay.getElementsByClassName(this.classes.cell);
+        for (var cellIdx = 0; cellIdx < cellArray.length; cellIdx++) {
+          var $cell = cellArray[cellIdx];
+        }
+      }
+    };
+    proto._initEventHandler = function () {
+      var self = this;
+      var initEventHandler = function ($cell, cellIdx, $oneDay, dayIdx) {
+        var minY = $cell.getAttribute('y');
+        var height = $cell.getBBox().height;
+        var eventHandler = self._genCellEventHandler(dayIdx, minY, height);
+        $cell.addEventListener('mousedown', eventHandler.mousedown);
+        $cell.addEventListener('mouseover', eventHandler.mouseover);
+      };
+      this._mapEachCell(initEventHandler);
+    };
+    proto._genCellEventHandler = function (dayIdx, minY, height) {
       var that = this;
       var status = this.status;
       var saveStatusStart = function () {
@@ -150,6 +166,8 @@
      */
     proto._isInSelecting = function ($cell) {
       // TODO implement here
+      minDay = Math.min(this.status.start.day, this.status.end.day);
+      maxDay = Math.max(this.status.start.day, this.status.end.day);
     }
   })
   (TimeTable.prototype);
