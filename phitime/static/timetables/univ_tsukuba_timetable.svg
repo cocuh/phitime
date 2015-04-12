@@ -31,10 +31,6 @@
         <g id="cell30m_odd" class="the-cell odd">
             <rect width="80" height="30"/>
         </g>
-
-        <g id="header_column_mon" class="header">
-            <rect width="80" height="30"/>
-        </g>
     </defs>
     <g id="row_headers" transform="translate(-30,0)">
         <g class="row_header" transform="translate(0,-30)">
