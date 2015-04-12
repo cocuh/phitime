@@ -1,4 +1,4 @@
-.cell rect {
+.the-cell rect {
   fill: transparent;
   stroke: #000;
   stroke-width: 0.3;
@@ -27,4 +27,7 @@
 }
 .odd rect {
   fill: pink;
+}
+.selecting {
+  fill: red;
 }
