@@ -6,7 +6,7 @@
         viewBox="-30 -30 590 930"
         >
     {% macro gen_cell(height, cell_y, class) -%}
-        <g class="the-cell {{ class }}" transform="translate(0, {{ cell_y }})">
+        <g class="cell {{ class }}" transform="translate(0, {{ cell_y }})">
             <rect width="80" height="{{ height }}"/>
         </g>
     {%- endmacro %}
