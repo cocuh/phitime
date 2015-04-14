@@ -57,3 +57,11 @@ class MemberView(object):
         pass
 
 
+class TimetableView(object):
+    def __init__(self, request):
+        self.request = request
+
+    @view_config(route_name='timetable.univ_tsukuba', renderer='templates/timetable/univ_tsukuba_timetable.jinja2')
+    def univ_tsukuba(self):
+        self.request.response.content_type='image/svg+xml'
+        return {}
