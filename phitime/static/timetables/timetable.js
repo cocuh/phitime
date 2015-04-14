@@ -28,7 +28,8 @@
     ];
     this.classes = {
       cell: 'cell',
-      selecting: 'selecting'
+      selecting: 'selecting',
+      active: 'active'
     };
     this.cells = document.getElementsByClassName(this.classes.cell);
     this.isEditable = false;
@@ -36,12 +37,14 @@
       start: {
         day: null,
         minY: null,
-        maxY: null
+        maxY: null,
+        $cell: null
       },
       end: {
         day: null,
         minY: null,
-        maxY: null
+        maxY: null,
+        $cell: null
       },
       isSelecting: false
     };
@@ -89,27 +92,38 @@
       var initEventHandler = function ($cell, cellIdx, $oneDay, dayIdx) {
         var minY = parseInt($cell.getAttribute('data-y'));
         var height = parseInt($cell.getAttribute('data-height'));
-        var eventHandler = self._genCellEventHandler(dayIdx, minY, height);
+        var eventHandler = self._genCellEventHandler(dayIdx, minY, height, $cell);
         $cell.addEventListener('mousedown', eventHandler.mousedown);
         $cell.addEventListener('mouseover', eventHandler.mouseover);
       };
       this._mapEachCell(initEventHandler);
+      document.addEventListener('mouseup', this._genMouseUpHandler());
     };
-    proto._genCellEventHandler = function (dayIdx, minY, height) {
-      var that = this;
+    proto._genMouseUpHandler = function () {
+      var self = this;
+      return function () {
+        var isActive = self._hasClass(self.status.start.$cell, self.classes.active);
+        self._toggleSelectingCellClass(self.classes.active, !isActive);
+        self._toggleSelectingCellClass(self.classes.selecting, false);
+      }
+    };
+    proto._genCellEventHandler = function (dayIdx, minY, height, $cell) {
+      var self = this;
       var status = this.status;
       var saveStatusStart = function () {
         status.start.day = dayIdx;
         status.start.minY = minY;
         status.start.maxY = minY + height;
+        status.start.$cell = $cell;
       };
       var saveStatusEnd = function () {
         status.end.day = dayIdx;
         status.end.minY = minY;
         status.end.maxY = minY + height;
+        status.end.$cell = $cell;
       };
       var redrawSelecting = function () {
-        that._toggleSelectingCellClass(that.classes.selecting, true);
+        self._toggleSelectingCellClass(self.classes.selecting, true);
       };
       return {
         mousedown: function (event) {
@@ -120,7 +134,7 @@
           event.preventDefault();
         },
         mouseover: function (event) {
-          that._clearSelectingCells();
+          self._clearSelectingCells();
           if (status.isSelecting && event.buttons != 0 && event.which % 2 != 0) {
             saveStatusEnd();
             redrawSelecting();

@@ -28,6 +28,9 @@
 .odd rect {
   fill: pink;
 }
+.active rect {
+  fill: cyan !important;
+}
 .selecting rect {
   fill: red !important;
 }
