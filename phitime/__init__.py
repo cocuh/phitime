@@ -47,6 +47,7 @@ def main(global_config, **settings):
     config.add_route('event.edit', '/event/{scrambled_event_id}/edit')
     config.add_route('member.edit', '/event/{scrambled_event_id}/{member_position}/edit')
     config.add_route('timetable.univ_tsukuba', '/timetable/univ_tsukuba.svg')
+    config.add_route('timetable.half_hourly', '/timetable/half_hourly.svg')
 
     config.scan()
     return config.make_wsgi_app()
