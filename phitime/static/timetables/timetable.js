@@ -66,6 +66,18 @@
         }
       }
     };
+    // TODO: jsdoc
+    proto.getActivePeriods = function(){
+      var activeCells = [];
+      for(var idx=0;idx<this.cells.length;idx++){
+        var $cell = this.cells[idx];
+        if(this._hasClass($cell, this.classes.active)){
+          activeCells.push($cell);
+        }
+      }
+      // TODO: implement serialize
+      return {};
+    };
     // private method
     proto._mapEachCell = function (func) {
       for (var dayIdx = 0; dayIdx < this.columnElements.length; dayIdx++) {
@@ -102,9 +114,19 @@
     proto._genMouseUpHandler = function () {
       var self = this;
       return function () {
-        var isActive = self._hasClass(self.status.start.$cell, self.classes.active);
-        self._toggleSelectingCellClass(self.classes.active, !isActive);
-        self._toggleSelectingCellClass(self.classes.selecting, false);
+        if (self.status.start.$cell && self.status.end.$cell) {
+          var isActive = self._hasClass(self.status.start.$cell, self.classes.active);
+          self._toggleSelectingCellClass(self.classes.active, !isActive);
+          self._toggleSelectingCellClass(self.classes.selecting, false);
+        }
+        self.status.start.day = 0;
+        self.status.start.minY = 0;
+        self.status.start.maxY = 0;
+        self.status.start.$cell = 0;
+        self.status.end.day = 0;
+        self.status.end.minY = 0;
+        self.status.end.maxY = 0;
+        self.status.end.$cell = 0;
       }
     };
     proto._genCellEventHandler = function (dayIdx, minY, height, $cell) {
