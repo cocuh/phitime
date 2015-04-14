@@ -28,6 +28,6 @@
 .odd rect {
   fill: pink;
 }
-.selecting {
-  fill: red;
+.selecting rect {
+  fill: red !important;
 }

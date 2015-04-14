@@ -87,8 +87,8 @@
     proto._initEventHandler = function () {
       var self = this;
       var initEventHandler = function ($cell, cellIdx, $oneDay, dayIdx) {
-        var minY = $cell.getAttribute('y');
-        var height = $cell.getBBox().height;
+        var minY = parseInt($cell.dataset.y);
+        var height = parseInt($cell.dataset.height);
         var eventHandler = self._genCellEventHandler(dayIdx, minY, height);
         $cell.addEventListener('mousedown', eventHandler.mousedown);
         $cell.addEventListener('mouseover', eventHandler.mouseover);
@@ -136,8 +136,7 @@
       for (var cellIdx = 0; cellIdx < this.cells.length; cellIdx++) {
         var $cell = this.cells[cellIdx];
         if (this._isInSelecting($cell)) {
-          this._addClass($cell, 'youjo');
-//          this._toggleClass($cell, className, toggle);
+          this._toggleClass($cell, className, toggle);
         }
       }
     };
@@ -153,14 +152,14 @@
     };
     proto._addClass = function ($elem, className) {
       if (!this._hasClass($elem, className)) {
-        $elem.className += ' ' + className;
+        $elem.classList.add(className);
       }
     };
     proto._removeClass = function ($elem, className) {
-      $elem.className = (' ' + $elem.className + ' ').replace(' ' + className + ' ', ' ').trim();
+      $elem.classList.remove(className);
     };
     proto._hasClass = function ($elem, className) {
-      return (' ' + $elem.className + ' ').indexOf(' ' + className + ' ') != -1;
+      return $elem.classList.contains(className);
     };
     /**
      * is the cell in selecting.
@@ -178,17 +177,12 @@
       // else
       // minDay <= theDay <= maxDay
 
-      console.log("youjo");
-      return true;
-      
       var minY = Math.min(this.status.start.minY, this.status.end.minY);
-      var maxY = Math.min(this.status.start.maxY, this.status.end.maxY);
-      var theY = $cell.getAttribute('y');
-      var height = $cell.getAttribute('height');
+      var maxY = Math.max(this.status.start.maxY, this.status.end.maxY);
+      var theY = parseInt($cell.dataset.y);
+      var height = parseInt($cell.dataset.height);
 
-      if (theY < minY || maxY < theY) {
-        return false;
-      } else if (minY <= theY && theY + height <= maxY) {
+      if (minY <= theY && theY + height <= maxY) {
         return true;
       }
       return false;
