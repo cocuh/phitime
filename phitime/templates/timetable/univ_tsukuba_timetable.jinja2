@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="/static/timetables/univ_tsukuba_timetable.css" ?>
+<?xml-stylesheet type="text/css" href="{{ 'phitime:static/timetables/univ_tsukuba_timetable.css'|static_path }}" ?>
 <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -231,5 +231,5 @@
             {{ gen_holiday() }}
         </g>
     </g>
-    <script xlink:href="timetable.js" type="application/javascript"/>
+    <script xlink:href="{{ 'phitime:static/timetables/timetable.js'|static_path }}" type="application/javascript"/>
 </svg>
