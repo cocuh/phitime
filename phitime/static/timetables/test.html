@@ -16,16 +16,19 @@
 </head>
 <body>
 
-<object id="timetable" data="/timetable/half_hourly.svg" type="image/svg+xml" height="100%"
+<object id="timetable" data="/timetable/univ_tsukuba.svg" type="image/svg+xml" height="100%"
         width="100%"></object>
 
 <script>
     $timetable = null;
     window.onload = function () {
         $timetable = document.getElementById('timetable');
-        var $svg = $timetable.contentDocument;
-        console.log($svg);
-        $svg.timetable.setColumnHeaderTexts(['a','i','u'])
+        $timetable.onload = function () {
+            var $svg = $timetable.contentDocument;
+            console.log($svg);
+            console.log($svg.timetable);
+            $svg.timetable.setColumnHeaderTexts(['a', 'i', 'u'])
+        }
     }
 </script>
 <!-- TODO REMOVE THIS FILE -->

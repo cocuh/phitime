@@ -80,15 +80,15 @@
         var cellArray = $oneDay.getElementsByClassName(this.classes.cell);
         for (var cellIdx = 0; cellIdx < cellArray.length; cellIdx++) {
           var $cell = cellArray[cellIdx];
-          $cell.dataset.day = dayIdx;
+          $cell.setAttribute('data-day', dayIdx);
         }
       }
     };
     proto._initEventHandler = function () {
       var self = this;
       var initEventHandler = function ($cell, cellIdx, $oneDay, dayIdx) {
-        var minY = parseInt($cell.dataset.y);
-        var height = parseInt($cell.dataset.height);
+        var minY = parseInt($cell.getAttribute('data-y'));
+        var height = parseInt($cell.getAttribute('data-height'));
         var eventHandler = self._genCellEventHandler(dayIdx, minY, height);
         $cell.addEventListener('mousedown', eventHandler.mousedown);
         $cell.addEventListener('mouseover', eventHandler.mouseover);
@@ -140,6 +140,9 @@
         }
       }
     };
+    proto._getClassName = function ($elem) {
+      return $elem.classname.indexOf ? $elem.className : $elem.className.baseVal;
+    }
     proto._toggleClass = function ($elem, className, toggle) {
       if (toggle === undefined) {
         toggle = !this._hasClass($elem, className);
@@ -152,14 +155,14 @@
     };
     proto._addClass = function ($elem, className) {
       if (!this._hasClass($elem, className)) {
-        $elem.classList.add(className);
+        $elem.className.baseVal += ' ' + className;
       }
     };
     proto._removeClass = function ($elem, className) {
-      $elem.classList.remove(className);
+      $elem.className.baseVal = (' ' + $elem.className.baseVal + ' ').replace(' ' + className + ' ', ' ').trim();
     };
     proto._hasClass = function ($elem, className) {
-      return $elem.classList.contains(className);
+      return (' ' + $elem.className.baseVal + ' ').indexOf(' ' + className + ' ') >= 0;
     };
     /**
      * is the cell in selecting.
@@ -169,7 +172,7 @@
     proto._isInSelecting = function ($cell) {
       var minDay = Math.min(this.status.start.day, this.status.end.day);
       var maxDay = Math.max(this.status.start.day, this.status.end.day);
-      var theDay = $cell.dataset.day;
+      var theDay = $cell.getAttribute('data-day');
 
       if (theDay < minDay || maxDay < theDay) {
         return false;
@@ -179,8 +182,8 @@
 
       var minY = Math.min(this.status.start.minY, this.status.end.minY);
       var maxY = Math.max(this.status.start.maxY, this.status.end.maxY);
-      var theY = parseInt($cell.dataset.y);
-      var height = parseInt($cell.dataset.height);
+      var theY = parseInt($cell.getAttribute('data-y'));
+      var height = parseInt($cell.getAttribute('data-height'));
 
       if (minY <= theY && theY + height <= maxY) {
         return true;
