@@ -61,12 +61,14 @@ class TimetableView(object):
     def __init__(self, request):
         self.request = request
 
-    @view_config(route_name='timetable.univ_tsukuba', renderer='templates/timetable/univ_tsukuba.jinja2')
+    @view_config(route_name='timetable.univ_tsukuba', renderer='templates/timetable/univ_tsukuba.jinja2',
+        http_cache=3600)
     def univ_tsukuba(self):
         self.request.response.content_type = 'image/svg+xml'
         return {}
 
-    @view_config(route_name='timetable.half_hourly', renderer='templates/timetable/half_hourly.jinja2')
+    @view_config(route_name='timetable.half_hourly', renderer='templates/timetable/half_hourly.jinja2',
+        http_cache=3600)
     def univ_tsukuba(self):
         self.request.response.content_type = 'image/svg+xml'
         return {}
