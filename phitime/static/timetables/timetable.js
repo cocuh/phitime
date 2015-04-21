@@ -66,17 +66,50 @@
         }
       }
     };
-    // TODO: jsdoc
-    proto.getActivePeriods = function(){
-      var activeCells = [];
-      for(var idx=0;idx<this.cells.length;idx++){
-        var $cell = this.cells[idx];
-        if(this._hasClass($cell, this.classes.active)){
-          activeCells.push($cell);
+    /**
+     * get active periods, [[minutes_from_day_start, ...], ...]
+     * @returns {Object<string:Array<int>>}
+     */
+    proto.getActivePeriods = function () {
+      var activeCellByDay = {};
+      var activeCellArray = this._getActiveCells();
+      for (var activeCellIdx in activeCellArray) {
+        var activeCell = activeCellArray[activeCellIdx];
+        var theDay = parseInt(activeCell.getAttribute('data-day'));
+        var theY = parseInt(activeCell.getAttribute('data-y'));
+        var theHeight = parseInt(activeCell.getAttribute('data-height'));
+        if (theDay in activeCellByDay) {
+          activeCellByDay[theDay].push([theY, theHeight]);
+        } else {
+          activeCellByDay[theDay] = [[theY, theHeight]];
         }
       }
-      // TODO: implement serialize
-      return {};
+
+      for (theDay in activeCellByDay) {
+        activeCellByDay[theDay].sort(function (a, b) {
+          return a[0] > b[0] ? 1 : -1;
+        });
+      }
+
+      var res = {};
+      for (theDay in activeCellByDay) {
+        res[theDay] = activeCellByDay[theDay].reduce(function (previousValue, currentValue, index, array) {
+          if (previousValue.length==0) {
+            return [currentValue];
+          }
+          var lastY = previousValue[previousValue.length - 1][0];
+          var lastHeight = previousValue[previousValue.length - 1][1];
+          if (lastY + lastHeight == currentValue[0]) {// current y
+            previousValue[previousValue.length - 1][1] += currentValue[1];
+          } else {
+            previousValue.push(currentValue);
+          }
+          return previousValue;
+        }, []);
+
+      }
+
+      return res;
     };
     // private method
     proto._mapEachCell = function (func) {
@@ -164,6 +197,20 @@
           event.preventDefault();
         }
       }
+    };
+    /**
+     *
+     * @private {Array<DOMElement>}
+     */
+    proto._getActiveCells = function () {
+      var activeCells = [];
+      for (var idx = 0; idx < this.cells.length; idx++) {
+        var $cell = this.cells[idx];
+        if (this._hasClass($cell, this.classes.active)) {
+          activeCells.push($cell);
+        }
+      }
+      return activeCells;
     };
     proto._clearSelectingCells = function () {
       this._toggleSelectingCellClass(this.classes.selecting, false);
