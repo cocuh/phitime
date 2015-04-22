@@ -94,7 +94,7 @@
       var res = {};
       for (theDay in activeCellByDay) {
         res[theDay] = activeCellByDay[theDay].reduce(function (previousValue, currentValue, index, array) {
-          if (previousValue.length==0) {
+          if (previousValue.length == 0) {
             return [currentValue];
           }
           var lastY = previousValue[previousValue.length - 1][0];
@@ -138,11 +138,17 @@
         var minY = parseInt($cell.getAttribute('data-y'));
         var height = parseInt($cell.getAttribute('data-height'));
         var eventHandler = self._genCellEventHandler(dayIdx, minY, height, $cell);
-        $cell.addEventListener('mousedown', eventHandler.mousedown);
-        $cell.addEventListener('mouseover', eventHandler.mouseover);
+        $cell.addEventListener('mousedown', eventHandler.mousedown(true));
+        $cell.addEventListener('touchstart', eventHandler.mousedown(false));
+        $cell.addEventListener('mouseover', eventHandler.mouseover(true));
+        $cell.addEventListener('touchmove', eventHandler.mouseover(false));
+        $cell.addEventListener('gesturechange', eventHandler.mouseover(false));
+        $cell.addEventListener('gesturemove', eventHandler.mouseover(false));
       };
       this._mapEachCell(initEventHandler);
       document.addEventListener('mouseup', this._genMouseUpHandler());
+      document.addEventListener('touchend', this._genMouseUpHandler());
+      document.addEventListener('gestureend', this._genMouseUpHandler());
     };
     proto._genMouseUpHandler = function () {
       var self = this;
@@ -181,20 +187,28 @@
         self._toggleSelectingCellClass(self.classes.selecting, true);
       };
       return {
-        mousedown: function (event) {
-          saveStatusStart();
-          saveStatusEnd();
-          status.isSelecting = true;
-          redrawSelecting();
-          event.preventDefault();
-        },
-        mouseover: function (event) {
-          self._clearSelectingCells();
-          if (status.isSelecting && event.buttons != 0 && event.which % 2 != 0) {
+        mousedown: function (isPreventDefault) {
+          return function (event) {
+            saveStatusStart();
             saveStatusEnd();
+            status.isSelecting = true;
             redrawSelecting();
-          }
-          event.preventDefault();
+            if (isPreventDefault) {
+              event.preventDefault();
+            }
+          };
+        },
+        mouseover: function (isPreventDefault) {
+          return function (event) {
+            self._clearSelectingCells();
+            if (status.isSelecting && event.buttons != 0 && event.which % 2 != 0) {
+              saveStatusEnd();
+              redrawSelecting();
+            }
+            if (isPreventDefault) {
+              event.preventDefault();
+            }
+          };
         }
       }
     };
