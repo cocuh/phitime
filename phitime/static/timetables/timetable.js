@@ -68,7 +68,7 @@
     };
     /**
      * get active periods, [[minutes_from_day_start, ...], ...]
-     * @returns {Object<string:Array<int>>}
+     * @returns {Object<string, Array<int>>}
      */
     proto.getActivePeriods = function () {
       var activeCellByDay = {};
