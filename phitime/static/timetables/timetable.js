@@ -67,8 +67,8 @@
       }
     };
     /**
-     * get active periods, [[start_minutes, length], ...]
-     * "start_minutes" means the length of minutes from the midnight.
+     * get active periods, [{startMinutes:startMinutes, periodLength:periodLength}, ...]
+     * "startMinutes" means the length of minutes from the midnight.
      * @returns {Object<string, Array<int>>}
      */
     proto.getActivePeriods = function () {
@@ -79,7 +79,7 @@
         var theDay = parseInt(activeCell.getAttribute('data-day'));
         var theY = parseInt(activeCell.getAttribute('data-y'));
         var theHeight = parseInt(activeCell.getAttribute('data-height'));
-        var theCellData = {minutes:theY, period_length:theHeight};
+        var theCellData = {startMinutes: theY, periodLength: theHeight};
         if (theDay in activeCellByDay) {
           activeCellByDay[theDay].push(theCellData);
         } else {
@@ -89,7 +89,7 @@
 
       for (theDay in activeCellByDay) {
         activeCellByDay[theDay].sort(function (a, b) {
-          return a.minutes > b.minutes ? 1 : -1;
+          return a.startMinutes > b.startMinutes ? 1 : -1;
         });
       }
 
@@ -99,10 +99,10 @@
           if (previousValue.length == 0) {
             return [currentValue];
           }
-          var lastMinutes = previousValue[previousValue.length - 1].minutes;
-          var lastLength = previousValue[previousValue.length - 1].period_length;
-          if (lastMinutes + lastLength == currentValue.minutes) {// current y
-            previousValue[previousValue.length - 1].period_length += currentValue.period_length;
+          var lastMinutes = previousValue[previousValue.length - 1].startMinutes;
+          var lastLength = previousValue[previousValue.length - 1].periodLength;
+          if (lastMinutes + lastLength == currentValue.startMinutes) {// current y
+            previousValue[previousValue.length - 1].periodLength += currentValue.periodLength;
           } else {
             previousValue.push(currentValue);
           }
@@ -127,11 +127,25 @@
     };
     /**
      * set unavailable periods, neither update or append.
-     * "start_minutes" means the length of minutes from the midnight.
-     * 
-     * @param {Array<Array<int>>} periods [monday_period_list, tuesday_period_list....], period_list:=[[start_minutes, length],]
+     * "startMinutes" means the length of minutes from the midnight.
+     *
+     * @param {Array<Array<Object<str,int>>>} periodByDay [monday_period_list, tuesday_period_list....], period_list:=[{startMinutes: startMinutes, periodLength:length},]
      */
-    proto.setUnavailablePeriods = function (periods) {
+    proto.setUnavailablePeriods = function (periodByDay) {
+      var self = this;
+      this._mapEachCell(function ($cell, cellIdx, $oneDay, dayIdx) {
+        var cellStartMinutes = parseInt($cell.getAttribute('data-y'));
+        var periodLength = parseInt($cell.getAttribute('data-height'));
+        var cellEndMinutes = cellStartMinutes + periodLength;
+        var theDayUnavailablePeriods = periodByDay[dayIdx];
+        if (theDayUnavailablePeriods) {
+          theDayUnavailablePeriods.forEach(function (period) {
+            if (period.startMinutes <= cellStartMinutes && cellEndMinutes <= period.startMinutes + period.periodLength) {
+              self._addClass($cell, 'unavailable');
+            }
+          });
+        }
+      });
     };
     // private method
     proto._mapEachCell = function (func) {

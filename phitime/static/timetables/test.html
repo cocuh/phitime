@@ -36,6 +36,7 @@
             console.log($svg.timetable);
             timetable = $svg.timetable;
             timetable.setColumnHeaderTexts(['a', 'i', 'u'])
+            timetable.setUnavailablePeriods([[{startMinutes: 60, periodLength: 300}]])
         };
         
         if ($timetable.contentDocument.timetable === undefined) {

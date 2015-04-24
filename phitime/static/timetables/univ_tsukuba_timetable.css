@@ -34,3 +34,6 @@
 .selecting rect {
   fill: red !important;
 }
+.unavailable rect {
+  fill: black !important;
+}
