@@ -21,7 +21,7 @@ class EventView(object):
 
     @view_config(route_name='event.create', request_method='GET', renderer='templates/event/create.jinja2')
     def create_get(self):
-        pass
+        return {}
 
     @view_config(route_name='event.create', request_method='POST')
     def create_post(self):
