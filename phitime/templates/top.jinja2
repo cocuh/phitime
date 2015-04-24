@@ -1,1 +1,12 @@
 {% extends "base.jinja2" %}
+{% block content %}
+    {% macro link(route_name) %}
+        <li><a href="{{ route_name| route_url }}">{{ route_name }}</a></li>
+    {% endmacro %}
+    <ul>
+    {{ link('top') }}
+    {{ link('event.create') }}
+    {{ link('timetable.univ_tsukuba') }}
+    {{ link('timetable.half_hourly') }}
+    </ul>
+{% endblock %}
