@@ -32,7 +32,7 @@
       active: 'active'
     };
     this.cells = document.getElementsByClassName(this.classes.cell);
-    this.isEditable = false;
+    this.isEditable = true;
     this.status = {
       start: {
         day: null,
@@ -67,7 +67,8 @@
       }
     };
     /**
-     * get active periods, [[minutes_from_day_start, ...], ...]
+     * get active periods, [[start_minutes, length], ...]
+     * "start_minutes" means the length of minutes from the midnight.
      * @returns {Object<string, Array<int>>}
      */
     proto.getActivePeriods = function () {
@@ -78,16 +79,17 @@
         var theDay = parseInt(activeCell.getAttribute('data-day'));
         var theY = parseInt(activeCell.getAttribute('data-y'));
         var theHeight = parseInt(activeCell.getAttribute('data-height'));
+        var theCellData = {minutes:theY, period_length:theHeight};
         if (theDay in activeCellByDay) {
-          activeCellByDay[theDay].push([theY, theHeight]);
+          activeCellByDay[theDay].push(theCellData);
         } else {
-          activeCellByDay[theDay] = [[theY, theHeight]];
+          activeCellByDay[theDay] = [theCellData];
         }
       }
 
       for (theDay in activeCellByDay) {
         activeCellByDay[theDay].sort(function (a, b) {
-          return a[0] > b[0] ? 1 : -1;
+          return a.minutes > b.minutes ? 1 : -1;
         });
       }
 
@@ -97,10 +99,10 @@
           if (previousValue.length == 0) {
             return [currentValue];
           }
-          var lastY = previousValue[previousValue.length - 1][0];
-          var lastHeight = previousValue[previousValue.length - 1][1];
-          if (lastY + lastHeight == currentValue[0]) {// current y
-            previousValue[previousValue.length - 1][1] += currentValue[1];
+          var lastMinutes = previousValue[previousValue.length - 1].minutes;
+          var lastLength = previousValue[previousValue.length - 1].period_length;
+          if (lastMinutes + lastLength == currentValue.minutes) {// current y
+            previousValue[previousValue.length - 1].period_length += currentValue.period_length;
           } else {
             previousValue.push(currentValue);
           }
@@ -122,6 +124,14 @@
       }
       this.isEditable = isEditable;
       return isEditable;
+    };
+    /**
+     * set unavailable periods, neither update or append.
+     * "start_minutes" means the length of minutes from the midnight.
+     * 
+     * @param {Array<Array<int>>} periods [monday_period_list, tuesday_period_list....], period_list:=[[start_minutes, length],]
+     */
+    proto.setUnavailablePeriods = function (periods) {
     };
     // private method
     proto._mapEachCell = function (func) {
