@@ -29,7 +29,8 @@
     this.classes = {
       cell: 'cell',
       selecting: 'selecting',
-      active: 'active'
+      active: 'active',
+      unavailable: 'unavailable'
     };
     this.cells = document.getElementsByClassName(this.classes.cell);
     this.isEditable = true;
@@ -141,7 +142,7 @@
         if (theDayUnavailablePeriods) {
           theDayUnavailablePeriods.forEach(function (period) {
             if (period.startMinutes <= cellStartMinutes && cellEndMinutes <= period.startMinutes + period.periodLength) {
-              self._addClass($cell, 'unavailable');
+              self._addClass($cell, self.classes.unavailable);
             }
           });
         }
@@ -309,6 +310,10 @@
      * @return {boolean} is the cell selecting
      */
     proto._isInSelecting = function ($cell) {
+      if(this._hasClass($cell, this.classes.unavailable)){
+        return false;
+      }
+      
       var minDay = Math.min(this.status.start.day, this.status.end.day);
       var maxDay = Math.max(this.status.start.day, this.status.end.day);
       var theDay = $cell.getAttribute('data-day');
