@@ -141,7 +141,8 @@
         var theDayUnavailablePeriods = periodByDay[dayIdx];
         if (theDayUnavailablePeriods) {
           theDayUnavailablePeriods.forEach(function (period) {
-            if (period.startMinutes <= cellStartMinutes && cellEndMinutes <= period.startMinutes + period.periodLength) {
+            if (!(cellEndMinutes <= period.startMinutes
+              || period.startMinutes + period.periodLength <= cellStartMinutes)) {
               self._addClass($cell, self.classes.unavailable);
             }
           });
