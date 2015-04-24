@@ -111,6 +111,13 @@
 
       return res;
     };
+    proto.setEditable = function(isEditable){
+      if(isEditable===undefined){
+        isEditable = !this.isEditable;
+      }
+      this.isEditable = isEditable;
+      return isEditable;
+    };
     // private method
     proto._mapEachCell = function (func) {
       for (var dayIdx = 0; dayIdx < this.columnElements.length; dayIdx++) {
@@ -190,6 +197,9 @@
       return {
         mousedown: function (isPreventDefault) {
           return function (event) {
+            if(!self.isEditable){
+              return true;
+            }
             saveStatusStart();
             saveStatusEnd();
             status.isSelecting = true;
@@ -197,6 +207,7 @@
             if (isPreventDefault) {
               event.preventDefault();
             }
+            return isPreventDefault;
           };
         },
         mouseover: function (isPreventDefault) {
@@ -209,6 +220,7 @@
             if (isPreventDefault) {
               event.preventDefault();
             }
+            return isPreventDefault;
           };
         }
       }
