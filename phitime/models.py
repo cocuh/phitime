@@ -5,6 +5,7 @@ from sqlalchemy import (
     Text,
     String,
     Unicode,
+    UnicodeText,
     ForeignKey,
     Date,
 )
@@ -56,6 +57,7 @@ class Event(Base):
     id = Column(Integer, primary_key=True)
 
     name = Column(Unicode, nullable=False)
+    description = Column(UnicodeText, nullable=False)
 
     sponsor_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     sponsor = relationship(User)
