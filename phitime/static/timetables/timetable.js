@@ -156,8 +156,9 @@
         if (self.status.start.$cell && self.status.end.$cell) {
           var isActive = self._hasClass(self.status.start.$cell, self.classes.active);
           self._toggleSelectingCellClass(self.classes.active, !isActive);
-          self._toggleSelectingCellClass(self.classes.selecting, false);
+          self._clearSelectingCells();
         }
+        self.status.isSelecting = false;
         self.status.start.day = 0;
         self.status.start.minY = 0;
         self.status.start.maxY = 0;
