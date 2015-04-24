@@ -2,7 +2,6 @@ from sqlalchemy import (
     Column,
     Integer,
     BigInteger,
-    SmallInteger,
     Text,
     String,
     Unicode,
