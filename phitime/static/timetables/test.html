@@ -27,7 +27,6 @@
     $timetable = null;
     timetable = null;
     window.addEventListener('load', function () {
-        console.log('DOMContentLoaded')
         $timetable = document.getElementById('timetable');
         
         var initTimeTable = function () {
@@ -44,10 +43,6 @@
         }else{
             initTimeTable();
         }
-
-        console.log('hoge')
-//        console.log($timetable.contentDocument.readyState)
-
 
         $getActivePeriods = document.getElementById('getActivePeriods');
         $getActivePeriods.onclick = function () {
