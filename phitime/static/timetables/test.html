@@ -25,20 +25,23 @@
 <script>
     $timetable = null;
     timetable = null;
-    window.onload = function () {
+    window.addEventListener('load', function () {
+        console.log('DOMContentLoaded')
         $timetable = document.getElementById('timetable');
-        $timetable.onload = function () {
-            var $svg = $timetable.contentDocument;
-            console.log($svg);
-            console.log($svg.timetable);
-            timetable = $svg.timetable;
-            timetable.setColumnHeaderTexts(['a', 'i', 'u'])
-        };
+        console.log($timetable.contentDocument.timetable);
+        var $svg = $timetable.contentDocument;
+        console.log($svg);
+        console.log($svg.timetable);
+        timetable = $svg.timetable;
+        timetable.setColumnHeaderTexts(['a', 'i', 'u'])
         
         $getActivePeriods = document.getElementById('getActivePeriods');
-        $getActivePeriods.onclick = function(){
+        $getActivePeriods.onclick = function () {
             console.log(timetable.getActivePeriods());
         }
+    });
+    var test = function () {
+        return $timetable.contentDocument.timetable;
     }
 </script>
 <!-- TODO REMOVE THIS FILE -->
