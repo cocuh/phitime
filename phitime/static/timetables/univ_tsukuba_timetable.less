@@ -12,8 +12,51 @@
   }
 }
 
-.cell_odd {
+.column_header {
   rect {
     fill: pink;
+    stroke: #000;
+    stroke-width: 0.3;
+  }
+  text {
+    fill: red;
+    dominant-baseline: central;
+    text-anchor: middle;
+  }
+}
+
+.row_header {
+  rect {
+    fill: transparent;
+    stroke: #000;
+    stroke-width: 0.3;
+  }
+  text {
+    dominant-baseline: central;
+    text-anchor: middle;
+  }
+}
+
+.odd {
+  rect {
+    fill: pink;
+  }
+}
+
+.active {
+  rect {
+    fill: cyan !important;
+  }
+}
+
+.selecting {
+  rect {
+    fill: red !important;
+  }
+}
+
+.unavailable {
+  rect {
+    fill: black !important;
   }
 }

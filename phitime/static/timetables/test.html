@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- TODO REMOVE THIS FILE -->
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <style>
+        object {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+<button id="getActivePeriods">getActivePeriods</button>
+
+<object id="timetable" data="/timetable/univ_tsukuba.svg" type="image/svg+xml" height="100%"
+        width="100%"></object>
+
+<script>
+    $timetable = null;
+    timetable = null;
+    window.addEventListener('load', function () {
+        $timetable = document.getElementById('timetable');
+        
+        var initTimeTable = function () {
+            var $svg = $timetable.contentDocument;
+            console.log($svg);
+            console.log($svg.timetable);
+            timetable = $svg.timetable;
+            timetable.setColumnHeaderTexts(['a', 'i', 'u'])
+            timetable.setUnavailablePeriods([[{startMinutes: 700, periodLength: 40}]])
+        };
+        
+        if ($timetable.contentDocument.timetable === undefined) {
+            $timetable.addEventListener('load', initTimeTable);
+        }else{
+            initTimeTable();
+        }
+
+        $getActivePeriods = document.getElementById('getActivePeriods');
+        $getActivePeriods.onclick = function () {
+            console.log(timetable.getActivePeriods());
+        }
+    });
+    var test = function () {
+        return $timetable.contentDocument.timetable;
+    }
+</script>
+<!-- TODO REMOVE THIS FILE -->
+</body>
+</html>
