@@ -111,8 +111,13 @@
 
       return res;
     };
-    proto.setEditable = function(isEditable){
-      if(isEditable===undefined){
+    /**
+     * set editable or not
+     * @param {bool} [isEditable] next isEditable flag. default is toggle.
+     * @returns {bool}
+     */
+    proto.setEditable = function (isEditable) {
+      if (isEditable === undefined) {
         isEditable = !this.isEditable;
       }
       this.isEditable = isEditable;
@@ -197,7 +202,7 @@
       return {
         mousedown: function (isPreventDefault) {
           return function (event) {
-            if(!self.isEditable){
+            if (!self.isEditable) {
               return true;
             }
             saveStatusStart();
