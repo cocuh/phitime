@@ -76,10 +76,8 @@ class Member(Base):
 class _PeriodTime(object):
     date = Column(Date, nullable=False)
 
-    _start_hour = Column(SmallInteger)
-    _start_minute = Column(SmallInteger)
-    _end_hour = Column(SmallInteger)
-    _end_minute = Column(SmallInteger)
+    _start_minutes = Column(Integer)
+    _period_length = Column(Integer)
 
     def set_date(self, date):
         """
@@ -88,17 +86,12 @@ class _PeriodTime(object):
         """
         self.date = date
 
-    def set_times(self, start_hour, start_minute, end_hour, end_minute):
-        self._validate_times(start_hour, start_minute)
-        self._validate_times(end_hour, end_minute)
-
-        self._start_hour = start_hour
-        self._start_minute = start_minute
-        self._end_hour = end_hour
-        self._end_minute = end_minute
+    def set_times(self, start_minutes, period_length):
+        self._start_minutes = start_minutes
+        self._period_length = period_length
 
     @staticmethod
-    def _validate_times(hour, minute):
+    def _validate_times(start_minutes, period_length):
         """
         validate hour and minute in range 00:00-24:00
         
@@ -108,12 +101,12 @@ class _PeriodTime(object):
         :type minute: int
         :return:
         """
-        if not (0 <= minute < 60):
-            raise ValidationException('minutes should be 0 <= MM < 60')
-        if not (0 <= hour <= 24):
-            raise ValidationException('minutes should be 0 <= HH <= 24')
-        if hour == 24 and minute != 0:
-            raise ValidationException('hour=24 only accepted 24:00; minute should be 0')
+        if not (0 <= start_minutes <= 24 * 60):
+            raise ValidationException('minutes should be 0 <= minutes <= 24*60')
+        if not (0 < period_length ):
+            raise ValidationException('length should be 0 < length')
+        if not (start_minutes + period_length <= 24 * 60):
+            raise ValidationException('length should be start_minutes+period_length <= 24*60')
 
 
 class ProposedTime(_PeriodTime, Base):
