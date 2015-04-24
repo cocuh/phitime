@@ -6,7 +6,7 @@
         viewBox="-30 -30 590 930"
         >
     {% macro gen_cell(day_index, height, cell_y, class) -%}
-        <g class="cell {{ class }}" data-y="{{ cell_y }}" data-day="{{ day_index }}" data-height="{{ height }}" transform="translate(0, {{ cell_y }})">
+        <g class="cell {{ class }}" data-day="{{ day_index }}" data-y="{{ cell_y }}" data-height="{{ height }}" transform="translate(0, {{ cell_y }})">
             <rect width="80" height="{{ height }}"/>
         </g>
     {%- endmacro %}
@@ -180,7 +180,7 @@
             <text x="15" y="30">22</text>
         </g>
     </g>
-    <g id="main" data-start="800">
+    <g id="main" data-start="{{ 8*60 }}">
         <g id="column_mon" data-day="mon" transform="translate(0,0)">
             <g id="column_header_mon" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>

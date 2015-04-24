@@ -49,7 +49,7 @@
       },
       isSelecting: false
     };
-    this._initCellData();
+    this.startMinutes = parseInt(this.$timetable.getAttribute('data-start'));
     this._initEventHandler();
   };
   (function (proto) {
@@ -76,11 +76,11 @@
       var activeCellByDay = {};
       var activeCellArray = this._getActiveCells();
       for (var activeCellIdx in activeCellArray) {
-        var activeCell = activeCellArray[activeCellIdx];
-        var theDay = parseInt(activeCell.getAttribute('data-day'));
-        var theY = parseInt(activeCell.getAttribute('data-y'));
-        var theHeight = parseInt(activeCell.getAttribute('data-height'));
-        var theCellData = {startMinutes: theY, periodLength: theHeight};
+        var $activeCell = activeCellArray[activeCellIdx];
+        var theDay = this._getCellDay($activeCell);
+        var theStartMinutes = this._getCellStartMinutes($activeCell);
+        var thePeriodLength = this._getCellPeriodLength($activeCell);
+        var theCellData = {startMinutes: theStartMinutes, periodLength: thePeriodLength};
         if (theDay in activeCellByDay) {
           activeCellByDay[theDay].push(theCellData);
         } else {
@@ -135,8 +135,8 @@
     proto.setUnavailablePeriods = function (periodByDay) {
       var self = this;
       this._mapEachCell(function ($cell, cellIdx, $oneDay, dayIdx) {
-        var cellStartMinutes = parseInt($cell.getAttribute('data-y'));
-        var periodLength = parseInt($cell.getAttribute('data-height'));
+        var cellStartMinutes = self._getCellStartMinutes($cell);
+        var periodLength = self._getCellPeriodLength($cell);
         var cellEndMinutes = cellStartMinutes + periodLength;
         var theDayUnavailablePeriods = periodByDay[dayIdx];
         if (theDayUnavailablePeriods) {
@@ -159,21 +159,11 @@
         }
       }
     };
-    proto._initCellData = function () {
-      for (var dayIdx = 0; dayIdx < this.columnElements.length; dayIdx++) {
-        var $oneDay = this.columnElements[dayIdx];
-        var cellArray = $oneDay.getElementsByClassName(this.classes.cell);
-        for (var cellIdx = 0; cellIdx < cellArray.length; cellIdx++) {
-          var $cell = cellArray[cellIdx];
-          $cell.setAttribute('data-day', dayIdx);
-        }
-      }
-    };
     proto._initEventHandler = function () {
       var self = this;
       var initEventHandler = function ($cell, cellIdx, $oneDay, dayIdx) {
-        var minY = parseInt($cell.getAttribute('data-y'));
-        var height = parseInt($cell.getAttribute('data-height'));
+        var minY = self._getCellStartMinutes($cell);
+        var height = self._getCellPeriodLength($cell);
         var eventHandler = self._genCellEventHandler(dayIdx, minY, height, $cell);
         $cell.addEventListener('mousedown', eventHandler.mousedown(true));
         $cell.addEventListener('touchstart', eventHandler.mousedown(false));
@@ -282,7 +272,7 @@
     };
     proto._getClassName = function ($elem) {
       return $elem.classname.indexOf ? $elem.className : $elem.className.baseVal;
-    }
+    };
     proto._toggleClass = function ($elem, className, toggle) {
       if (toggle === undefined) {
         toggle = !this._hasClass($elem, className);
@@ -310,13 +300,13 @@
      * @return {boolean} is the cell selecting
      */
     proto._isInSelecting = function ($cell) {
-      if(this._hasClass($cell, this.classes.unavailable)){
+      if (this._hasClass($cell, this.classes.unavailable)) {
         return false;
       }
-      
+
       var minDay = Math.min(this.status.start.day, this.status.end.day);
       var maxDay = Math.max(this.status.start.day, this.status.end.day);
-      var theDay = $cell.getAttribute('data-day');
+      var theDay = this._getCellDay($cell);
 
       if (theDay < minDay || maxDay < theDay) {
         return false;
@@ -326,13 +316,37 @@
 
       var minY = Math.min(this.status.start.minY, this.status.end.minY);
       var maxY = Math.max(this.status.start.maxY, this.status.end.maxY);
-      var theY = parseInt($cell.getAttribute('data-y'));
-      var height = parseInt($cell.getAttribute('data-height'));
+      var theY = this._getCellStartMinutes($cell);
+      var height = this._getCellPeriodLength($cell);
 
       if (minY <= theY && theY + height <= maxY) {
         return true;
       }
       return false;
+    };
+    /**
+     * @param $cell
+     * @private
+     * @returns {int}
+     */
+    proto._getCellStartMinutes = function ($cell) {
+      return parseInt($cell.getAttribute('data-y')) + this.startMinutes;
+    };
+    /**
+     * @param $cell
+     * @private
+     * @returns {int}
+     */
+    proto._getCellPeriodLength = function ($cell) {
+      return parseInt($cell.getAttribute('data-height'));
+    };
+    /**
+     * @param $cell
+     * @private
+     * @returns {int}
+     */
+    proto._getCellDay = function ($cell) {
+      return parseInt($cell.getAttribute('data-day'));
     }
   })(TimeTable.prototype);
 

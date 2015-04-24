@@ -5,86 +5,63 @@
         xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="-30 -30 590 930"
         >
-    {% macro gen_cell(height, cell_y, class) -%}
-        <g class="cell {{ class }}" data-y="{{ cell_y }}" data-height="{{ height }}" transform="translate(0, {{ cell_y }})">
+    {% macro gen_cell(day_index, height, cell_y, class) -%}
+        <g class="cell {{ class }}" data-day="{{ day_index }}" data-y="{{ cell_y }}" data-height="{{ height }}" transform="translate(0, {{ cell_y }})">
             <rect width="80" height="{{ height }}"/>
         </g>
     {%- endmacro %}
-    {% macro gen_one_day() %}
+    {% macro gen_one_day(day_index) %}
         {% set y = 0 %}
         <!--8-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
         <!--9-->
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
         <!--10-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
         <!--11-->
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
         <!--12-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
         <!--13-->
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
         <!--14-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
         <!--15-->
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
         <!--16-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
         <!--17-->
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
         <!--18-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
         <!--19-->
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
         <!--20-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
         <!--21-->
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "odd") }}{% set y = y + h %}
         <!--22-->
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
-        {% set h = 30 %}{{ gen_cell(h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
+        {% set h = 30 %}{{ gen_cell(day_index, h, y, "even") }}{% set y = y + h %}
     {% endmacro %}
     <!-- rowHeader.width = 30 -->
     <!-- columnHeader.height = 30 -->
     <!-- height = 900 + columnHeader.height-->
     <!-- width = 80px * 7day + rowHeaderWidth.height-->
-    <defs>
-        <g id="lesson75m" class="the-cell lesson">
-            <rect width="80" height="75"/>
-        </g>
-        <g id="lesson75m" class="the-cell lesson">
-            <rect width="80" height="75"/>
-        </g>
-        <g id="rest40m" class="the-cell break">
-            <rect width="80" height="40"/>
-        </g>
-        <g id="rest15m" class="the-cell break">
-            <rect width="80" height="15"/>
-        </g>
-        <g id="rest50m" class="the-cell break">
-            <rect width="80" height="50"/>
-        </g>
-        <g id="cell30m_even" class="the-cell even">
-            <rect width="80" height="30"/>
-        </g>
-        <g id="cell30m_odd" class="the-cell odd">
-            <rect width="80" height="30"/>
-        </g>
-    </defs>
     <g id="row_headers" transform="translate(-30,0)">
         <g class="row_header" transform="translate(0,-30)">
             <rect width="30" height="30"/>
@@ -150,55 +127,55 @@
             <text x="15" y="30">22</text>
         </g>
     </g>
-    <g id="main" data-start="800">
+    <g id="main" data-start="{{ 8*60 }}">
         <g id="column_mon" data-day="mon" transform="translate(0,0)">
             <g id="column_header_mon" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">mon</text>
             </g>
-            {{ gen_one_day() }}
+            {{ gen_one_day(0) }}
         </g>
         <g id="column_tue" data-day="tue" transform="translate(80,0)">
             <g id="column_header_tue" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">tue</text>
             </g>
-            {{ gen_one_day() }}
+            {{ gen_one_day(1) }}
         </g>
         <g id="column_wed" data-day="wed" transform="translate(160,0)">
             <g id="column_header_wed" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">wed</text>
             </g>
-            {{ gen_one_day() }}
+            {{ gen_one_day(2) }}
         </g>
         <g id="column_thr" data-day="thr" transform="translate(240,0)">
             <g id="column_header_thr" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">thr</text>
             </g>
-            {{ gen_one_day() }}
+            {{ gen_one_day(3) }}
         </g>
         <g id="column_fri" data-day="fri" transform="translate(320,0)">
             <g id="column_header_fri" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">fri</text>
             </g>
-            {{ gen_one_day() }}
+            {{ gen_one_day(4) }}
         </g>
         <g id="column_sat" data-day="sat" transform="translate(400,0)">
             <g id="column_header_sat" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">sat</text>
             </g>
-            {{ gen_one_day() }}
+            {{ gen_one_day(5) }}
         </g>
         <g id="column_sun" data-day="sun" transform="translate(480,0)">
             <g id="column_header_sun" class="column_header" transform="translate(0,-30)">
                 <rect width="80" height="30"/>
                 <text x="40" y="15">sun</text>
             </g>
-            {{ gen_one_day() }}
+            {{ gen_one_day(6) }}
         </g>
     </g>
     <script xlink:href="{{ 'phitime:static/timetables/timetable.js'|static_path }}" type="application/javascript"/>
