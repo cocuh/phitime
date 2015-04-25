@@ -11,6 +11,9 @@ class TimetableType(object):
         self.name = name
         self.display_name = display_name
         self.route_name = route_name
+    
+    def is_default(self):
+        return self.default_type == self
 
     @classmethod
     def find_by_name(cls, name):
@@ -20,12 +23,12 @@ class TimetableType(object):
         return None
 
     @classmethod
-    def register(cls, name, route_name, display_name):
+    def register(cls, name, route_name, display_name, is_default=False):
         timetable_type = cls(name, route_name, display_name)
 
         cls.timetable_types.append(timetable_type)
-        
-        if cls.default_type is None:
+
+        if cls.default_type is None or is_default:
             cls.set_default(timetable_type)
 
         return timetable_type
@@ -39,7 +42,6 @@ class TimetableType(object):
         cls.default_type = default_type
 
 
+TimetableType.register('half_hourly', 'timetable.half_hourly', '30分区切り', is_default=True)
 TimetableType.register('univ_tsukuba', 'timetable.univ_tsukuba', '筑波大学時間割')
-
-TimetableType.register('half_hourly', 'timetable.half_hourly', '30分区切り')
 
