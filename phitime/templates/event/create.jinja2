@@ -1,1 +1,16 @@
 {% extends "../base.jinja2" %}
+{% macro input(name, value='', type='text', size=20) -%}
+
+    <div class="form-group">
+        <label>
+            {{ name }}
+            <input type="{{ type }}" class="form-control" value="{{ value|e }}" size="{{ size }}">
+        </label>
+    </div>
+{%- endmacro %}
+{% block content %}
+    <form>
+        {{ input('event_name') }}
+        {{ input('event_description') }}
+    </form>
+{% endblock %}
