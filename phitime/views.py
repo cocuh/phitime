@@ -1,4 +1,5 @@
 from pyramid.view import view_config
+from phitime.timetable import TimetableType
 
 
 class TopView(object):
@@ -21,7 +22,9 @@ class EventView(object):
 
     @view_config(route_name='event.create', request_method='GET', renderer='templates/event/create.jinja2')
     def create_get(self):
-        return {}
+        return {
+            'TimetableType': TimetableType,
+        }
 
     @view_config(route_name='event.create', request_method='POST')
     def create_post(self):

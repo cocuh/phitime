@@ -8,9 +8,12 @@
         </label>
     </div>
 {%- endmacro %}
+{% import "../macro/form.jinja2" as form %}
 {% block content %}
-    <form>
+    <form method="POST" action="">
         {{ input('event_name') }}
         {{ input('event_description') }}
+        {{ form.select_timetable_type(TimetableType) }}
+    <input type="submit" />
     </form>
 {% endblock %}

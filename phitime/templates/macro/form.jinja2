@@ -1,0 +1,9 @@
+{% macro select_timetable_type(TimetableType) %}
+    <div>
+        {% for timetable in TimetableType.timetable_types %}
+            <label class="radio-inline">
+                <input type="radio" name="timetable_type" value="{{ timetable.name }}"> {{ timetable.display_name }}
+            </label>
+        {% endfor %}
+    </div>
+{% endmacro %}
