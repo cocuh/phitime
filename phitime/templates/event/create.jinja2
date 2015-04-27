@@ -14,6 +14,7 @@
         {{ input('event_name') }}
         {{ input('event_description') }}
         {{ form.select_timetable_type(TimetableType) }}
-    <input type="submit" />
+        <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
+        <input type="submit"/>
     </form>
 {% endblock %}

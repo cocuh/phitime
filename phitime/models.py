@@ -22,6 +22,7 @@ from phitime.db import (
     Base,
     DBSession,
 )
+from phitime.timetable import TimetableType
 
 
 class User(Base):
@@ -59,8 +60,24 @@ class Event(Base):
     name = Column(Unicode, nullable=False)
     description = Column(UnicodeText, nullable=False)
 
-    sponsor_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    sponsor_id = Column(Integer, ForeignKey('users.id'))
     sponsor = relationship(User)
+    
+    timetable_type = Column(String, nullable=False)
+
+    def __init__(self, name, description,timetable_type):
+        self.name = name
+        self.description = description
+        self.timetable_type = timetable_type
+        
+
+    @classmethod
+    def create(cls, name, description, timetable_type):
+        # todo implement validation
+        if not TimetableType.is_exist(timetable_type):
+            # todo validate hare
+            pass
+        return cls(name, description, timetable_type)
 
 
 class Member(Base):

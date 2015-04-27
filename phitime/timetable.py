@@ -32,6 +32,11 @@ class TimetableType(object):
             cls.set_default(timetable_type)
 
         return timetable_type
+    
+    @classmethod
+    def is_exist(cls, name):
+        timetable_type = cls.find_by_name(name)
+        return timetable_type is None
 
     @classmethod
     def set_default(cls, default_type):
