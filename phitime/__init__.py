@@ -1,5 +1,6 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
+from pyramid.session import SignedCookieSessionFactory
 
 from phitime.db import (
     DBSession,
@@ -26,15 +27,21 @@ def _load_secret_ini(settings):
         settings.update(config.items(section))
     return settings
 
+def _gen_session_factory(settings):
+    print(settings)
+    return SignedCookieSessionFactory('rarara')
+
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    _load_secret_ini(settings)
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
+    
     config = Configurator(settings=settings)
-
+    config.set_session_factory(_gen_session_factory(settings))
     for plugin_name in required_plugins:
         config.include(plugin_name)
 

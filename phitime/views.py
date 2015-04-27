@@ -1,4 +1,7 @@
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
+from phitime.db import DBSession
+from phitime.models import Event
 from phitime.timetable import TimetableType
 
 
@@ -26,9 +29,14 @@ class EventView(object):
             'TimetableType': TimetableType,
         }
 
-    @view_config(route_name='event.create', request_method='POST')
+    @view_config(route_name='event.create', request_method='POST', check_csrf=True)
     def create_post(self):
-        pass
+        event_name = self.request.params.get('event_name')
+        event_description = self.request.params.get('event_description')
+        timetable_type = self.request.params.get('timetable_type')
+        event = Event.create(event_name, event_description, timetable_type)
+        DBSession.add(event)
+        return HTTPFound(self.request.route_path('event.detail'))
 
     @view_config(route_name='event.edit', request_method='GET', renderer='templates/event/edit.jinja2')
     def edit_get(self):
