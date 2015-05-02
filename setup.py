@@ -39,7 +39,7 @@ setup(name='phitime',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    test_suite='phitime',
+    test_suite='tests',
     install_requires=requires,
     entry_points="""\
       [paste.app_factory]
