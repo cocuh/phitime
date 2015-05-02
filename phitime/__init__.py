@@ -14,9 +14,9 @@ required_plugins = [
 
 
 def _load_secret_ini(settings):
-    import six.moves
+    import  six.moves 
 
-    secret_ini = settings.get("phitime.secret_ini", None)
+    secret_ini = settings.get("phitime.secret.ini", None)
     if secret_ini is None:
         return
 
@@ -28,9 +28,7 @@ def _load_secret_ini(settings):
     return settings
 
 def _gen_session_factory(settings):
-    print(settings)
     return SignedCookieSessionFactory('rarara')
-
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -50,9 +48,9 @@ def main(global_config, **settings):
     
     config.add_route('top', '/')
     config.add_route('event.create', '/event_create')
-    config.add_route('event.detail', '/event/{scrambled_event_id}/')
-    config.add_route('event.edit', '/event/{scrambled_event_id}/edit')
-    config.add_route('member.edit', '/event/{scrambled_event_id}/{member_position}/edit')
+    config.add_route('event.detail', '/event/{event_scrambled_id}/')
+    config.add_route('event.edit', '/event/{event_scrambled_id}/edit')
+    config.add_route('member.edit', '/event/{event_scrambled_id}/{member_position}/edit')
     config.add_route('timetable.univ_tsukuba', '/timetable/univ_tsukuba.svg')
     config.add_route('timetable.half_hourly', '/timetable/half_hourly.svg')
 
