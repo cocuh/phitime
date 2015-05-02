@@ -12,6 +12,9 @@ class TimetableType(object):
         self.display_name = display_name
         self.route_name = route_name
 
+    def __repr__(self):
+        return '<TimetableType name="{}">'.format(self.name)
+
     def is_default(self):
         return self.default_type == self
 
