@@ -96,7 +96,7 @@ class ViewMemberCreatePostTests(BaseViewTestCase):
     def _callFUT(self, request):
         from phitime.views import MemberView
 
-        return MemberView(request).create_posti()
+        return MemberView(request).create_post()
 
     def test_it(self):
         event = self._make_event()
@@ -111,6 +111,39 @@ class ViewMemberCreatePostTests(BaseViewTestCase):
         request.matchdict['event_scrambled_id'] = event.scrambled_id
 
         self.assertEqual(event.last_member_position, 0)
+
+        response = self._callFUT(request)
+
+        from phitime.models import Member
+
+        member = Member.query.first()
+        self.assertEqual(response.location, request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
+        self.assertEqual(member.name, member_name)
+        self.assertEqual(member.comment, member_comment)
+        self.assertEqual(event.last_member_position, 1)
+
+
+class ViewMemberEditPostTests(BaseViewTestCase):
+    def _callFUT(self, request):
+        from phitime.views import MemberView
+
+        return MemberView(request).edit_post()
+
+    def test_it(self):
+        event = self._make_event()
+        member = self._make_member(event)
+
+        member_name = 'member name'
+        member_comment = 'member comment'
+
+        request = DummyRequest({
+            'member.name': member_name,
+            'member.comment': member_comment,
+        })
+        request.matchdict['event_scrambled_id'] = event.scrambled_id
+        request.matchdict['member_position'] = member.position
+
+        self.assertEqual(event.last_member_position, 1)
 
         response = self._callFUT(request)
 
