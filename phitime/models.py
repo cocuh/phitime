@@ -73,10 +73,12 @@ class Event(Base):
 
     @classmethod
     def create(cls, name, description, timetable_type):
-        # todo implement validation
+        if name is None: # TODO validate length
+            raise ValidationException('event.name is None')
+        if description is None: # TODO Validate length
+            raise ValidationException('event.description is None')
         if not TimetableType.is_exist(timetable_type):
-            # todo validate hare
-            pass
+            raise ValidationException('event.timetable_type is not exist: timetable_type:{!r}'.format(timetable_type))
         return cls(name, description, timetable_type)
 
 
