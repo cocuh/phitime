@@ -5,7 +5,7 @@
         {{ form.input('event.name') }}
         {{ form.input('event.description') }}
         {{ form.select_timetable_type(TimetableType) }}
-        {{ form.csrf_token() }}
+        {{ form.csrf_token(request) }}
         <input type="submit"/>
     </form>
 {% endblock %}
