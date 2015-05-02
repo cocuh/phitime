@@ -1,5 +1,6 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
+
 from phitime.db import DBSession
 from phitime.models import Event
 from phitime.timetable import TimetableType
