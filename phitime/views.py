@@ -1,5 +1,6 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
+import transaction
 
 from phitime.db import DBSession
 from phitime.models import Event
@@ -36,8 +37,10 @@ class EventView(object):
         event_description = self.request.params.get('event.description')
         event_timetable_type = self.request.params.get('event.timetable_type')
 
-        event = Event.create(event_name, event_description, event_timetable_type)
-        event.validate()
+        with transaction.manager:
+            event = Event.create(event_name, event_description, event_timetable_type)
+            event.validate()
+    
         DBSession.add(event)
         DBSession.flush()
 
@@ -56,11 +59,12 @@ class EventView(object):
         event_description = self.request.params.get('event.description')
         event_timetable_type = self.request.params.get('event.timetable_type')
 
-        event = self.event
-        event.name = event_name
-        event.description = event_description
-        event.timetable_type = event_timetable_type
-        event.validate()
+        with transaction.manager:
+            event = self.event
+            event.name = event_name
+            event.description = event_description
+            event.timetable_type = event_timetable_type
+            event.validate()
 
         DBSession.add(event)
         DBSession.flush()
