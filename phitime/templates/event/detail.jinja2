@@ -1,1 +1,18 @@
 {% extends "../base.jinja2" %}
+{% block content %}
+    <table class="table table-striped">
+        <tr>
+            <th>event.name</th>
+            <td>{{ event.name }}</td>
+        </tr>
+        <tr>
+            <th>event.description</th>
+            <td>{{ event.description }}</td>
+        </tr>
+        <tr>
+            <th>event.timetable_type</th>
+            <td>{{ event.timetable_type }}</td>
+        </tr>
+    </table>
+    <a href="{{ request.route_path('event.edit', event_scrambled_id=event.scrambled_id) }}">edit</a>
+{% endblock %}

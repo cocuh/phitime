@@ -22,7 +22,7 @@ from phitime.db import (
     Base,
     DBSession,
 )
-from phitime.scrambler import scramble
+from phitime.scrambler import scramble, unscramble
 from phitime.timetable import TimetableType
 
 
@@ -64,12 +64,20 @@ class Event(Base):
     sponsor_id = Column(Integer, ForeignKey('users.id'))
     sponsor = relationship(User)
 
-    timetable_type = Column(String, nullable=False)
+    _timetable_type = Column(String, nullable=False)
 
     def __init__(self, name, description, timetable_type):
         self.name = name
         self.description = description
-        self.timetable_type = timetable_type
+        self._timetable_type = timetable_type
+
+    def _get_timetable_type(self):
+        return TimetableType.find_by_name(self._timetable_type)
+
+    def _set_timetable_type(self, timetable_type):
+        self._timetable_type = timetable_type
+
+    timetable_type = property(_get_timetable_type, _set_timetable_type)
 
     @property
     def scrambled_id(self):
@@ -80,13 +88,22 @@ class Event(Base):
 
     @classmethod
     def create(cls, name, description, timetable_type):
-        if name is None:  # TODO validate length
+        event = cls(name, description, timetable_type)
+        return event
+
+    @classmethod
+    def find_by_scrambled_id(cls, scrambled_id):
+        id = unscramble(scrambled_id)
+        return cls.query.filter(cls.id == id).first()
+
+    def validate(self):
+        if self.name is None:  # TODO validate length
             raise ValidationException('event.name is None')
-        if description is None:  # TODO Validate length
+        if self.description is None:  # TODO Validate length
             raise ValidationException('event.description is None')
-        if not TimetableType.is_exist(timetable_type):
-            raise ValidationException('event.timetable_type is not exist: timetable_type:{!r}'.format(timetable_type))
-        return cls(name, description, timetable_type)
+        if not TimetableType.is_exist(self._timetable_type):
+            raise ValidationException(
+                'event.timetable_type is not exist: timetable_type:{!r}'.format(self.timetable_type))
 
 
 class Member(Base):

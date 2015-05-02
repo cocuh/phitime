@@ -1,9 +1,24 @@
-{% macro select_timetable_type(TimetableType) %}
-    <div>
-        {% for timetable in TimetableType.timetable_types %}
-            <label class="radio-inline">
-                <input type="radio" name="event.timetable_type" value="{{ timetable.name }}" {{ 'checked' if timetable.is_default() else '' }}> {{ timetable.display_name }}
-            </label>
-        {% endfor %}
-    </div>
+{% macro select_timetable_type(TimetableType, default='')-%}
+{%-if default == ''-%}
+{%-set default = TimetableType.default_type -%}
+{%-endif %}
+<div>
+    {% for timetable in TimetableType.timetable_types %}
+        <label class="radio-inline">
+            <input type="radio" name="event.timetable_type"
+                   value="{{ timetable.name }}" {{ 'checked' if timetable == default else '' }}> {{ timetable.display_name }}
+        </label>
+    {% endfor %}
+</div>
 {% endmacro %}
+{% macro input(name, value='', type='text', size=20) -%}
+    <div class="form-group">
+        <label>
+            {{ name }}
+            <input type="{{ type }}" name="{{ name }}" class="form-control" value="{{ value|e }}" size="{{ size }}">
+        </label>
+    </div>
+{%- endmacro %}
+{% macro csrf_token(request) -%}
+    <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
+{%- endmacro %}
