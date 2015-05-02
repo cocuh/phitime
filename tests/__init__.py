@@ -11,6 +11,8 @@ from phitime.db import (
 class BaseTestCase(unittest.TestCase):
     ECHO_SQL = False
     DEFAULT_SETTINGS = {
+        'phitime.scramble_salt': 2204040131,
+        'phitime.scramble_inverse_salt': 3264957675,
     }
 
     def _getTargetClass(self):
@@ -32,6 +34,7 @@ class BaseTestCase(unittest.TestCase):
 
     def _setup_db(self):
         from sqlalchemy import create_engine
+        import phitime.models
 
         self.engine = create_engine('sqlite://', echo=self.ECHO_SQL)
         DBSession.configure(bind=self.engine)
