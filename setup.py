@@ -46,5 +46,6 @@ setup(name='phitime',
       main = phitime:main
       [console_scripts]
       initialize_phitime_db = phitime.scripts.initializedb:main
+      generate_scramble_salt = phitime.scripts.generate_scramble_salt:main
       """,
 )
