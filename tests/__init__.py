@@ -34,7 +34,7 @@ class BaseTestCase(unittest.TestCase):
 
     def _setup_db(self):
         from sqlalchemy import create_engine
-        import phitime.models
+        import phitime.models  # to load models
 
         self.engine = create_engine('sqlite://', echo=self.ECHO_SQL)
         DBSession.configure(bind=self.engine)
