@@ -62,20 +62,20 @@ class Event(Base):
 
     sponsor_id = Column(Integer, ForeignKey('users.id'))
     sponsor = relationship(User)
-    
+
     timetable_type = Column(String, nullable=False)
 
-    def __init__(self, name, description,timetable_type):
+    def __init__(self, name, description, timetable_type):
         self.name = name
         self.description = description
         self.timetable_type = timetable_type
-        
+
 
     @classmethod
     def create(cls, name, description, timetable_type):
-        if name is None: # TODO validate length
+        if name is None:  # TODO validate length
             raise ValidationException('event.name is None')
-        if description is None: # TODO Validate length
+        if description is None:  # TODO Validate length
             raise ValidationException('event.description is None')
         if not TimetableType.is_exist(timetable_type):
             raise ValidationException('event.timetable_type is not exist: timetable_type:{!r}'.format(timetable_type))
