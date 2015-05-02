@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import (
     relationship,
+    backref,
 )
 from passlib.context import CryptContext
 
@@ -64,12 +65,18 @@ class Event(Base):
     sponsor_id = Column(Integer, ForeignKey('users.id'))
     sponsor = relationship(User)
 
-    _timetable_type = Column(String, nullable=False)
+    last_member_position = Column(Integer, nullable=False)
+
+    _timetable_type = Column(String, nullable=False, default=0)
 
     def __init__(self, name, description, timetable_type):
         self.name = name
         self.description = description
         self._timetable_type = timetable_type
+        self.last_member_position = 0
+
+    def __repr__(self):
+        return '<Event name="{}">'.format(self.name)
 
     def _get_timetable_type(self):
         return TimetableType.find_by_name(self._timetable_type)
@@ -105,6 +112,12 @@ class Event(Base):
             raise ValidationException(
                 'event.timetable_type is not exist: timetable_type:{!r}'.format(self.timetable_type))
 
+    def create_member(self, name, comment):
+        self.last_member_position += 1
+        member = Member(self, name, comment, self.last_member_position)
+        member.validate()
+        return member
+
 
 class Member(Base):
     __tablename__ = 'members'
@@ -112,9 +125,32 @@ class Member(Base):
     id = Column(Integer, primary_key=True)
 
     name = Column(Unicode, nullable=False)
+    comment = Column(Unicode, nullable=False)
+    position = Column(Integer, nullable=False)
 
     event_id = Column(Integer, ForeignKey('events.id'), nullable=False)
-    event = relationship(Event)
+    event = relationship(Event, backref=backref('members'))
+
+    def __init__(self, event, name, comment, position):
+        self.event = event
+        self.name = name
+        self.comment = comment
+        self.position = position
+
+    def __repr__(self):
+        return '<Member name="{}" position="{}">'.format(self.name, self.position)
+
+    @classmethod
+    def find(cls, event, position):
+        return cls.query.filter(cls.event_id == event.id, cls.position == position)
+
+    def validate(self):
+        if self.event is None:
+            raise ValidationException('member.event is None')
+        if self.name is None:  # TODO validate length
+            raise ValidationException('member.name is None')
+        if self.comment is None:  # TODO Validate length
+            raise ValidationException('member.comment is None')
 
 
 class _PeriodTime(object):
