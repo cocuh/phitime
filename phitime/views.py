@@ -37,11 +37,12 @@ class EventView(object):
         event_description = self.request.params.get('event.description')
         event_timetable_type = self.request.params.get('event.timetable_type')
 
-        with transaction.manager:
-            event = Event.create(event_name, event_description, event_timetable_type)
-            event.validate()
-            DBSession.add(event)
-    
+        event = Event.create(event_name, event_description, event_timetable_type)
+        event.validate()
+
+        DBSession.add(event)
+        DBSession.flush()
+
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
     @view_config(route_name='event.edit', request_method='GET', renderer='templates/event/edit.jinja2')
@@ -57,13 +58,14 @@ class EventView(object):
         event_description = self.request.params.get('event.description')
         event_timetable_type = self.request.params.get('event.timetable_type')
 
-        with transaction.manager:
-            event = self.event
-            event.name = event_name
-            event.description = event_description
-            event.timetable_type = event_timetable_type
-            event.validate()
-            DBSession.add(event)
+        event = self.event
+        event.name = event_name
+        event.description = event_description
+        event.timetable_type = event_timetable_type
+        event.validate()
+
+        DBSession.add(event)
+        DBSession.flush()
 
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=self.event.scrambled_id))
 
@@ -86,6 +88,14 @@ class EventView(object):
 class MemberView(object):
     def __init__(self, request):
         self.request = request
+
+    @view_config(route_name='member.create', request_method='GET', renderer='templates/member/create.jinja2')
+    def edit_get(self):
+        pass
+
+    @view_config(route_name='member.create', request_method='POST')
+    def edit_post(self):
+        pass
 
     @view_config(route_name='member.edit', request_method='GET', renderer='templates/member/edit.jinja2')
     def edit_get(self):
