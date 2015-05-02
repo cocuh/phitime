@@ -197,7 +197,7 @@ class ProposedTime(_PeriodTime, Base):
     id = Column(Integer, primary_key=True)
 
     event_id = Column(Integer, ForeignKey('events.id'))
-    event = relationship(Event)
+    event = relationship(Event, backref=backref('proposed_times'))
 
 
 class AvailableTime(_PeriodTime, Base):
@@ -206,4 +206,4 @@ class AvailableTime(_PeriodTime, Base):
     id = Column(Integer, primary_key=True)
 
     member_id = Column(Integer, ForeignKey('members.id'))
-    member = relationship(Member)
+    member = relationship(Member, backref=backref('available_times'))
