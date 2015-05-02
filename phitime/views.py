@@ -90,7 +90,8 @@ class MemberView(object):
     @view_config(route_name='member.create', request_method='GET', renderer='templates/member/create.jinja2')
     def create_get(self):
         return {
-            'event': self.event,
+            'event': self.get_event(),
+            'member': self.get_member(),
             'TimetableType': TimetableType,
         }
 
@@ -99,7 +100,7 @@ class MemberView(object):
         member_name = self.request.params.get('member.name')
         member_comment = self.request.params.get('member.comment')
 
-        event = self.event
+        event = self.get_event()
 
         member = event.create_member(member_name, member_comment)
         member.validate()
@@ -109,9 +110,9 @@ class MemberView(object):
     @view_config(route_name='member.edit', request_method='GET', renderer='templates/member/edit.jinja2')
     def edit_get(self):
         return {
-            'event': self.event,
+            'event': self.get_event(),
+            'member': self.get_member(),
             'TimetableType': TimetableType,
-            'member': self.member,
         }
 
     @view_config(route_name='member.edit', request_method='POST')
@@ -119,8 +120,8 @@ class MemberView(object):
         member_name = self.request.params.get('member.name')
         member_comment = self.request.params.get('member.comment')
 
-        event = self.event
-        member = self.member
+        event = self.get_event()
+        member = self.get_member()
 
         member.name = member_name
         member.comment = member_comment
@@ -129,15 +130,13 @@ class MemberView(object):
 
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
-    @property
-    def event(self):
+    def get_event(self):
         scrambled_id = self.request.matchdict.get('event_scrambled_id')
         return Event.find_by_scrambled_id(scrambled_id)
 
-    @property
-    def member(self):
+    def get_member(self):
         position = self.request.matchdict.get('member_position')
-        return Member.find(self.event, position).first()
+        return Member.find(self.get_event(), position).first()
 
 
 class TimetableView(object):
