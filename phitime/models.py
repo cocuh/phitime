@@ -37,7 +37,7 @@ class User(Base):
     _password = Column(String(511), nullable=True, default=None)
     twitter_id = Column(BigInteger, unique=True, nullable=True, default=None)
 
-    _password_ctx = CryptContext(["sha256_crypt"])
+    _password_ctx = CryptContext(["sha512_crypt"])
 
     def __init__(self, name):
         self.identifier = name
@@ -51,7 +51,7 @@ class User(Base):
         self._password = self._password_ctx.encrypt(password)
 
     def verify_password(self, password):
-        self._password_ctx.verify(password, self.password)
+        return self._password_ctx.verify(password, self._password)
 
 
 class Event(Base):
