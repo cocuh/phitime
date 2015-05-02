@@ -40,10 +40,8 @@ class EventView(object):
         with transaction.manager:
             event = Event.create(event_name, event_description, event_timetable_type)
             event.validate()
+            DBSession.add(event)
     
-        DBSession.add(event)
-        DBSession.flush()
-
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
     @view_config(route_name='event.edit', request_method='GET', renderer='templates/event/edit.jinja2')
@@ -65,9 +63,7 @@ class EventView(object):
             event.description = event_description
             event.timetable_type = event_timetable_type
             event.validate()
-
-        DBSession.add(event)
-        DBSession.flush()
+            DBSession.add(event)
 
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=self.event.scrambled_id))
 
