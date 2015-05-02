@@ -2,6 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from phitime.db import DBSession
+from phitime.exceptions import MemberNotFoundException, EventNotFoundException
 from phitime.models import Event, Member
 from phitime.timetable import TimetableType
 
@@ -132,11 +133,29 @@ class MemberView(object):
 
     def get_event(self):
         scrambled_id = self.request.matchdict.get('event_scrambled_id')
-        return Event.find_by_scrambled_id(scrambled_id)
+        if scrambled_id is None:
+            raise EventNotFoundException('scrambled_id is None')
+
+        event = Event.find_by_scrambled_id(scrambled_id)
+
+        if event is None:
+            raise EventNotFoundException('scrambled_id:{}'.format(scrambled_id))
+        return event
 
     def get_member(self):
+        event = self.get_event()
         position = self.request.matchdict.get('member_position')
-        return Member.find(self.get_event(), position).first()
+
+        if position is None:
+            raise MemberNotFoundException('position is None'.format(position))
+
+        member = Member.find(event, position).first()
+
+        if member is None:
+            raise MemberNotFoundException('event:{!r} position:{!r}'.format(
+                event, position
+            ))
+        return member
 
 
 class TimetableView(object):

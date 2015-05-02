@@ -96,7 +96,7 @@ class ViewMemberCreatePostTests(BaseViewTestCase):
     def _callFUT(self, request):
         from phitime.views import MemberView
 
-        return MemberView(request).edit_post()
+        return MemberView(request).create_posti()
 
     def test_it(self):
         event = self._make_event()
