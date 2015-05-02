@@ -1,5 +1,6 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
+from pyramid.session import SignedCookieSessionFactory
 
 from phitime.db import (
     DBSession,
@@ -13,9 +14,9 @@ required_plugins = [
 
 
 def _load_secret_ini(settings):
-    import six.moves
+    import  six.moves 
 
-    secret_ini = settings.get("phitime.secret_ini", None)
+    secret_ini = settings.get("phitime.secret.ini", None)
     if secret_ini is None:
         return
 
@@ -26,15 +27,19 @@ def _load_secret_ini(settings):
         settings.update(config.items(section))
     return settings
 
+def _gen_session_factory(settings):
+    return SignedCookieSessionFactory(settings['phitime.session_secret'])
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    _load_secret_ini(settings)
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
+    
     config = Configurator(settings=settings)
-
+    config.set_session_factory(_gen_session_factory(settings))
     for plugin_name in required_plugins:
         config.include(plugin_name)
 
@@ -43,9 +48,9 @@ def main(global_config, **settings):
     
     config.add_route('top', '/')
     config.add_route('event.create', '/event_create')
-    config.add_route('event.detail', '/event/{scrambled_event_id}/')
-    config.add_route('event.edit', '/event/{scrambled_event_id}/edit')
-    config.add_route('member.edit', '/event/{scrambled_event_id}/{member_position}/edit')
+    config.add_route('event.detail', '/event/{event_scrambled_id}/')
+    config.add_route('event.edit', '/event/{event_scrambled_id}/edit')
+    config.add_route('member.edit', '/event/{event_scrambled_id}/{member_position}/edit')
     config.add_route('timetable.univ_tsukuba', '/timetable/univ_tsukuba.svg')
     config.add_route('timetable.half_hourly', '/timetable/half_hourly.svg')
 

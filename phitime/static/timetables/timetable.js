@@ -254,7 +254,7 @@
       var activeCells = [];
       for (var idx = 0; idx < this.cells.length; idx++) {
         var $cell = this.cells[idx];
-        if (this._hasClass($cell, this.classes.active) && !this._hasClass($cell, this.clases.unavailable)) {
+        if (this._hasClass($cell, this.classes.active) && !this._hasClass($cell, this.classes.unavailable)) {
           activeCells.push($cell);
         }
       }
