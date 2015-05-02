@@ -50,15 +50,17 @@ class EventView(object):
 
     @view_config(route_name='event.edit', request_method='POST')
     def edit_post(self):
-        pass
+        return {}
 
-    @view_config(route_name='event.detail', request_method='GET', renderer='tempaltes/event/detail.jinja2')
+    @view_config(route_name='event.detail', request_method='GET', renderer='templates/event/detail.jinja2')
     def detail_get(self):
-        pass
+        return {
+            'event': self.event,
+        }
 
     @view_config(route_name='event.detail', request_method='POST')
     def detail_post(self):
-        pass
+        return {}
 
     @property
     def event(self):

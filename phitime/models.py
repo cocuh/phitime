@@ -64,12 +64,16 @@ class Event(Base):
     sponsor_id = Column(Integer, ForeignKey('users.id'))
     sponsor = relationship(User)
 
-    timetable_type = Column(String, nullable=False)
+    _timetable_type = Column(String, nullable=False)
 
     def __init__(self, name, description, timetable_type):
         self.name = name
         self.description = description
-        self.timetable_type = timetable_type
+        self._timetable_type = timetable_type
+
+    @property
+    def timetable_type(self):
+        return TimetableType.find_by_name(self._timetable_type)
 
     @property
     def scrambled_id(self):
