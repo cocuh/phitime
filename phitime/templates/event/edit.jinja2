@@ -1,1 +1,11 @@
 {% extends "../base.jinja2" %}
+{% import "../macro/form.jinja2" as form %}
+{% block content %}
+    <form method="POST" action="">
+        {{ form.input('event.name', value=event.name) }}
+        {{ form.input('event.description', value=event.name) }}
+        {{ form.select_timetable_type(TimetableType) }}
+        {{ form.csrf_token(request) }}
+        <input type="submit"/>
+    </form>
+{% endblock %}
