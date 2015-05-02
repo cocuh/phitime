@@ -24,10 +24,23 @@ class ViewEventCreatePostTests(BaseViewTestCase):
         return EventView(request).create_post()
 
     def test_it(self):
+        from phitime.models import Event
+        
+        event_name = 'いべんとだよ'
+        event_description = 'せつめいぶんだよ'
+        event_timetable_type = 'half_hourly'
+
+        self.assertEqual(Event.query.count(), 0)
         request = DummyRequest({
-            'event.name': 'いべんとだよ',
-            'event.description': 'せつめいぶんだよ',
-            'event.timetable_type': 'half_hourly',
+            'event.name': event_name,
+            'event.description': event_description,
+            'event.timetable_type': event_timetable_type,
         })
-        req = self._callFUT(request)
-        print(req)
+        
+        response = self._callFUT(request)
+
+        self.assertEqual(Event.query.count(), 1)
+        event =  Event.query.first()
+        self.assertEqual(event.name, event_name)
+        self.assertEqual(event.description, event_description)
+        self.assertEqual(event.timetable_type, event_timetable_type)
