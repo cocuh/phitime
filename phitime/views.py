@@ -38,12 +38,15 @@ class EventView(object):
         event = Event.create(event_name, event_description, timetable_type)
         DBSession.add(event)
         DBSession.flush()
-        
+
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
     @view_config(route_name='event.edit', request_method='GET', renderer='templates/event/edit.jinja2')
     def edit_get(self):
-        pass
+        return {
+            'event': self.event,
+            'TimetableType': TimetableType,
+        }
 
     @view_config(route_name='event.edit', request_method='POST')
     def edit_post(self):
@@ -56,6 +59,11 @@ class EventView(object):
     @view_config(route_name='event.detail', request_method='POST')
     def detail_post(self):
         pass
+
+    @property
+    def event(self):
+        scrambled_id = self.request.matchdict.get('event_scrambled_id')
+        return Event.get_by_scrambled_id(scrambled_id)
 
 
 class MemberView(object):

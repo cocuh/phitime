@@ -22,7 +22,7 @@ from phitime.db import (
     Base,
     DBSession,
 )
-from phitime.scrambler import scramble
+from phitime.scrambler import scramble, unscramble
 from phitime.timetable import TimetableType
 
 
@@ -87,6 +87,11 @@ class Event(Base):
         if not TimetableType.is_exist(timetable_type):
             raise ValidationException('event.timetable_type is not exist: timetable_type:{!r}'.format(timetable_type))
         return cls(name, description, timetable_type)
+
+    @classmethod
+    def get_by_scrambled_id(cls, scrambled_id):
+        id = unscramble(scrambled_id)
+        return cls.query.find(cls.id == id).first()
 
 
 class Member(Base):
