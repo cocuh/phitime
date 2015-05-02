@@ -28,7 +28,7 @@ def _load_secret_ini(settings):
     return settings
 
 def _gen_session_factory(settings):
-    return SignedCookieSessionFactory('rarara')
+    return SignedCookieSessionFactory(settings['phitime.session_secret'])
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
