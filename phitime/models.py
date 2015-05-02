@@ -89,7 +89,7 @@ class Event(Base):
         return cls(name, description, timetable_type)
 
     @classmethod
-    def get_by_scrambled_id(cls, scrambled_id):
+    def find_by_scrambled_id(cls, scrambled_id):
         id = unscramble(scrambled_id)
         return cls.query.find(cls.id == id).first()
 

@@ -63,7 +63,7 @@ class EventView(object):
     @property
     def event(self):
         scrambled_id = self.request.matchdict.get('event_scrambled_id')
-        return Event.get_by_scrambled_id(scrambled_id)
+        return Event.find_by_scrambled_id(scrambled_id)
 
 
 class MemberView(object):
