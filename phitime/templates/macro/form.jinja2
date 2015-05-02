@@ -2,7 +2,7 @@
     <div>
         {% for timetable in TimetableType.timetable_types %}
             <label class="radio-inline">
-                <input type="radio" name="timetable_type" value="{{ timetable.name }}" {{ 'checked' if timetable.is_default() else '' }}> {{ timetable.display_name }}
+                <input type="radio" name="event.timetable_type" value="{{ timetable.name }}" {{ 'checked' if timetable.is_default() else '' }}> {{ timetable.display_name }}
             </label>
         {% endfor %}
     </div>

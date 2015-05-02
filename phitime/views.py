@@ -31,12 +31,12 @@ class EventView(object):
 
     @view_config(route_name='event.create', request_method='POST', check_csrf=True)
     def create_post(self):
-        event_name = self.request.params.get('event_name')
-        event_description = self.request.params.get('event_description')
-        timetable_type = self.request.params.get('timetable_type')
+        event_name = self.request.params.get('event.name')
+        event_description = self.request.params.get('event.description')
+        timetable_type = self.request.params.get('event.timetable_type')
         event = Event.create(event_name, event_description, timetable_type)
         DBSession.add(event)
-        return HTTPFound(self.request.route_path('event.detail'))
+        return HTTPFound(self.request.route_path('event.detail', scrambled_event_id=event.scra))
 
     @view_config(route_name='event.edit', request_method='GET', renderer='templates/event/edit.jinja2')
     def edit_get(self):
