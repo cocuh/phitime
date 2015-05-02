@@ -34,9 +34,12 @@ class EventView(object):
         event_name = self.request.params.get('event.name')
         event_description = self.request.params.get('event.description')
         timetable_type = self.request.params.get('event.timetable_type')
+
         event = Event.create(event_name, event_description, timetable_type)
         DBSession.add(event)
-        return HTTPFound(self.request.route_path('event.detail', scrambled_event_id=event.scra))
+        DBSession.flush()
+        
+        return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
     @view_config(route_name='event.edit', request_method='GET', renderer='templates/event/edit.jinja2')
     def edit_get(self):
