@@ -22,6 +22,7 @@ from phitime.db import (
     Base,
     DBSession,
 )
+from phitime.scrambler import scramble
 from phitime.timetable import TimetableType
 
 
@@ -70,6 +71,12 @@ class Event(Base):
         self.description = description
         self.timetable_type = timetable_type
 
+    @property
+    def scrambled_id(self):
+        """
+        :rtype: int
+        """
+        return scramble(self.id)
 
     @classmethod
     def create(cls, name, description, timetable_type):
