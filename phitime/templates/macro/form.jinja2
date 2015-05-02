@@ -1,7 +1,7 @@
 {% macro select_timetable_type(TimetableType, default='')-%}
 {%-if default == ''-%}
 {%-set default = TimetableType.default_type -%}
-{%-endif- %}
+{%-endif %}
 <div>
     {% for timetable in TimetableType.timetable_types %}
         <label class="radio-inline">
