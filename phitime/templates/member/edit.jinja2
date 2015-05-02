@@ -1,1 +1,10 @@
 {% extends "../base.jinja2" %}
+{% import "../macro/form.jinja2" as form %}
+{% block content %}
+    <form method="post" action="">
+        {{ form.input('member.name', member.name) }}
+        {{ form.input('member.comment', member.comment) }}
+        <input type="submit">
+    </form>
+    <a href="{{ 'event.detail'|route_path(event_scrambled_id=event.scrambled_id) }}">back</a>
+{% endblock %}

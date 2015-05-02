@@ -2,6 +2,14 @@
 {% block content %}
     <table class="table table-striped">
         <tr>
+            <th>event.id</th>
+            <td>{{ event.id }}</td>
+        </tr>
+        <tr>
+            <th>event.scrambled_id</th>
+            <td>{{ event.scrambled_id }}</td>
+        </tr>
+        <tr>
             <th>event.name</th>
             <td>{{ event.name }}</td>
         </tr>
@@ -13,6 +21,15 @@
             <th>event.timetable_type</th>
             <td>{{ event.timetable_type }}</td>
         </tr>
+        <tr>
+            <th>event.members</th>
+            <td>[{% for member in event.members -%}
+                <a href="{{ "member.edit"|route_path(event_scrambled_id=event.scrambled_id, member_position=member.position) }}">
+                    {{- member -}}</a>
+            {%- endfor %}]
+            </td>
+        </tr>
     </table>
-    <a href="{{ request.route_path('event.edit', event_scrambled_id=event.scrambled_id) }}">edit</a>
+    <a href="{{ request.route_path('event.edit', event_scrambled_id=event.scrambled_id) }}">event.edit</a><br/>
+    <a href="{{ request.route_path('member.create', event_scrambled_id=event.scrambled_id) }}">member.create</a><br/>
 {% endblock %}
