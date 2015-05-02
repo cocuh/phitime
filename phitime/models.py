@@ -91,7 +91,7 @@ class Event(Base):
     @classmethod
     def find_by_scrambled_id(cls, scrambled_id):
         id = unscramble(scrambled_id)
-        return cls.query.find(cls.id == id).first()
+        return cls.query.filter(cls.id == id).first()
 
 
 class Member(Base):
