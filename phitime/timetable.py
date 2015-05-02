@@ -11,7 +11,7 @@ class TimetableType(object):
         self.name = name
         self.display_name = display_name
         self.route_name = route_name
-    
+
     def is_default(self):
         return self.default_type == self
 
@@ -32,11 +32,11 @@ class TimetableType(object):
             cls.set_default(timetable_type)
 
         return timetable_type
-    
+
     @classmethod
     def is_exist(cls, name):
         timetable_type = cls.find_by_name(name)
-        return timetable_type is None
+        return timetable_type is not None
 
     @classmethod
     def set_default(cls, default_type):
