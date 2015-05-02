@@ -116,6 +116,8 @@ class Event(Base):
         self.last_member_position += 1
         member = Member(self, name, comment, self.last_member_position)
         member.validate()
+        DBSession.add(self)
+        DBSession.flush()
         return member
 
 
