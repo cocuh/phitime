@@ -9,4 +9,9 @@
     {{ link('timetable.univ_tsukuba') }}
     {{ link('timetable.half_hourly') }}
     </ul>
+    <ul>
+        {% for event in Event.query.all() %}
+            <li><a href="{{ 'event.detail'|route_path(event_scrambled_id=event.scrambled_id) }}">{{ event }}</a></li>
+        {% endfor %}
+    </ul>
 {% endblock %}
