@@ -1,8 +1,10 @@
 <html lang="ja">
 <head>
     <title>{% block title %}phitime{% endblock %}</title>
+    <script type="application/javascript" src="{{ "phitime:static/js/jquery-2.1.3.min.js"|static_path }}"></script>
     <link rel="stylesheet" href="{{ 'phitime:resources/bootstrap/dist/css/bootstrap.css' | static_path }}">
-    <script type="application/javascript" src="{{ 'phitime:resources/bootstrap/dist/js/bootstrap.js' | static_path }}"></script>
+    <script type="application/javascript"
+            src="{{ 'phitime:resources/bootstrap/dist/js/bootstrap.js' | static_path }}"></script>
 </head>
 <body>
 <div id="content">
