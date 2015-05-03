@@ -84,7 +84,7 @@ class EventView(object):
     @view_config(route_name='event.api.info', renderer='json')
     def info(self):
         return {
-            'event': repr(self.get_event()),
+            'event': self.get_event(),
         }
 
     def get_event(self):
