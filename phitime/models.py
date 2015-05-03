@@ -44,13 +44,25 @@ class User(Base):
 
     @classmethod
     def create(cls, name):
+        """
+        :type name: Unicode, str 
+        :rtype: User
+        """
         # TODO validate name
         return cls(name)
 
     def set_password(self, password):
+        """
+        :type password: str
+        :rtype: None
+        """
         self._password = self._password_ctx.encrypt(password)
 
     def verify_password(self, password):
+        """
+        :type password: str
+        :rtype: bool
+        """
         return self._password_ctx.verify(password, self._password)
 
 
@@ -89,21 +101,35 @@ class Event(Base):
     @property
     def scrambled_id(self):
         """
-        :rtype: int
+        :rtype: str
         """
         return scramble(self.id)
 
     @classmethod
     def create(cls, name, description, timetable_type):
+        """
+        :type name: Unicode, str
+        :type description: Unicode, str
+        :type timetable_type: str
+        :rtype: Event
+        """
         event = cls(name, description, timetable_type)
         return event
 
     @classmethod
     def find_by_scrambled_id(cls, scrambled_id):
+        """
+        :param scrambled_id: event scrambled id
+        :type scrambled_id: str
+        :rtype: Event
+        """
         id = unscramble(scrambled_id)
         return cls.query.filter(cls.id == id).first()
 
     def validate(self):
+        """validate the instance's attributes. raises ValidationException
+        :rtype: None
+        """
         if self.name is None:  # TODO validate length
             raise ValidationException('event.name is None')
         if self.description is None:  # TODO Validate length
@@ -113,6 +139,11 @@ class Event(Base):
                 'event.timetable_type is not exist: timetable_type:{!r}'.format(self.timetable_type))
 
     def create_member(self, name, comment):
+        """
+        :type name: Unicode, str
+        :type comment: Unicode, str 
+        :rtype: Member
+        """
         self.last_member_position += 1
         member = Member(self, name, comment, self.last_member_position)
         member.validate()
@@ -144,9 +175,17 @@ class Member(Base):
 
     @classmethod
     def find(cls, event, position):
+        """
+        :type event: Event
+        :type position: int
+        :rtype: Member
+        """
         return cls.query.filter(cls.event_id == event.id, cls.position == position)
 
     def validate(self):
+        """validate the instance's attributes. raises ValidationException
+        :rtype: None
+        """
         if self.event is None:
             raise ValidationException('member.event is None')
         if self.name is None:  # TODO validate length
@@ -169,6 +208,13 @@ class _PeriodTime(object):
         self.date = date
 
     def set_times(self, start_minutes, period_length):
+        """
+        :param start_minutes: the number of minutes from the beginning of the day.
+        :type start_minutes: int
+        :param period_length: length (minutes)
+        :type period_length: int
+        :rtype: None
+        """
         self._start_minutes = start_minutes
         self._period_length = period_length
 
@@ -177,11 +223,11 @@ class _PeriodTime(object):
         """
         validate hour and minute in range 00:00-24:00
         
-        :param hour: 00-24
-        :type hour: int
-        :param minute: 00-59
-        :type minute: int
-        :return:
+        :param start_minutes: the number of minutes from the beginning of the day.
+        :type start_minutes: int
+        :param period_length: length (minutes)
+        :type period_length: int
+        :rtype: None
         """
         if not (0 <= start_minutes <= 24 * 60):
             raise ValidationException('minutes should be 0 <= minutes <= 24*60')
