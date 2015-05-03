@@ -92,7 +92,6 @@ class MemberView(object):
     def create_get(self):
         return {
             'event': self.get_event(),
-            'member': self.get_member(),
             'TimetableType': TimetableType,
         }
 
