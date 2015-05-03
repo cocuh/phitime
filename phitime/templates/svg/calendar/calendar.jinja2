@@ -1,10 +1,49 @@
+<?xml-stylesheet type="text/css" href="{{ 'phitime:static/calendar/calendar.css'|static_path }}" ?>
+{%- set cell_width=80 -%}
+{%- set cell_height=60 -%}
+{%- set header_height=30 -%}
+{%- set week_num=8 -%}
 <svg
         xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 {{ -header_height }} {{ cell_width*7 }} {{ week_num*cell_height+header_height }}"
         >
-    {% set cell_width=80 %}
-    {% set cell_height=60 %}
-    {% macro cell(classes) %}
-        <rect class="{{ classes }}" width="{{ cell_width }}" height="{{ cell_height }}"/>
+    {%- macro cell(x, day_name, y, classes) -%}
+        <g id="cell{{ "-%01d-%01d"%(y,x) }}" transform="translate({{ cell_width*x }})"
+           class="cell {{ day_name }} {{ ' '.join(classes) }}">
+            <rect width="{{ cell_width }}" height="{{ cell_height }}"/>
+            <text x="{{ cell_width*0.17 }}" y="{{ cell_height*0.22 }}">{{ y*7+x }}</text>
+        </g>
+    {%- endmacro %}
+    {%- macro header_cell(x, day_name, display_name, classes) -%}
+        <g class="column_header column_header_{{ day_name }} {{ ' '.join(classes) }}"
+           transform="translate({{ cell_width*x }})">
+            <rect width="{{ cell_width }}" height="{{ header_height }}"/>
+            <text x="{{ cell_width/2 }}" y="{{ header_height/2 }}">{{ display_name }}</text>
+        </g>
+    {%- endmacro -%}
+    {% macro week(y) %}
+        <g transform="translate(0, {{ y*cell_height }})">
+            {{ cell(0, "mon", y, []) }}
+            {{ cell(1, "tue", y, []) }}
+            {{ cell(2, "wed", y, []) }}
+            {{ cell(3, "thr", y, []) }}
+            {{ cell(4, "fri", y, []) }}
+            {{ cell(5, "sat", y, ["holiday"]) }}
+            {{ cell(6, "sun", y, ["holiday"]) }}
+        </g>
     {% endmacro %}
-    {{ cell("") }}
+    <g id="header" transform="translate(0, {{ -header_height }})">
+        {{ header_cell(0, "mon", "月", []) }}
+        {{ header_cell(1, "tue", "火", []) }}
+        {{ header_cell(2, "wed", "水", []) }}
+        {{ header_cell(3, "thr", "木", []) }}
+        {{ header_cell(4, "fri", "金", []) }}
+        {{ header_cell(5, "sat", "土", ["holiday"]) }}
+        {{ header_cell(6, "sun", "日", ["holiday"]) }}
+    </g>
+    <g>
+        {%- for week_idx in range(week_num) -%}
+            {{ week(week_idx) }}
+        {%- endfor -%}
+    </g>
 </svg>
