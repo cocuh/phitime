@@ -13,7 +13,9 @@ class TopView(object):
 
     @view_config(route_name='top', renderer='templates/top.jinja2')
     def top(self):
-        return {}
+        return {
+            'Event': Event,
+        }
 
 
 class UserView(object):
@@ -78,6 +80,12 @@ class EventView(object):
     @view_config(route_name='event.detail', request_method='POST')
     def detail_post(self):
         return {}
+
+    @view_config(route_name='event.api.info', renderer='json')
+    def info(self):
+        return {
+            'event': self.get_event(),
+        }
 
     def get_event(self):
         scrambled_id = self.request.matchdict.get('event_scrambled_id')

@@ -4,7 +4,20 @@
     <form method="post" action="">
         {{ form.input('member.name', member.name) }}
         {{ form.input('member.comment', member.comment) }}
-        <input type="submit">
+        <input type="hidden" value="" name="member.available_times" id="member_available_times">
+        <object id="timetable" data="{{ 'timetable.univ_tsukuba'|route_path }}" type="image/svg+xml"
+                height="80%"></object>
+        <input type="submit" id="submit">
     </form>
     <a href="{{ 'event.detail'|route_path(event_scrambled_id=event.scrambled_id) }}">back</a>
+    <script>
+        $(document).ready(function () {
+            $("#submit").click(function (e) {
+                var available_times = $("#timetable")[0].contentDocument.timetable.getActivePeriods();
+                console.log(JSON.stringify(available_times));
+                $("#member_available_times").val(JSON.stringify(available_times));
+                e.preventDefault();
+            });
+        })
+    </script>
 {% endblock %}

@@ -90,6 +90,13 @@ class Event(Base):
     def __repr__(self):
         return '<Event name="{}">'.format(self.name)
 
+    def __json__(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+
+        }
+
     def _get_timetable_type(self):
         return TimetableType.find_by_name(self._timetable_type)
 
