@@ -50,6 +50,6 @@ class TimetableType(object):
         cls.default_type = default_type
 
 
-TimetableType.register('half_hourly', 'timetable.half_hourly', '30分区切り', is_default=True)
-TimetableType.register('univ_tsukuba', 'timetable.univ_tsukuba', '筑波大学時間割')
+TimetableType.register('half_hourly', 'svg.timetable.half_hourly', '30分区切り', is_default=True)
+TimetableType.register('univ_tsukuba', 'svg.timetable.univ_tsukuba', '筑波大学時間割')
 
