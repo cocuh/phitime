@@ -1,0 +1,10 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        >
+    {% set cell_width=80 %}
+    {% set cell_height=60 %}
+    {% macro cell(classes) %}
+        <rect class="{{ classes }}" width="{{ cell_width }}" height="{{ cell_height }}"/>
+    {% endmacro %}
+    {{ cell("") }}
+</svg>
