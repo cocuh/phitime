@@ -183,4 +183,6 @@ class SVGView(object):
     @view_config(route_name='svg.calendar', renderer='templates/svg/calendar/calendar.jinja2',
         http_cache=3600)
     def calendar(request):
-        return {}
+        return {
+            "week_num": 5,
+        }

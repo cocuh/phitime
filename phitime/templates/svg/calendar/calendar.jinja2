@@ -2,9 +2,9 @@
 {%- set cell_width=80 -%}
 {%- set cell_height=60 -%}
 {%- set header_height=30 -%}
-{%- set week_num=8 -%}
 <svg
         xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="0 {{ -header_height }} {{ cell_width*7 }} {{ week_num*cell_height+header_height }}"
         >
     {%- macro cell(x, day_name, y, classes) -%}
@@ -46,4 +46,5 @@
             {{ week(week_idx) }}
         {%- endfor -%}
     </g>
+    <script xlink:href="{{ "phitime:static/calendar/calendar.js"|static_path }}" type="application/javascript"/>
 </svg>
