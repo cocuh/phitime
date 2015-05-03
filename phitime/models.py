@@ -79,7 +79,7 @@ class Event(Base):
 
     last_member_position = Column(Integer, nullable=False)
 
-    _timetable_type = Column(String, nullable=False, default=0)
+    _timetable_type = Column(String, nullable=False, default='')
 
     def __init__(self, name, description, timetable_type):
         self.name = name
