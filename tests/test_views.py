@@ -62,6 +62,47 @@ class ViewEventCreatePostTests(BaseViewTestCase):
 
         self.assertEqual(response.location, request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
+    def test_no_name(self):
+        from phitime.exceptions import ValidationException
+
+        request = DummyRequest({
+            'event.description': '',
+            'event.timetable_type': '',
+        })
+
+        self.assertRaises(ValidationException, self._callFUT, request)
+
+    def test_no_description(self):
+        from phitime.exceptions import ValidationException
+
+        request = DummyRequest({
+            'event.name': '',
+            'event.timetable_type': '',
+        })
+
+        self.assertRaises(ValidationException, self._callFUT, request)
+
+    def test_no_timetable_type(self):
+        from phitime.exceptions import ValidationException
+
+        request = DummyRequest({
+            'event.name': '',
+            'event.description': '',
+        })
+
+        self.assertRaises(ValidationException, self._callFUT, request)
+
+    def test_no_exist_timetable_type(self):
+        from phitime.exceptions import ValidationException
+
+        request = DummyRequest({
+            'event.name': '',
+            'event.description': '',
+            'event.timetable_type': 'NO_SUCH_TIMETABLE_TYPE',
+        })
+
+        self.assertRaises(ValidationException, self._callFUT, request)
+
 
 class ViewEventEditPostTests(BaseViewTestCase):
     def _callFUT(self, request):
