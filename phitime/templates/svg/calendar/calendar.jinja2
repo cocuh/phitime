@@ -9,7 +9,8 @@
         >
     {%- macro cell(x, day_name, y, classes) -%}
         <g id="cell{{ "-%01d-%01d"%(y,x) }}" transform="translate({{ cell_width*x }})"
-           class="cell {{ day_name }} {{ ' '.join(classes) }}">
+           class="cell {{ day_name }} {{ ' '.join(classes) }}"
+           data-x="{{ x }}" data-y="{{ y }}">
             <rect width="{{ cell_width }}" height="{{ cell_height }}"/>
             <text x="{{ cell_width*0.17 }}" y="{{ cell_height*0.22 }}">{{ y*7+x }}</text>
         </g>
@@ -46,5 +47,4 @@
             {{ week(week_idx) }}
         {%- endfor -%}
     </g>
-    <script xlink:href="{{ "phitime:static/calendar/calendar.js"|static_path }}" type="application/javascript"/>
 </svg>
