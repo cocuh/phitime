@@ -229,7 +229,6 @@
         },
         mouseover: function (event) {
           self._clearSelectingCells();
-          console.log(event.touches)
           if (status.isSelecting && event.buttons != 0 && event.which % 2 != 0) {
             saveStatusEnd();
           }
