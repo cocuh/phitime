@@ -54,6 +54,22 @@
   };
   (function (proto) {
     /**
+     * set including date
+     * @param {Date} date
+     */
+    proto.setBaseDate = function (date) {
+      var currentDate = this._getLatestMonday(date);
+      var headers = [];
+      for (var idx = 0; idx < 7; idx++) {
+        var day = [
+          "Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat",
+        ][currentDate.getDay()];
+        headers.push('' + (currentDate.getMonth() + 1) + '/' + (currentDate.getDate()) + "(" + day + ")");
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      this.setColumnHeaderTexts(headers);
+    };
+    /**
      * set column header texts
      * @param {Array<string>} headerTexts [monday, tuesday, ... , sunday]
      */
@@ -150,6 +166,12 @@
       });
     };
     // private method
+    proto._getLatestMonday = function (date) {
+      var delta = 7 - (7 + date.getDay() - 1) % 7;
+      var res = new Date(date.getTime());
+      res.setDate(date.getDate() + delta);
+      return res;
+    };
     proto._mapEachCell = function (func) {
       for (var dayIdx = 0; dayIdx < this.columnElements.length; dayIdx++) {
         var $oneDay = this.columnElements[dayIdx];

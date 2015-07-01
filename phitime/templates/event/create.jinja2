@@ -1,11 +1,32 @@
 {% extends "../base.jinja2" %}
 {% import "../macro/form.jinja2" as form %}
+{% block header %}
+    <script type="application/javascript" src="{{ 'phitime:static/js/event.create.js'|static_path }}"></script>
+{% endblock %}
 {% block content %}
-    <form method="POST" action="">
-        {{ form.input('event.name') }}
-        {{ form.input('event.description') }}
-        {{ form.select_timetable_type(TimetableType) }}
-        {{ form.csrf_token(request) }}
-        <input type="submit"/>
-    </form>
+    <div class="container">
+        <form method="POST" action="">
+            {{ form.input('event.name') }}
+            {{ form.input('event.description') }}
+            {{ form.select_timetable_type(TimetableType) }}
+            {{ form.csrf_token(request) }}
+            <div id="timetable-wrapper">
+                <object id="timetable-0" class="timetable" type="image/svg+xml"
+                        data="{{ TimetableType.default_type.route_name|route_path }}"></object>
+
+                <object id="timetable-1" class="timetable" type="image/svg+xml"
+                        data="{{ TimetableType.default_type.route_name|route_path }}"></object>
+
+                <object id="timetable-2" class="timetable" type="image/svg+xml"
+                        data="{{ TimetableType.default_type.route_name|route_path }}"></object>
+
+                <object id="timetable-3" class="timetable" type="image/svg+xml"
+                        data="{{ TimetableType.default_type.route_name|route_path }}"></object>
+
+                <object id="timetable-4" class="timetable" type="image/svg+xml"
+                        data="{{ TimetableType.default_type.route_name|route_path }}"></object>
+            </div>
+            <input type="submit"/>
+        </form>
+    </div>
 {% endblock %}
