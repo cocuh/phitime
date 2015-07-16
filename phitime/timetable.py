@@ -53,3 +53,93 @@ class TimetableType(object):
 TimetableType.register('half_hourly', 'timetable.half_hourly', '30分区切り', is_default=True)
 TimetableType.register('univ_tsukuba', 'timetable.univ_tsukuba', '筑波大学時間割')
 
+
+class HalfHourlyTimetable():
+    name = 'half_hourly'
+    route_name = 'timetable.half_hourly'
+    display_name = u'30分区切り'
+
+    start_time = 800
+    end_time = 2300
+
+    _one_day = [
+        830,
+        900,
+        930,
+        1000,
+        1030,
+        1100,
+        1130,
+        1200,
+        1230,
+        1300,
+        1330,
+        1400,
+        1430,
+        1500,
+        1530,
+        1600,
+        1630,
+        1700,
+        1730,
+        1800,
+        1830,
+        1900,
+        1930,
+        2000,
+        2030,
+        2100,
+        2130,
+        2200,
+        2230,
+    ]
+
+    timetable = [
+        _one_day
+        for i in
+        range(7)
+        ]
+
+
+class UnivTsukubaTimetable():
+    name = 'univ_tsukuba'
+    route_name = 'timetable.univ_tsukuba'
+    display_name = u'筑波大学時間割'
+
+    start_time = 800
+    end_time = 2300
+
+    _workweek = [
+        840,  # 1st
+        955,
+        1010,  # 2nd
+        1125,
+        1215,  # 3rd
+        1330,
+        1345,  # 4th
+        1500,
+        1515,  # 5th
+        1630,
+        1645,  # 6th
+        1800,
+        1830,
+        1900,
+        1930,
+        2000,
+        2030,
+        2100,
+        2130,
+        2200,
+        2230,
+    ]
+    _weekend = HalfHourlyTimetable._one_day
+
+    timetable = [
+        _workweek,
+        _workweek,
+        _workweek,
+        _workweek,
+        _workweek,
+        _weekend,
+        _weekend,
+    ]
