@@ -51,9 +51,9 @@ class SVGDay():
     HEADER_HEIGHT = 30
 
     def __init__(self):
-        self.periods = self._gen_periods()
         self.day_idx = 0
         self.day_identifier = 'mon'
+        self.periods = self._gen_periods()
         """:type: list[SVGPeriod]"""
 
     def to_elem(self):
@@ -73,6 +73,10 @@ class SVGDay():
         return elem
 
     def _gen_periods(self):
+        """
+        override here
+        :rtype: list[SVGPeriod]
+        """
         # TODO use abc
         raise NotImplementedError()
 
