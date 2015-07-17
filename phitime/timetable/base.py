@@ -1,11 +1,8 @@
-from phitime.svg import SVGDocument
-
 from xml.etree import ElementTree as ET
 
 
 class SVGTimetable():
     def __init__(self):
-        self.root = SVGDocument()
         self.stylesheet_urls = []
         self.days = []
         """:type: list[SVGDay]"""
