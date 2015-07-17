@@ -25,7 +25,9 @@ class SVGTimetable(object):
         self.stylesheet_urls = []
         self.days = self.gen_days(start_date)
         """:type: list[SVGDay]"""
-        assert len(self.days) == 7
+
+    def to_string(self):
+        return ET.tostring(self.to_elem(), 'unicode')
 
     def to_elem(self):
         """
