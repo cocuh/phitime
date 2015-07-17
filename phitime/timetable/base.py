@@ -53,7 +53,7 @@ class SVGDay():
     def __init__(self):
         self.day_idx = 0
         self.day_identifier = 'mon'
-        self.periods = self._gen_periods()
+        self.periods = self.gen_periods()
         """:type: list[SVGPeriod]"""
 
     def to_elem(self):
@@ -72,7 +72,7 @@ class SVGDay():
             y_offset += period.height
         return elem
 
-    def _gen_periods(self):
+    def gen_periods(self):
         """
         override here
         :rtype: list[SVGPeriod]
