@@ -1,11 +1,31 @@
 from xml.etree import ElementTree as ET
 
 
-class SVGTimetable():
-    def __init__(self):
+def conv2y(time):
+    hour = time // 100
+    minute = time % 100
+    assert 0 <= minute < 60
+    return hour * 60 + minute
+
+
+_START_TIME = 800
+_END_TIME = 2300
+
+
+class SVGTimetable(object):
+    START_TIME = _START_TIME
+    END_TIME = _END_TIME
+
+    def __init__(self, start_date):
+        """
+        :type date: datetime.date 
+        :return:
+        """
+        self.start_date = start_date
         self.stylesheet_urls = []
-        self.days = []
+        self.days = self.gen_days(start_date)
         """:type: list[SVGDay]"""
+        assert len(self.days) == 7
 
     def to_elem(self):
         """
@@ -45,12 +65,18 @@ class SVGTimetable():
         stylesheet.tail = "\n"
         return stylesheet
 
+    def gen_days(self, start_date):
+        raise NotImplementedError()
 
-class SVGDay():
+
+class SVGDay(object):
     WIDTH = 80
     HEADER_HEIGHT = 30
+    START_TIME = _START_TIME
+    END_TIME = _END_TIME
 
-    def __init__(self):
+    def __init__(self, date):
+        self.date = date
         self.day_idx = 0
         self.day_identifier = 'mon'
         self.periods = self.gen_periods()
@@ -113,11 +139,11 @@ class SVGDay():
         return elem
 
 
-class SVGPeriod():
+class SVGPeriod(object):
     def __init__(self, day_idx, start_time, end_time, classes=[]):
         self.day_idx = day_idx
-        self.start_time = start_time
-        self.end_time = end_time
+        self.start_y = conv2y(start_time)
+        self.end_y = conv2y(end_time)
         self.classes = set(classes)
 
     def add_class(self, classes):
@@ -128,7 +154,7 @@ class SVGPeriod():
         """
         :rtype: int
         """
-        return self.end_time - self.start_time
+        return self.end_y - self.start_y
 
     def to_elem(self, width, y_offset):
         """
@@ -137,7 +163,7 @@ class SVGPeriod():
         elem = ET.Element('g', {
             'classes': self.classes,
             'data-day': self.day_idx,
-            'data-y': self.start_time - y_offset,
+            'data-y': self.start_y - y_offset,
             'data-height': self.height,
             'transform': 'translate(0, {})'.format(y),
         })
@@ -147,3 +173,7 @@ class SVGPeriod():
         })
         elem.append(rect)
         return elem
+
+
+class TimetableType(object):
+    pass
