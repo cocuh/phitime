@@ -40,7 +40,7 @@ class SVGTimetable():
         """
         :rtype: xml.etree.ElementTree.Element
         """
-        # FIXME: it might be xss vulnerability
+        # FIXME: it might have xss vulnerability
         stylesheet = ET.ProcessingInstruction('xml-stylesheet', 'type="text/css" href="{}"'.format(stylesheet_url))
         stylesheet.tail = "\n"
         return stylesheet
