@@ -91,7 +91,7 @@ class TestSVGDay(BaseTestCase):
         elem = day.to_elem()
 
         self.assertIsInstance(elem, Element)
-        self.assertEqual(len(elem), 3 + 1)
+        self.assertEqual(len(elem), len(gen_periods.return_value) + 1)  # +1 for header
 
 
 class TestSVGPeriod(BaseTestCase):
