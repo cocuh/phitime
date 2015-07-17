@@ -7,9 +7,15 @@ class SVGTree(ET.ElementTree):
 
 
 class SVGElement(ET.Element):
-    def __init__(self, tag, **extra):
-        super().__init__(tag, **extra)
+    def __init__(self, tag, attrib={}, **extra):
         self.classes = set()
+        super().__init__(tag,attrib, **extra)
+    
+    def __setattr__(self, key, value):
+        self.__dict__[key] = value
+    
+    def __getattr__(self, item):
+        return self.__dict__[item]
 
     def add_class(self, *class_names):
         """
@@ -23,7 +29,20 @@ class SVGElement(ET.Element):
 
     def makeelement(self, tag, attrib):
         return self.__class__(tag, attrib)
+
+    def append_child(self, tag, attrib=None, **extra):
+        if attrib is None:
+            attrib = {}
+        else:
+            attrib = attrib.copy()
+        attrib.update(extra)
+        element = self.makeelement(tag, attrib)
+        self.append(element)
+        return element
     
+    def tostring(self):
+        return ET.tostring(self)
+
 
 class SVGDocument(SVGElement):
     def __init__(self, stylesheet_url=None, **attrib):
@@ -31,17 +50,17 @@ class SVGDocument(SVGElement):
             attrib['xmlns'] = 'http://www.w3.org/2000/svg',
 
         super().__init__("svg", **attrib)
-        
+
         # dummy root element for stylesheet object
         self.root = SVGElement(None, **attrib)
-        
+
         if stylesheet_url:
             stylesheet = self._create_stylesheet(stylesheet_url)
             self.root.append(stylesheet)
         self.root.append(self)
 
-    def dump(self):
-        ET.dump(self, self.root)
+    def tostring(self):
+        return self.root.tostring()
 
     @staticmethod
     def _create_stylesheet(stylesheet_url):
