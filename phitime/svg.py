@@ -9,11 +9,11 @@ class SVGTree(ET.ElementTree):
 class SVGElement(ET.Element):
     def __init__(self, tag, attrib={}, **extra):
         self.classes = set()
-        super().__init__(tag,attrib, **extra)
-    
+        super().__init__(tag, attrib, **extra)
+
     def __setattr__(self, key, value):
         self.__dict__[key] = value
-    
+
     def __getattr__(self, item):
         return self.__dict__[item]
 
@@ -39,15 +39,16 @@ class SVGElement(ET.Element):
         element = self.makeelement(tag, attrib)
         self.append(element)
         return element
-    
+
     def tostring(self):
-        return ET.tostring(self)
+        self.set('class', ' '.join(self.classes))
+        return ET.tostring(self, 'unicode')
 
 
 class SVGDocument(SVGElement):
     def __init__(self, stylesheet_url=None, **attrib):
         if 'xmlns' not in attrib:
-            attrib['xmlns'] = 'http://www.w3.org/2000/svg',
+            attrib['xmlns'] = 'http://www.w3.org/2000/svg'
 
         super().__init__("svg", **attrib)
 
