@@ -62,7 +62,7 @@ class SVGDay():
         """
         elem = self._to_elem()
 
-        elem_header = self._gen_header(self.day_identifier)  # fixme header text
+        elem_header = self._gen_header_elem(self.day_identifier)  # fixme header text
         elem.append(elem_header)
 
         y_offset = 0
@@ -72,7 +72,7 @@ class SVGDay():
             y_offset += period.height
         return elem
 
-    def _gen_header(self, header_text):
+    def _gen_header_elem(self, header_text):
         elem = ET.Element('g', {
             'id': 'column_header_{}'.format(self.day_identifier),
             'data-day': self.day_identifier,
