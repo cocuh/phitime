@@ -95,9 +95,13 @@ class HalfHourlyTimetable():
     ]
 
     timetable = [
-        _one_day
-        for i in
-        range(7)
+        _one_day,
+        _one_day,
+        _one_day,
+        _one_day,
+        _one_day,
+        _one_day,
+        _one_day,
         ]
 
 

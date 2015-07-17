@@ -1,7 +1,7 @@
 from pyramid.testing import DummyRequest
-from . import BaseTestCase
 from phitime.models import Event
 
+from . import BaseTestCase
 
 class BaseViewTestCase(BaseTestCase):
     def setUp(self):

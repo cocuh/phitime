@@ -24,7 +24,7 @@ from phitime.db import (
     DBSession,
 )
 from phitime.scrambler import scramble, unscramble
-from phitime.timetable import TimetableType
+from phitime._timetable import TimetableType
 
 
 class User(Base):
