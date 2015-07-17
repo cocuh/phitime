@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from phitime.db import DBSession
 from phitime.exceptions import MemberNotFoundException, EventNotFoundException
 from phitime.models import Event, Member
-from phitime.timetable import TimetableType
+from phitime._timetable import TimetableType
 
 
 class TopView(object):

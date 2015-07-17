@@ -1,6 +1,5 @@
 from xml.etree import ElementTree as ET
 
-ET.SubElement()
 
 class SVGTree(ET.ElementTree):
     def write(self, **kwargs):
@@ -27,21 +26,22 @@ class SVGElement(ET.Element):
     
 
 class SVGDocument(SVGElement):
-    def __init__(self, stylesheet_url, **attrib):
-        super().__init__(None)
-
-        tag = 'svg'
+    def __init__(self, stylesheet_url=None, **attrib):
         if 'xmlns' not in attrib:
             attrib['xmlns'] = 'http://www.w3.org/2000/svg',
 
-        stylesheet = self._create_stylesheet(stylesheet_url)
-        svg = ET.Element(tag, **attrib)
-        self.add_class(stylesheet)
-        self.add_class(svg)
+        super().__init__("svg", **attrib)
+        
+        # dummy root element for stylesheet object
+        self.root = SVGElement(None, **attrib)
+        
+        if stylesheet_url:
+            stylesheet = self._create_stylesheet(stylesheet_url)
+            self.root.append(stylesheet)
+        self.root.append(self)
 
     def dump(self):
-        self.set('class', ' '.join(self.classes))
-        ET.dump(self)
+        ET.dump(self, self.root)
 
     @staticmethod
     def _create_stylesheet(stylesheet_url):
