@@ -51,7 +51,7 @@ class SVGDay():
     HEADER_HEIGHT = 30
 
     def __init__(self):
-        self.periods = []
+        self.periods = self._gen_periods()
         self.day_idx = 0
         self.day_identifier = 'mon'
         """:type: list[SVGPeriod]"""
@@ -71,6 +71,10 @@ class SVGDay():
             elem.append(period_elem)
             y_offset += period.height
         return elem
+
+    def _gen_periods(self):
+        # TODO use abc
+        raise NotImplementedError()
 
     def _gen_header_elem(self, header_text):
         elem = ET.Element('g', {
