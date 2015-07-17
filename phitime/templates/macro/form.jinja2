@@ -1,15 +1,16 @@
 {% macro select_timetable_type(TimetableType, default='')-%}
-{%-if default == ''-%}
-{%-set default = TimetableType.default_type -%}
-{%-endif %}
-<div>
-    {% for timetable in TimetableType.timetable_types %}
-        <label class="radio-inline">
-            <input type="radio" name="event.timetable_type"
-                   value="{{ timetable.name }}" {{ 'checked' if timetable == default else '' }}> {{ timetable.display_name }}
-        </label>
-    {% endfor %}
-</div>
+    {%-if default == ''-%}
+        {%-set default = TimetableType.default_type -%}
+    {%-endif %}
+    <div>
+        {% for timetable in TimetableType.timetable_types %}
+            <label class="radio-inline">
+                <input type="radio" name="event.timetable_type"
+                       value="{{ timetable.name }}" {{ 'checked' if timetable == default else '' }}
+                       data-path="{{ timetable.route_name|route_path }}"> {{ timetable.display_name }}
+            </label>
+        {% endfor %}
+    </div>
 {% endmacro %}
 {% macro input(name, value='', type='text', size=20) -%}
     <div class="form-group">

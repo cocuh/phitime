@@ -165,18 +165,24 @@ class MemberView(object):
         return member
 
 
-class TimetableView(object):
+class SVGView(object):
     def __init__(self, request):
         self.request = request
-
-    @view_config(route_name='timetable.univ_tsukuba', renderer='templates/timetable/univ_tsukuba.jinja2',
-        http_cache=3600)
-    def univ_tsukuba(self):
         self.request.response.content_type = 'image/svg+xml'
+
+    @view_config(route_name='svg.timetable.univ_tsukuba', renderer='templates/svg/timetable/univ_tsukuba.jinja2',
+        http_cache=3600)
+    def timetable_univ_tsukuba(self):
         return {}
 
-    @view_config(route_name='timetable.half_hourly', renderer='templates/timetable/half_hourly.jinja2',
+    @view_config(route_name='svg.timetable.half_hourly', renderer='templates/svg/timetable/half_hourly.jinja2',
         http_cache=3600)
-    def univ_tsukuba(self):
-        self.request.response.content_type = 'image/svg+xml'
+    def timetable_half_hourly(self):
         return {}
+
+    @view_config(route_name='svg.calendar', renderer='templates/svg/calendar/calendar.jinja2',
+        http_cache=3600)
+    def calendar(request):
+        return {
+            "week_num": 5,
+        }

@@ -6,8 +6,9 @@
     <ul>
     {{ link('top') }}
     {{ link('event.create') }}
-    {{ link('timetable.univ_tsukuba') }}
-    {{ link('timetable.half_hourly') }}
+        {{ link('svg.timetable.univ_tsukuba') }}
+        {{ link('svg.timetable.half_hourly') }}
+        {{ link('svg.calendar') }}
     </ul>
     <ul>
         {% for event in Event.query.all() %}
