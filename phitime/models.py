@@ -24,7 +24,7 @@ from phitime.db import (
     DBSession,
 )
 from phitime.scrambler import scramble, unscramble
-from phitime._timetable import TimetableType
+from phitime.timetable import TimetableUtils
 
 
 class User(Base):
@@ -98,7 +98,7 @@ class Event(Base):
         }
 
     def _get_timetable_type(self):
-        return TimetableType.find_by_name(self._timetable_type)
+        return TimetableUtils.find_by_name(self._timetable_type)
 
     def _set_timetable_type(self, timetable_type):
         self._timetable_type = timetable_type
@@ -141,7 +141,7 @@ class Event(Base):
             raise ValidationException('event.name is None')
         if self.description is None:  # TODO Validate length
             raise ValidationException('event.description is None')
-        if not TimetableType.is_exist(self._timetable_type):
+        if not TimetableUtils.is_exist(self._timetable_type):
             raise ValidationException(
                 'event.timetable_type is not exist: timetable_type:{!r}'.format(self.timetable_type))
 

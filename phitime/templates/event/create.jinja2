@@ -4,7 +4,7 @@
     <form method="POST" action="">
         {{ form.input('event.name') }}
         {{ form.input('event.description') }}
-        {{ form.select_timetable_type(TimetableType) }}
+        {{ form.select_timetable_type(TimetableUtils) }}
         {{ form.csrf_token(request) }}
         <input type="submit"/>
     </form>

@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from phitime.db import DBSession
 from phitime.exceptions import MemberNotFoundException, EventNotFoundException
 from phitime.models import Event, Member
-from phitime._timetable import TimetableType
+from phitime.timetable import TimetableUtils
 
 
 class TopView(object):
@@ -30,7 +30,7 @@ class EventView(object):
     @view_config(route_name='event.create', request_method='GET', renderer='templates/event/create.jinja2')
     def create_get(self):
         return {
-            'TimetableType': TimetableType,
+            'TimetableUtils': TimetableUtils,
         }
 
     @view_config(route_name='event.create', request_method='POST', check_csrf=True)
@@ -51,7 +51,7 @@ class EventView(object):
     def edit_get(self):
         return {
             'event': self.get_event(),
-            'TimetableType': TimetableType,
+            'TimetableUtils': TimetableUtils,
         }
 
     @view_config(route_name='event.edit', request_method='POST')
@@ -100,7 +100,7 @@ class MemberView(object):
     def create_get(self):
         return {
             'event': self.get_event(),
-            'TimetableType': TimetableType,
+            'TimetableUtils': TimetableUtils,
         }
 
     @view_config(route_name='member.create', request_method='POST')
@@ -120,7 +120,7 @@ class MemberView(object):
         return {
             'event': self.get_event(),
             'member': self.get_member(),
-            'TimetableType': TimetableType,
+            'TimetableUtils': TimetableUtils,
         }
 
     @view_config(route_name='member.edit', request_method='POST')

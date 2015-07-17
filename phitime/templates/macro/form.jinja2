@@ -1,9 +1,9 @@
-{% macro select_timetable_type(TimetableType, default='')-%}
+{% macro select_timetable_type(TimetableUtils, default='')-%}
     {%-if default == ''-%}
-        {%-set default = TimetableType.default_type -%}
+        {%-set default = TimetableUtils.default_type -%}
     {%-endif %}
     <div>
-        {% for timetable in TimetableType.timetable_types %}
+        {% for timetable in TimetableUtils.timetable_types %}
             <label class="radio-inline">
                 <input type="radio" name="event.timetable_type"
                        value="{{ timetable.name }}" {{ 'checked' if timetable == default else '' }}
