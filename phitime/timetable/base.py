@@ -8,6 +8,19 @@ def conv2y(time):
     return hour * 60 + minute
 
 
+def stringify_element_attribute(elem):
+    assert isinstance(elem, ET.Element)
+    accepted_type = [str, int, float]
+    for key, value in elem.attrib.items():
+        if any(
+                isinstance(value, ty)
+                for ty in accepted_type
+        ):
+            elem.attrib[key] = str(value)
+        else:
+            raise TypeError('attr has invlaid type key:{} value:{}'.format(key, value))
+
+
 _START_TIME = 800
 _END_TIME = 2300
 
@@ -53,6 +66,7 @@ class SVGTimetable(object):
             'xmlns:xlink': 'http://www.w3.org/1999/xlink',
             'viewBox': '-30 -30 590 930',  # fixme
         })
+        stringify_element_attribute(elem)
         for day in self.days:
             elem.append(day.to_elem())
         return elem
@@ -117,17 +131,20 @@ class SVGDay(object):
             ),
             'class': 'column_header',
         })
-        elem_rect = ET.Element('rect', {
+        rect = ET.Element('rect', {
             'width': self.WIDTH,
             'height': self.HEADER_HEIGHT,
         })
-        elem_text = ET.Element('text', {
+        text = ET.Element('text', {
             'x': self.WIDTH / 2,
             'y': 15,
         })
-        elem_text.text = header_text
-        elem.append(elem_rect)
-        elem.append(elem_text)
+        text.text = header_text
+        stringify_element_attribute(elem)
+        stringify_element_attribute(text)
+        stringify_element_attribute(rect)
+        elem.append(rect)
+        elem.append(text)
         return elem
 
     def _to_elem(self):
@@ -138,6 +155,7 @@ class SVGDay(object):
                 x=self.day_idx * self.WIDTH
             ),
         })
+        stringify_element_attribute(elem)
         return elem
 
 
@@ -163,7 +181,7 @@ class SVGPeriod(object):
         :rtype: xml.etree.ElementTree.Element
         """
         elem = ET.Element('g', {
-            'classes': self.classes,
+            'classes': ' '.join(self.classes),
             'data-day': self.day_idx,
             'data-y': self.start_y - y_offset,
             'data-height': self.height,
@@ -173,9 +191,16 @@ class SVGPeriod(object):
             'width': width,
             'height': SVGDay.WIDTH,
         })
+        stringify_element_attribute(elem)
+        stringify_element_attribute(rect)
         elem.append(rect)
         return elem
 
 
 class TimetableType(object):
-    pass
+    display_name = None
+    name = None
+    route_name = None
+
+    def to_string(self):
+        raise NotImplementedError()

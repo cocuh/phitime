@@ -2,7 +2,7 @@ from .base import (
     SVGTimetable,
     SVGDay,
     SVGPeriod,
-)
+    TimetableType)
 
 _START_TIME = 800
 _END_TIME = 2300
@@ -111,9 +111,11 @@ class _Timetable(SVGTimetable):
         ]
 
 
-class UnivTsukubaTimetable():
+class UnivTsukubaTimetable(TimetableType):
     def __init__(self, start_date):
         self.timetable = _Timetable(start_date)
 
+    def to_string(self):
+        return self.timetable.to_string()
 
 __all__ = ['UnivTsukubaTimetable']
