@@ -167,7 +167,7 @@ class SVGPeriod(object):
             'data-day': self.day_idx,
             'data-y': self.start_y - y_offset,
             'data-height': self.height,
-            'transform': 'translate(0, {})'.format(y),
+            'transform': 'translate(0, {})'.format(y_offset),
         })
         rect = ET.Element('g', {
             'width': width,
