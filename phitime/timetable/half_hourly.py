@@ -45,11 +45,13 @@ class Day(SVGDay):
     ]
 
     def gen_periods(self):
-        return [
-            SVGPeriod(self.day_idx, start_time, end_time)
-            for start_time, end_time
-            in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME])
-            ]
+        periods = []
+        for start, end in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME]):
+            classes = []
+            if start // 100 % 2 == 1:
+                classes.append('odd')
+            periods.append(SVGPeriod(self.day_idx, start, end, classes))
+        return periods
 
 
 class _Timetable(SVGTimetable):
