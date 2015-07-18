@@ -8,7 +8,7 @@ timetable_types = [
 
 
 class TimetableUtils(object):
-    DEFAULT = UnivTsukubaTimetable  # fixme
+    DEFAULT = HalfHourlyTimetable
 
     @classmethod
     def find_by_name(cls, name):
