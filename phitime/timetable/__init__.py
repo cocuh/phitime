@@ -1,7 +1,9 @@
 from .univ_tsukuba import UnivTsukubaTimetable
+from .half_hourly import HalfHourlyTimetable
 
 timetable_types = [
     UnivTsukubaTimetable,
+    HalfHourlyTimetable,
 ]
 
 
