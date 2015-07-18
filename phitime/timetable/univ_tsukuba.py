@@ -2,7 +2,8 @@ from .base import (
     SVGTimetable,
     SVGDay,
     SVGPeriod,
-    TimetableType)
+    TimetableType,
+)
 
 _START_TIME = 800
 _END_TIME = 2300
@@ -14,40 +15,55 @@ class WeekDay(SVGDay):
 
     splitter = [
         # 1st
-        840,
+        (840, "lesson"),
         955,
         # 2nd
-        1010,
+        (1010, "lesson"),
         1125,
         # 3rd
-        1215,
+        (1215, "lesson"),
         1330,
         # 4th
-        1345,
+        (1345, "lesson"),
         1500,
         # 5th
-        1515,
+        (1515, "lesson"),
         1630,
         # 6th
-        1645,
+        (1645, "lesson"),
         1800,
         1830,
-        1900,
-        1930,
+        (1900, "odd"),
+        (1930, "odd"),
         2000,
         2030,
-        2100,
-        2130,
+        (2100, "odd"),
+        (2130, "odd"),
         2200,
         2230,
     ]
 
     def gen_periods(self):
-        return [
-            SVGPeriod(self.day_idx, start_time, end_time)
-            for start_time, end_time
-            in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME])
-            ]
+        def get(time):
+            if isinstance(time, tuple):
+                time, classes = time
+                if not isinstance(classes, list):
+                    classes = [classes]
+                return time, classes
+            else:
+                return time, []
+
+        def gen():
+            for start, end in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME]):
+                start, classes = get(start)
+                end, _ = get(end)
+                yield start, end, classes
+
+        periods = []
+        for start_time, end_time, classes in gen():
+            period = SVGPeriod(self.day_idx, start_time, end_time, classes)
+            periods.append(period)
+        return periods
 
 
 class Holiday(SVGDay):
@@ -112,10 +128,12 @@ class _Timetable(SVGTimetable):
 
 
 class UnivTsukubaTimetable(TimetableType):
+    name = 'univ_tsukuba'
     def __init__(self, start_date):
         self.timetable = _Timetable(start_date)
 
     def to_string(self):
         return self.timetable.to_string()
+
 
 __all__ = ['UnivTsukubaTimetable']
