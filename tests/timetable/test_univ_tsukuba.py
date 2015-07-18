@@ -17,5 +17,4 @@ class TestUnivTsukubaTimetable(BaseTestCase):
         timetable = self._makeOne()
 
         res = timetable.to_string()
-        print(res)
         self.assertIsInstance(res, str)
