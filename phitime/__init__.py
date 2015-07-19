@@ -6,6 +6,7 @@ from phitime.db import (
     DBSession,
     Base,
 )
+from phitime.timetable.renderer import SVGTimetableRendererFactory
 
 
 required_plugins = [
@@ -40,6 +41,7 @@ def main(global_config, **settings):
     
     config = Configurator(settings=settings)
     config.set_session_factory(_gen_session_factory(settings))
+    config.add_renderer(name='svg_timetable', factory=SVGTimetableRendererFactory)
     for plugin_name in required_plugins:
         config.include(plugin_name)
 
@@ -51,6 +53,7 @@ def main(global_config, **settings):
     config.add_route('event.detail', '/event/{event_scrambled_id}/')
     config.add_route('event.edit', '/event/{event_scrambled_id}/edit')
     config.add_route('event.edit.proposed', '/event/{event_scrambled_id}/edit/proposed')
+    config.add_route('event.edit.proposed_timetable', '/event/{event_scrambled_id}/edit/proposed_timetable.svg')
     config.add_route('event.api.info', '/event/{event_scrambled_id}/api/info.json')
     config.add_route('member.create', '/event/{event_scrambled_id}/create_member')
     config.add_route('member.edit', '/event/{event_scrambled_id}/{member_position}/edit')

@@ -82,7 +82,6 @@ class EventView(object):
     def edit_proposed_time_post(self):
         event = self.get_event()
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
-
     @view_config(route_name='event.detail', request_method='GET', renderer='templates/event/detail.jinja2')
     def detail_get(self):
         return {
@@ -102,6 +101,12 @@ class EventView(object):
     def get_event(self):
         scrambled_id = self.request.matchdict.get('event_scrambled_id')
         return Event.find_by_scrambled_id(scrambled_id)
+
+
+class EventSVGView(object):
+    @view_config(route_name='event.edit.proposed_timetable', request_method='GET')
+    def edit_proposed_timetable(self):
+        pass
 
 
 class MemberView(object):
@@ -183,27 +188,31 @@ class SVGView(object):
     def __init__(self, request):
         self.request = request
 
-    @view_config(route_name='svg.timetable.univ_tsukuba', http_cache=3600)
+    @view_config(route_name='svg.timetable.univ_tsukuba', http_cache=3600, renderer='svg_timetable')
     def timetable_univ_tsukuba(self):
         import datetime
         UnivTsukubaTimetable = TimetableUtils.find_by_name('univ_tsukuba')
-        body = UnivTsukubaTimetable(
+        timetable = UnivTsukubaTimetable(
             datetime.datetime.today(),
             [self.request.static_path("phitime:static/timetables/univ_tsukuba_timetable.css")],
             [self.request.static_path("phitime:static/timetables/timetable.js")]
-        ).to_string()
-        return Response(body, content_type=self.CONTENT_TYPE_SVG, charset='utf-8')
+        )
+        return {
+            'timetable': timetable,
+        }
 
-    @view_config(route_name='svg.timetable.half_hourly', http_cache=3600)
+    @view_config(route_name='svg.timetable.half_hourly', http_cache=3600, renderer='svg_timetable')
     def timetable_half_hourly(self):
         import datetime
         HalfHourlyTimetable = TimetableUtils.find_by_name('half_hourly')
-        body = HalfHourlyTimetable(
+        timetable = HalfHourlyTimetable(
             datetime.datetime.today(),
             [self.request.static_path("phitime:static/timetables/univ_tsukuba_timetable.css")],
             [self.request.static_path("phitime:static/timetables/timetable.js")]
-        ).to_string()
-        return Response(body, content_type=self.CONTENT_TYPE_SVG, charset='utf-8')
+        )
+        return {
+            'timetable': timetable,
+        }
 
     @view_config(route_name='svg.calendar', renderer='templates/svg/calendar/calendar.jinja2',
         http_cache=3600)
