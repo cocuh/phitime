@@ -68,10 +68,19 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         """
         :rtype: xml.etree.ElementTree.Element
         """
+        row_header_width = 0
+        column_header_height = SVGDay.HEADER_HEIGHT
+        timetable_width = sum(map(lambda day: day.WIDTH, self.days))
+        timetable_height = conv2y(self.END_TIME - self.START_TIME)
         svg = ET.Element('svg', {
             'xmlns': 'http://www.w3.org/2000/svg',
             'xmlns:xlink': 'http://www.w3.org/1999/xlink',
-            'viewBox': '-30 -30 590 930',  # fixme
+            'viewBox': '-{row_header_width} -{column_header_height} {width} {height}'.format(
+                row_header_width=row_header_width,
+                column_header_height=column_header_height,
+                width=timetable_width + row_header_width,
+                height=timetable_height + column_header_height,
+            ),
         })
         stringify_element_attribute(svg)
         main = ET.Element('g', {
@@ -134,7 +143,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
 
 
 class SVGDay(metaclass=abc.ABCMeta):
-    WIDTH = 80
+    WIDTH = 90
     HEADER_HEIGHT = 30
     START_TIME = _START_TIME
     END_TIME = _END_TIME
