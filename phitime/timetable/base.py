@@ -162,7 +162,6 @@ class SVGDay(metaclass=abc.ABCMeta):
         override here
         :rtype: list[SVGPeriod]
         """
-        # TODO use abc
         raise NotImplementedError()
 
     def _gen_header_elem(self, header_text):
