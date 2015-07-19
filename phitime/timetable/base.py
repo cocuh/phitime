@@ -187,7 +187,7 @@ class SVGDay(metaclass=abc.ABCMeta):
             'x': self.WIDTH / 2,
             'y': 15,
         })
-        text.text = header_text
+        text.text = self.gen_header_text()
         stringify_element_attribute(elem)
         stringify_element_attribute(text)
         stringify_element_attribute(rect)
@@ -223,6 +223,21 @@ class SVGDay(metaclass=abc.ABCMeta):
             "sat",
             "sun",
         ][date.weekday()]
+
+    def gen_header_text(self):
+        """
+        generate header text.
+        if change it, override this method.
+        :rtype: str
+        """
+        month = self.date.month
+        day = self.date.day
+        weekday = self.date.strftime('%a')
+        return '{month}/{day}({weekday})'.format(
+            month=month,
+            day=day,
+            weekday=weekday,
+        )
 
 
 class SVGPeriod(object):
