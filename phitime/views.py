@@ -7,10 +7,18 @@ from phitime.models import Event, Member
 from phitime.timetable import TimetableUtils
 
 
-class TopView(object):
+class BaseView(object):
     def __init__(self, request):
         self.request = request
 
+
+class _EventMixin(BaseView):
+    def get_event(self):
+        scrambled_id = self.request.matchdict.get('event_scrambled_id')
+        return Event.find_by_scrambled_id(scrambled_id)
+
+
+class TopView(BaseView):
     @view_config(route_name='top', renderer='templates/top.jinja2')
     def top(self):
         return {
@@ -18,15 +26,11 @@ class TopView(object):
         }
 
 
-class UserView(object):
-    def __init__(self, request):
-        self.request = request
+class UserView(BaseView):
+    pass
 
 
-class EventView(object):
-    def __init__(self, request):
-        self.request = request
-
+class EventView(_EventMixin):
     @view_config(route_name='event.create', request_method='GET', renderer='templates/event/create.jinja2')
     def create_get(self):
         return {
@@ -99,21 +103,18 @@ class EventView(object):
             'event': self.get_event(),
         }
 
-    def get_event(self):
-        scrambled_id = self.request.matchdict.get('event_scrambled_id')
-        return Event.find_by_scrambled_id(scrambled_id)
 
-
-class EventSVGView(object):
-    @view_config(route_name='event.edit.proposed_timetable', request_method='GET')
+class EventSVGView(_EventMixin):
+    @view_config(route_name='event.edit.proposed_timetable', request_method='GET', renderer='svg_timetable')
     def edit_proposed_timetable(self):
-        pass
+        event = self.get_event()
+        TimetableType = event.timetable_type
+        return {
+            'timetable': TimetableType(),
+        }
 
 
-class MemberView(object):
-    def __init__(self, request):
-        self.request = request
-
+class MemberView(BaseView):
     @view_config(route_name='member.create', request_method='GET', renderer='templates/member/create.jinja2')
     def create_get(self):
         return {
@@ -183,11 +184,8 @@ class MemberView(object):
         return member
 
 
-class SVGView(object):
+class SVGView(BaseView):
     CONTENT_TYPE_SVG = 'image/svg+xml'
-
-    def __init__(self, request):
-        self.request = request
 
     @view_config(route_name='svg.timetable.univ_tsukuba', http_cache=3600, renderer='svg_timetable')
     def timetable_univ_tsukuba(self):
