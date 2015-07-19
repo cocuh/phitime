@@ -30,6 +30,7 @@ _END_TIME = 2300
 class SVGTimetable(metaclass=abc.ABCMeta):
     START_TIME = _START_TIME
     END_TIME = _END_TIME
+    ROW_HEADER_WIDTH = 30
 
     def __init__(self, start_date, day_length, stylesheet_urls, script_urls):
         """
@@ -64,23 +65,26 @@ class SVGTimetable(metaclass=abc.ABCMeta):
 
         return root
 
+    def _gen_viewbox(self):
+        row_header_width = self.ROW_HEADER_WIDTH
+        column_header_height = SVGDay.HEADER_HEIGHT
+        timetable_width = sum(map(lambda day: day.WIDTH, self.days))
+        timetable_height = conv2y(self.END_TIME - self.START_TIME)
+        return '-{row_header_width} -{column_header_height} {width} {height}'.format(
+            row_header_width=row_header_width,
+            column_header_height=column_header_height,
+            width=timetable_width + row_header_width,
+            height=timetable_height + column_header_height,
+        )
+
     def _to_elem(self):
         """
         :rtype: xml.etree.ElementTree.Element
         """
-        row_header_width = 0
-        column_header_height = SVGDay.HEADER_HEIGHT
-        timetable_width = sum(map(lambda day: day.WIDTH, self.days))
-        timetable_height = conv2y(self.END_TIME - self.START_TIME)
         svg = ET.Element('svg', {
             'xmlns': 'http://www.w3.org/2000/svg',
             'xmlns:xlink': 'http://www.w3.org/1999/xlink',
-            'viewBox': '-{row_header_width} -{column_header_height} {width} {height}'.format(
-                row_header_width=row_header_width,
-                column_header_height=column_header_height,
-                width=timetable_width + row_header_width,
-                height=timetable_height + column_header_height,
-            ),
+            'viewBox': self._gen_viewbox(),
         })
         stringify_element_attribute(svg)
         main = ET.Element('g', {
