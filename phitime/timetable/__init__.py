@@ -23,3 +23,6 @@ class TimetableUtils(object):
     @classmethod
     def is_default(cls, timetable_type):
         return timetable_type == cls.DEFAULT
+
+
+__all__ = ['TimetableUtils']
