@@ -68,15 +68,21 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         """
         :rtype: xml.etree.ElementTree.Element
         """
-        elem = ET.Element('svg', {
+        svg = ET.Element('svg', {
             'xmlns': 'http://www.w3.org/2000/svg',
             'xmlns:xlink': 'http://www.w3.org/1999/xlink',
             'viewBox': '-30 -30 590 930',  # fixme
         })
-        stringify_element_attribute(elem)
+        stringify_element_attribute(svg)
+        main = ET.Element('g', {
+            'id': 'main',
+            'data-start': conv2y(self.START_TIME),
+        })
+        stringify_element_attribute(main)
+        svg.append(main)
         for day in self.days:
-            elem.append(day.to_elem())
-        return elem
+            main.append(day.to_elem())
+        return svg
 
     @staticmethod
     def _create_stylesheet_elem(stylesheet_url):
