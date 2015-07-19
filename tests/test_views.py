@@ -14,10 +14,14 @@ class BaseViewTestCase(BaseTestCase):
         config.add_route('event.create', '/event_create')
         config.add_route('event.detail', '/event/{event_scrambled_id}/')
         config.add_route('event.edit', '/event/{event_scrambled_id}/edit')
+        config.add_route('event.edit.proposed', '/event/{event_scrambled_id}/edit/proposed')
+        config.add_route('event.edit.proposed_timetable', '/event/{event_scrambled_id}/edit/proposed_timetable.svg')
+        config.add_route('event.api.info', '/event/{event_scrambled_id}/api/info.json')
         config.add_route('member.create', '/event/{event_scrambled_id}/create_member')
         config.add_route('member.edit', '/event/{event_scrambled_id}/{member_position}/edit')
-        config.add_route('svg.timetable.univ_tsukuba', '/timetable/univ_tsukuba.svg')
-        config.add_route('svg.timetable.half_hourly', '/timetable/half_hourly.svg')
+        config.add_route('svg.timetable.univ_tsukuba', '/svg/timetable/univ_tsukuba.svg')
+        config.add_route('svg.timetable.half_hourly', '/svg/timetable/half_hourly.svg')
+        config.add_route('svg.calendar', '/svg/calendar.svg')
 
     def _make_event(self, name=u'いべんとなめ', description=u'ですくりぷしょん', timetable_type='half_hourly'):
         event = Event(name, description, timetable_type)
@@ -60,7 +64,8 @@ class ViewEventCreatePostTests(BaseViewTestCase):
         self.assertEqual(event.description, event_description)
         self.assertEqual(event.timetable_type.name, event_timetable_type)
 
-        self.assertEqual(response.location, request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
+        self.assertEqual(response.location,
+            request.route_path('event.edit.proposed', event_scrambled_id=event.scrambled_id))
 
     def test_no_name(self):
         from phitime.exceptions import ValidationException
