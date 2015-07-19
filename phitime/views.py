@@ -46,7 +46,7 @@ class EventView(object):
         DBSession.add(event)
         DBSession.flush()
 
-        return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
+        return HTTPFound(self.request.route_path('event.edit.proposed_time', event_scrambled_id=event.scrambled_id))
 
     @view_config(route_name='event.edit', request_method='GET', renderer='templates/event/edit.jinja2')
     def edit_get(self):
@@ -74,12 +74,12 @@ class EventView(object):
 
     @view_config(route_name='event.edit.proposed_time', request_method='GET',
         renderer='templates/event/edit_proposed_time.jinja2')
-    def edit_proposed_time(self):
+    def edit_proposed_time_get(self):
         event = self.get_event()
         return {}
 
     @view_config(route_name='event.edit.proposed_time', request_method='POST')
-    def edit_proposed_time(self):
+    def edit_proposed_time_post(self):
         event = self.get_event()
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
