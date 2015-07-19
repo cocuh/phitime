@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from .. import BaseTestCase
 
 
-class TestSvtTimetable(BaseTestCase):
+class TestSvgTimetable(BaseTestCase):
     def _getTargetClass(self):
         """
         :rtype: phitime.timetable.base.SVGTimetable
