@@ -5,7 +5,7 @@ from pyramid.view import view_config
 from phitime.db import DBSession
 from phitime.exceptions import MemberNotFoundException, EventNotFoundException
 from phitime.models import Event, Member
-from phitime.timetable import TimetableUtils, UnivTsukubaTimetable
+from phitime.timetable import TimetableUtils
 
 
 class TopView(object):
@@ -171,9 +171,10 @@ class SVGView(object):
     def __init__(self, request):
         self.request = request
 
-    @view_config(route_name='svg.timetable.univ_tsukuba', renderer='string', http_cache=3600)
+    @view_config(route_name='svg.timetable.univ_tsukuba', http_cache=3600)
     def timetable_univ_tsukuba(self):
         import datetime
+        UnivTsukubaTimetable = TimetableUtils.find_by_name('univ_tsukuba')
         body = UnivTsukubaTimetable(
             datetime.datetime.today(),
             [self.request.static_path("phitime:static/timetables/univ_tsukuba_timetable.css")],
@@ -181,9 +182,16 @@ class SVGView(object):
         ).to_string()
         return Response(body, content_type=self.CONTENT_TYPE_SVG, charset='utf-8')
 
-    @view_config(route_name='svg.timetable.half_hourly', renderer='string', http_cache=3600)
+    @view_config(route_name='svg.timetable.half_hourly', http_cache=3600)
     def timetable_half_hourly(self):
-        return {}
+        import datetime
+        HalfHourlyTimetable = TimetableUtils.find_by_name('half_hourly')
+        body = HalfHourlyTimetable(
+            datetime.datetime.today(),
+            [self.request.static_path("phitime:static/timetables/univ_tsukuba_timetable.css")],
+            [self.request.static_path("phitime:static/timetables/timetable.js")]
+        ).to_string()
+        return Response(body, content_type=self.CONTENT_TYPE_SVG, charset='utf-8')
 
     @view_config(route_name='svg.calendar', renderer='templates/svg/calendar/calendar.jinja2',
         http_cache=3600)
