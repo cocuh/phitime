@@ -10,6 +10,8 @@ from .half_hourly import Day as Holiday
 _START_TIME = 800
 _END_TIME = 2300
 
+Holiday.START_TIME = _START_TIME
+Holiday.END_TIME = _END_TIME
 
 class Period(SVGPeriod):
     pass
