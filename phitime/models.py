@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy import (
     Column,
     Integer,
@@ -76,6 +77,8 @@ class Event(Base):
 
     sponsor_id = Column(Integer, ForeignKey('users.id'))
     sponsor = relationship(User)
+
+    created_at = Column(Date, nullable=False, default=datetime.date.today)
 
     last_member_position = Column(Integer, nullable=False)
 

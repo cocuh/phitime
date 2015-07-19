@@ -75,7 +75,9 @@ class EventView(object):
         renderer='templates/event/edit_proposed_time.jinja2')
     def edit_proposed_time_get(self):
         event = self.get_event()
-        return {}
+        return {
+            'event': event,
+        }
 
     @view_config(route_name='event.edit.proposed', request_method='POST')
     def edit_proposed_time_post(self):

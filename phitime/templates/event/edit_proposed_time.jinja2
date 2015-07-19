@@ -1,4 +1,6 @@
 {% extends "../base.jinja2" %}
 {% import "../macro/form.jinja2" as form %}
 {% block content %}
+    <a href="{{ 'event.edit' |route_path(event_scrambled_id=event.scrambled_id) }}">event.edit</a><br/>
+    <a href="{{ 'event.detail' |route_path(event_scrambled_id=event.scrambled_id) }}">event.detail</a><br/>
 {% endblock %}
