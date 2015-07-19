@@ -6,6 +6,16 @@
     }
     return elem;
   };
+  var getAttrWithLog = function ($elem, name, _default) {
+    var value = $elem.getAttribute(name);
+    if (value === undefined || value === null) {
+      console.log('waring: no attr name:' + name);
+      console.log($elem);
+      return _default;
+    } else {
+      return value;
+    }
+  };
   var TimeTable = function () {
     this.$timetable = document.getElementById('main');
     this.columnHeaderElements = [
@@ -49,7 +59,7 @@
       },
       isSelecting: false
     };
-    this.startMinutes = parseInt(this.$timetable.getAttribute('data-start'));
+    this.startMinutes = parseInt(getAttrWithLog(this.$timetable, 'data-start'));
     this._initEventHandler();
   };
   (function (proto) {
@@ -323,7 +333,7 @@
      * @returns {int}
      */
     proto._getCellStartMinutes = function ($cell) {
-      return parseInt($cell.getAttribute('data-y')) + this.startMinutes;
+      return parseInt(getAttrWithLog($cell, 'data-y')) + this.startMinutes;
     };
     /**
      * @param $cell
@@ -331,7 +341,7 @@
      * @returns {int}
      */
     proto._getCellPeriodLength = function ($cell) {
-      return parseInt($cell.getAttribute('data-height'));
+      return parseInt(getAttrWithLog($cell, 'data-height'));
     };
     /**
      * @param $cell
@@ -339,7 +349,7 @@
      * @returns {int}
      */
     proto._getCellDay = function ($cell) {
-      return parseInt($cell.getAttribute('data-day'));
+      return parseInt(getAttrWithLog($cell, 'data-day'));
     }
   })(TimeTable.prototype);
 
