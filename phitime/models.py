@@ -101,6 +101,9 @@ class Event(Base):
         }
 
     def _get_timetable_type(self):
+        """
+        :rtype: phitime.timetable.base.TimetableType
+        """
         return TimetableUtils.find_by_name(self._timetable_type)
 
     def _set_timetable_type(self, timetable_type):
