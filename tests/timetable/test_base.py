@@ -12,7 +12,8 @@ class TestSvgTimetable(BaseTestCase):
         return SVGTimetable
 
     def _makeOne(self, start_date=None, day_length=7,
-            gen_days=None, stylesheet_urls=[], script_urls=[]):
+            gen_days=None, stylesheet_urls=[], script_urls=[],
+            start_time=800, end_time=2300):
         """
         :rtype: phitime.timetable.base.SVGTimetable
         """
@@ -23,6 +24,8 @@ class TestSvgTimetable(BaseTestCase):
         if gen_days is None:
             gen_days = Mock()
             gen_days.return_value = []
+        SVGTimetable.START_TIME = start_time
+        SVGTimetable.END_TIME = end_time
         SVGTimetable._gen_days = gen_days
         SVGTimetable.__abstractmethods__ = {}
         return SVGTimetable(start_date, day_length, stylesheet_urls, script_urls)
