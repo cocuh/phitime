@@ -16,26 +16,26 @@
       return value;
     }
   };
+  var getColumns = function () {
+    var columns = [].slice.call(document.querySelectorAll('#main>.column'));
+    columns.sort(function (a, b) {
+      var a_idx = parseInt(getAttrWithLog(a, 'data-day-idx'));
+      var b_idx = parseInt(getAttrWithLog(b, 'data-day-idx'));
+      return a_idx - b_idx;
+    });
+    return columns;
+  };
+  var getColumnHeaders = function (columnElements) {
+    var getHeader = function (elem) {
+      return elem.querySelector('.column_header');
+    };
+    var headers = columnElements.map(getHeader);
+    return headers;
+  };
   var TimeTable = function () {
     this.$timetable = document.getElementById('main');
-    this.columnHeaderElements = [
-      getElementById('column_header_mon'),
-      getElementById('column_header_tue'),
-      getElementById('column_header_wed'),
-      getElementById('column_header_thr'),
-      getElementById('column_header_fri'),
-      getElementById('column_header_sat'),
-      getElementById('column_header_sun')
-    ];
-    this.columnElements = [
-      getElementById('column_mon'),
-      getElementById('column_tue'),
-      getElementById('column_wed'),
-      getElementById('column_thr'),
-      getElementById('column_fri'),
-      getElementById('column_sat'),
-      getElementById('column_sun')
-    ];
+    this.columnElements = getColumns();
+    this.columnHeaderElements = getColumnHeaders(this.columnElements);
     this.classes = {
       cell: 'cell',
       selecting: 'selecting',
@@ -215,12 +215,14 @@
         status.start.minY = minY;
         status.start.maxY = minY + height;
         status.start.$cell = $cell;
+        console.log(status.start)
       };
       var saveStatusEnd = function () {
         status.end.day = dayIdx;
         status.end.minY = minY;
         status.end.maxY = minY + height;
         status.end.$cell = $cell;
+        console.log(status.end)
       };
       var redrawSelecting = function () {
         self._toggleSelectingCellClass(self.classes.selecting, true);

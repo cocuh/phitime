@@ -199,6 +199,8 @@ class SVGDay(metaclass=abc.ABCMeta):
         elem = ET.Element('g', {
             'id': 'column_{}'.format(self.weekday),
             'data-day': self.weekday,
+            'data-day-idx': self.day_idx,
+            'class': 'column',
             'transform': 'translate({x},0)'.format(
                 x=self.day_idx * self.WIDTH
             ),
@@ -247,7 +249,7 @@ class SVGPeriod(object):
         elem = ET.Element('g', {
             'class': ' '.join(self.classes | {'cell'}),
             'data-day': self.day_idx,
-            'data-y': self.start_y - y_offset,
+            'data-y': self.start_y,
             'data-height': self.height,
             'transform': 'translate(0, {})'.format(y_offset),
         })
