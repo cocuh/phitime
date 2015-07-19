@@ -50,7 +50,7 @@ def main(global_config, **settings):
     config.add_route('event.create', '/event_create')
     config.add_route('event.detail', '/event/{event_scrambled_id}/')
     config.add_route('event.edit', '/event/{event_scrambled_id}/edit')
-    config.add_route('event.edit.proposed_time', '/event/{event_scrambled_id}/edit/proposed_time')
+    config.add_route('event.edit.proposed', '/event/{event_scrambled_id}/edit/proposed')
     config.add_route('event.api.info', '/event/{event_scrambled_id}/api/info.json')
     config.add_route('member.create', '/event/{event_scrambled_id}/create_member')
     config.add_route('member.edit', '/event/{event_scrambled_id}/{member_position}/edit')
