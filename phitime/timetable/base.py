@@ -36,6 +36,7 @@ class SVGElement(ET.Element):
                 raise TypeError('attr has invalid type key:{} value:{}'.format(key, value))
         return attrib
 
+
 _START_TIME = None
 _END_TIME = None
 
@@ -334,10 +335,51 @@ class SVGPeriod(object):
         return elem
 
 
-class TimetableType(metaclass=abc.ABCMeta):
-    display_name = None
-    name = None
-    route_name = None
+class classproperty(object):
+    def __init__(self, getter):
+        self.getter = getter
 
+    def __get__(self, instance, owner):
+        return self.getter(owner)
+
+
+class TimetableType(metaclass=abc.ABCMeta):
+    @classmethod
+    @abc.abstractmethod
+    def get_name(cls):
+        raise NotImplementedError()
+
+    @classmethod
+    @abc.abstractmethod
+    def get_display_name(cls):
+        raise NotImplementedError()
+
+    @classmethod
+    @abc.abstractmethod
+    def get_route_name(cls):
+        raise NotImplementedError()
+
+    @abc.abstractmethod
     def to_string(self):
         raise NotImplementedError()
+
+    @classproperty
+    def name(cls):
+        return cls.get_name()
+
+    @classproperty
+    def route_name(cls):
+        return cls.get_route_name()
+
+    @classproperty
+    def display_name(cls):
+        return cls.get_display_name()
+
+
+__all__ = [
+    'SVGElement',
+    'SVGTimetable',
+    'SVGDay',
+    'SVGPeriod',
+    'TimetableType',
+]

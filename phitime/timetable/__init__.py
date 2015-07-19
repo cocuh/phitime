@@ -1,19 +1,19 @@
 from .univ_tsukuba import UnivTsukubaTimetable
 from .half_hourly import HalfHourlyTimetable
 
-timetable_types = [
-    UnivTsukubaTimetable,
-    HalfHourlyTimetable,
-]
-
 
 class TimetableUtils(object):
     DEFAULT = HalfHourlyTimetable
 
+    timetable_types = [
+        UnivTsukubaTimetable,
+        HalfHourlyTimetable,
+    ]
+
     @classmethod
     def find_by_name(cls, name):
-        for timetable in timetable_types:
-            if timetable.name == name:
+        for timetable in cls.timetable_types:
+            if timetable.get_name() == name:
                 return timetable
 
     @classmethod

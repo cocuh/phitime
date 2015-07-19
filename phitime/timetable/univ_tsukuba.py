@@ -13,6 +13,7 @@ _END_TIME = 2300
 Holiday.START_TIME = _START_TIME
 Holiday.END_TIME = _END_TIME
 
+
 class Period(SVGPeriod):
     pass
 
@@ -83,18 +84,26 @@ class _Timetable(SVGTimetable):
             return Holiday(date, day_idx)
         else:
             return WeekDay(date, day_idx)
-    
 
 
 class UnivTsukubaTimetable(TimetableType):
-    name = 'univ_tsukuba'
-    target_timetable = _Timetable
-
     def __init__(self, start_date, stylesheet_urls=[], script_urls=[]):
         self.timetable = _Timetable(start_date, 7, stylesheet_urls, script_urls)
 
     def to_string(self):
         return self.timetable.to_string()
+
+    @classmethod
+    def get_display_name(self):
+        return u'筑波大学 時間割'
+
+    @classmethod
+    def get_name(self):
+        return 'univ_tsukuba'
+
+    @classmethod
+    def get_route_name(self):
+        return 'svg.timetable.univ_tsukuba'
 
 
 __all__ = ['UnivTsukubaTimetable']

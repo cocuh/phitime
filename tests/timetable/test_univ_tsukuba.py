@@ -13,8 +13,20 @@ class TestUnivTsukubaTimetable(BaseTestCase):
         UnivTsukubaTimetable = self._getTargetClass()
         return UnivTsukubaTimetable(start_date)
 
-    def test_it(self):
+    def test_to_string(self):
         timetable = self._makeOne()
 
         res = timetable.to_string()
         self.assertIsInstance(res, str)
+
+    def test_get_name(self):
+        timetable = self._makeOne()
+        self.assertIsNotNone(timetable.get_name())
+
+    def test_get_display_name(self):
+        timetable = self._makeOne()
+        self.assertIsNotNone(timetable.get_display_name())
+
+    def test_get_route_name(self):
+        timetable = self._makeOne()
+        self.assertIsNotNone(timetable.get_route_name())
