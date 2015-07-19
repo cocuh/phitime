@@ -8,4 +8,5 @@
         {{ form.csrf_token(request) }}
         <input type="submit"/>
     </form>
+    <a href="{{ request.route_path('event.edit.proposed_time', event_scrambled_id=event.scrambled_id) }}">event.edit.proposed_time</a><br/>
 {% endblock %}

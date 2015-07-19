@@ -70,7 +70,18 @@ class EventView(object):
         DBSession.add(event)
         DBSession.flush()
 
-        return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=self.get_event().scrambled_id))
+        return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
+
+    @view_config(route_name='event.edit.proposed_time', request_method='GET',
+        renderer='templates/event/edit_proposed_time.jinja2')
+    def edit_proposed_time(self):
+        event = self.get_event()
+        return {}
+
+    @view_config(route_name='event.edit.proposed_time', request_method='POST')
+    def edit_proposed_time(self):
+        event = self.get_event()
+        return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
     @view_config(route_name='event.detail', request_method='GET', renderer='templates/event/detail.jinja2')
     def detail_get(self):
@@ -168,6 +179,7 @@ class MemberView(object):
 
 class SVGView(object):
     CONTENT_TYPE_SVG = 'image/svg+xml'
+
     def __init__(self, request):
         self.request = request
 
