@@ -1,5 +1,4 @@
 from pyramid.httpexceptions import HTTPFound
-from pyramid.response import Response
 from pyramid.view import view_config
 
 from phitime.db import DBSession
