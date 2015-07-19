@@ -25,31 +25,31 @@ class WeekDay(SVGDay):
     splitter = [
         # 1st
         (840, "lesson"),
-        955,
+        (955, "recess"),
         # 2nd
         (1010, "lesson"),
-        1125,
+        (1125, "recess"),
         # 3rd
         (1215, "lesson"),
-        1330,
+        (1330, "recess"),
         # 4th
         (1345, "lesson"),
-        1500,
+        (1500, "recess"),
         # 5th
         (1515, "lesson"),
-        1630,
+        (1630, "recess"),
         # 6th
         (1645, "lesson"),
-        1800,
-        1830,
+        (1800, "even"),
+        (1830, "even"),
         (1900, "odd"),
         (1930, "odd"),
-        2000,
-        2030,
+        (2000, "even"),
+        (2030, "even"),
         (2100, "odd"),
         (2130, "odd"),
-        2200,
-        2230,
+        (2200, "even"),
+        (2230, "even"),
     ]
 
     def gen_periods(self):
