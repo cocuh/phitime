@@ -342,6 +342,15 @@ class classproperty(object):
 
 
 class TimetableType(metaclass=abc.ABCMeta):
+    def __init__(self, start_date, stylesheet_urls=[], script_urls=[]):
+        self.timetable = self.get_target_class()(start_date, 7, stylesheet_urls, script_urls)
+        """:type: SVGTimetable"""
+
+    @classmethod
+    @abc.abstractmethod
+    def get_target_class(cls):
+        raise NotImplementedError()
+
     @classmethod
     @abc.abstractmethod
     def get_name(cls):

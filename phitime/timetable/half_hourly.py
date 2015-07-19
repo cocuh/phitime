@@ -65,8 +65,8 @@ class _Timetable(SVGTimetable):
 
 
 class HalfHourlyTimetable(TimetableType):
-    def __init__(self, start_date, stylesheet_urls=[], script_urls=[]):
-        self.timetable = _Timetable(start_date, 7, stylesheet_urls, script_urls)
+    def get_target_class(cls):
+        return _Timetable
 
     def to_string(self):
         return self.timetable.to_string()
