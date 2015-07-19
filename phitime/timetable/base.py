@@ -11,18 +11,30 @@ def conv2y(time):
     return hour * 60 + minute
 
 
-def stringify_element_attribute(elem):
-    assert isinstance(elem, ET.Element)
-    accepted_type = [str, int, float]
-    for key, value in elem.attrib.items():
-        if any(
-                isinstance(value, ty)
-                for ty in accepted_type
-        ):
-            elem.attrib[key] = str(value)
-        else:
-            raise TypeError('attr has invlaid type key:{} value:{}'.format(key, value))
+class SVGElement(ET.Element):
+    def __init__(self, tag, attrib={}, **extra):
+        attrib.update(extra)
+        attrib = self._stringify_attrib(attrib)
+        super().__init__(tag, attrib)
 
+    def set(self, key, value):
+        self.attrib[key] = self._stringify_value(value)
+
+    def _stringify_value(self, value):
+        if isinstance(value, str):
+            return value
+        elif isinstance(value, int) or isinstance(value, float):
+            return str(value)
+        else:
+            raise TypeError('attr has invalid type value:{}'.format(value))
+
+    def _stringify_attrib(self, attrib):
+        for key, value in attrib.items():
+            try:
+                attrib[key] = self._stringify_value(value)
+            except TypeError:
+                raise TypeError('attr has invalid type key:{} value:{}'.format(key, value))
+        return attrib
 
 _START_TIME = None
 _END_TIME = None
@@ -52,7 +64,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         """
         :rtype: xml.etree.ElementTree.Element
         """
-        root = ET.Element(None)
+        root = SVGElement(None)
 
         for url in self.stylesheet_urls:
             stylesheet = self._create_stylesheet_elem(url)
@@ -83,17 +95,15 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         """
         :rtype: xml.etree.ElementTree.Element
         """
-        svg = ET.Element('svg', {
+        svg = SVGElement('svg', {
             'xmlns': 'http://www.w3.org/2000/svg',
             'xmlns:xlink': 'http://www.w3.org/1999/xlink',
             'viewBox': self._gen_viewbox(),
         })
-        stringify_element_attribute(svg)
-        main = ET.Element('g', {
+        main = SVGElement('g', {
             'id': 'main',
             'data-start': conv2y(self.START_TIME),
         })
-        stringify_element_attribute(main)
         svg.append(main)
         for day in self.days:
             main.append(day.to_elem())
@@ -135,7 +145,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         raise NotImplemented()
 
     def gen_row_header(self):
-        header_elem = ET.Element('g', {
+        header_elem = SVGElement('g', {
             'class': 'row_header',
             'transform': 'translate({},0)'.format(-self.ROW_HEADER_WIDTH)
         })
@@ -155,21 +165,18 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         return header_elem
 
     def _gen_header_elem(self, header_text, height, y_offset):
-        elem = ET.Element('g', {
+        elem = SVGElement('g', {
             'transform': 'translate(0, {})'.format(y_offset),
         })
-        rect = ET.Element('rect', {
+        rect = SVGElement('rect', {
             'width': self.ROW_HEADER_WIDTH,
             'height': height,
         })
-        text = ET.Element('text', {
+        text = SVGElement('text', {
             'x': self.ROW_HEADER_WIDTH / 2,
             'y': height / 2,
         })
         text.text = header_text
-        stringify_element_attribute(elem)
-        stringify_element_attribute(rect)
-        stringify_element_attribute(text)
         elem.append(rect)
         elem.append(text)
         return elem
@@ -180,7 +187,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         :rtype: xml.etree.ElementTree.Element
         """
         # FIXME: it might have xss vulnerability
-        stylesheet = ET.Element('script', {
+        stylesheet = SVGElement('script', {
             'type': 'application/javascript',
             'xlink:href': url,
         })
@@ -226,7 +233,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
     def _gen_header_elem(self, header_text):
-        elem = ET.Element('g', {
+        elem = SVGElement('g', {
             'id': 'column_header_{}'.format(self.weekday),
             'data-day': self.weekday,
             'transform': 'translate(0,{y})'.format(
@@ -234,24 +241,21 @@ class SVGDay(metaclass=abc.ABCMeta):
             ),
             'class': 'column_header',
         })
-        rect = ET.Element('rect', {
+        rect = SVGElement('rect', {
             'width': self.WIDTH,
             'height': self.HEADER_HEIGHT,
         })
-        text = ET.Element('text', {
+        text = SVGElement('text', {
             'x': self.WIDTH / 2,
             'y': self.HEADER_HEIGHT / 2,
         })
         text.text = self.gen_header_text()
-        stringify_element_attribute(elem)
-        stringify_element_attribute(text)
-        stringify_element_attribute(rect)
         elem.append(rect)
         elem.append(text)
         return elem
 
     def _to_elem(self):
-        elem = ET.Element('g', {
+        elem = SVGElement('g', {
             'id': 'column_{}'.format(self.weekday),
             'data-day': self.weekday,
             'data-day-idx': self.day_idx,
@@ -260,7 +264,6 @@ class SVGDay(metaclass=abc.ABCMeta):
                 x=self.day_idx * self.WIDTH
             ),
         })
-        stringify_element_attribute(elem)
         return elem
 
     @staticmethod
@@ -316,19 +319,17 @@ class SVGPeriod(object):
         """
         :rtype: xml.etree.ElementTree.Element
         """
-        elem = ET.Element('g', {
+        elem = SVGElement('g', {
             'class': ' '.join(self.classes | {'cell'}),
             'data-day': self.day_idx,
             'data-y': self.start_y,
             'data-height': self.height,
             'transform': 'translate(0, {})'.format(y_offset),
         })
-        rect = ET.Element('rect', {
+        rect = SVGElement('rect', {
             'width': width,
             'height': self.height,
         })
-        stringify_element_attribute(elem)
-        stringify_element_attribute(rect)
         elem.append(rect)
         return elem
 
