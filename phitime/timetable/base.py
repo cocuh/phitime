@@ -235,12 +235,11 @@ class SVGDay(metaclass=abc.ABCMeta):
 
     def _gen_header_elem(self, header_text):
         elem = SVGElement('g', {
-            'id': 'column_header_{}'.format(self.weekday),
             'data-day': self.weekday,
             'transform': 'translate(0,{y})'.format(
                 y=-self.HEADER_HEIGHT
             ),
-            'class': 'column_header',
+            'class': ' '.join(['column_header', 'column_header_{}'.format(self.weekday)]),
         })
         rect = SVGElement('rect', {
             'width': self.WIDTH,
@@ -257,10 +256,9 @@ class SVGDay(metaclass=abc.ABCMeta):
 
     def _to_elem(self):
         elem = SVGElement('g', {
-            'id': 'column_{}'.format(self.weekday),
             'data-day': self.weekday,
             'data-day-idx': self.day_idx,
-            'class': 'column',
+            'class': ' '.join(['column', 'column_{}'.format(self.weekday)]),
             'transform': 'translate({x},0)'.format(
                 x=self.day_idx * self.WIDTH
             ),
