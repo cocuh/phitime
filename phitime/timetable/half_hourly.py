@@ -58,24 +58,15 @@ class _Timetable(SVGTimetable):
     START_TIME = _START_TIME
     END_TIME = _END_TIME
 
-    def gen_days(self, start_date):
-        # TODO user start_date
-        return [
-            Day(start_date),
-            Day(start_date),
-            Day(start_date),
-            Day(start_date),
-            Day(start_date),
-            Day(start_date),
-            Day(start_date),
-        ]
+    def gen_day(self, date, day_idx):
+        return Day(date, day_idx)
 
 
 class HalfHourlyTimetable(TimetableType):
     name = 'half_hourly'
 
-    def __init__(self, start_date):
-        self.timetable = _Timetable(start_date)
+    def __init__(self, start_date, stylesheet_urls=[], script_urls=[]):
+        self.timetable = _Timetable(start_date, 7, stylesheet_urls, script_urls)
 
     def to_string(self):
         return self.timetable.to_string()

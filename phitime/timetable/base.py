@@ -1,4 +1,6 @@
 from xml.etree import ElementTree as ET
+import datetime
+import abc
 
 
 def conv2y(time):
@@ -25,18 +27,20 @@ _START_TIME = 800
 _END_TIME = 2300
 
 
-class SVGTimetable(object):
+class SVGTimetable(metaclass=abc.ABCMeta):
     START_TIME = _START_TIME
     END_TIME = _END_TIME
 
-    def __init__(self, start_date):
+    def __init__(self, start_date, day_length, stylesheet_urls, script_urls):
         """
         :type date: datetime.date 
         :return:
         """
         self.start_date = start_date
-        self.stylesheet_urls = []
-        self.days = self.gen_days(start_date)
+        self.stylesheet_urls = stylesheet_urls
+        self.script_urls = script_urls
+        self.day_length = day_length
+        self.days = self._gen_days()
         """:type: list[SVGDay]"""
 
     def to_string(self):
@@ -52,8 +56,11 @@ class SVGTimetable(object):
             stylesheet = self._create_stylesheet_elem(url)
             root.append(stylesheet)
 
-        elem = self._to_elem()
-        root.append(elem)
+        svg = self._to_elem()
+        for url in self.script_urls:
+            script = self._create_script_elem(url)
+            svg.append(script)
+        root.append(svg)
 
         return root
 
@@ -62,7 +69,7 @@ class SVGTimetable(object):
         :rtype: xml.etree.ElementTree.Element
         """
         elem = ET.Element('svg', {
-            'xmlns': 'http://www.w3.org/200/svg',
+            'xmlns': 'http://www.w3.org/2000/svg',
             'xmlns:xlink': 'http://www.w3.org/1999/xlink',
             'viewBox': '-30 -30 590 930',  # fixme
         })
@@ -81,20 +88,55 @@ class SVGTimetable(object):
         stylesheet.tail = "\n"
         return stylesheet
 
-    def gen_days(self, start_date):
-        raise NotImplementedError()
+    def _gen_days(self):
+        """
+        :type start_date: datetime.date
+        :type day_length: int
+        :return:
+        """
+        start_date = self.start_date
+        day_length = self.day_length
+        days = []
+
+        for day_idx in range(day_length):
+            date = start_date + datetime.timedelta(day_idx)
+            day = self.gen_day(date, day_idx)
+            days.append(day)
+        return days
+
+    @abc.abstractmethod
+    def gen_day(self, date, day_idx):
+        """
+        :type date: datetime.date
+        :type day_idx: int 
+        :rtype: SVGDay
+        """
+        raise NotImplemented()
+
+    @staticmethod
+    def _create_script_elem(url):
+        """
+        :rtype: xml.etree.ElementTree.Element
+        """
+        # FIXME: it might have xss vulnerability
+        stylesheet = ET.Element('script', {
+            'type': 'application/javascript',
+            'xlink:href': url,
+        })
+        stylesheet.tail = "\n"
+        return stylesheet
 
 
-class SVGDay(object):
+class SVGDay(metaclass=abc.ABCMeta):
     WIDTH = 80
     HEADER_HEIGHT = 30
     START_TIME = _START_TIME
     END_TIME = _END_TIME
 
-    def __init__(self, date):
+    def __init__(self, date, day_idx):
         self.date = date
-        self.day_idx = 0
-        self.day_identifier = 'mon'
+        self.day_idx = day_idx
+        self.weekday = self._get_weekday_identifier(date)
         self.periods = self.gen_periods()
         """:type: list[SVGPeriod]"""
 
@@ -104,7 +146,7 @@ class SVGDay(object):
         """
         elem = self._to_elem()
 
-        elem_header = self._gen_header_elem(self.day_identifier)  # fixme header text
+        elem_header = self._gen_header_elem(self.weekday)  # fixme header text
         elem.append(elem_header)
 
         y_offset = 0
@@ -114,6 +156,7 @@ class SVGDay(object):
             y_offset += period.height
         return elem
 
+    @abc.abstractmethod
     def gen_periods(self):
         """
         override here
@@ -124,8 +167,8 @@ class SVGDay(object):
 
     def _gen_header_elem(self, header_text):
         elem = ET.Element('g', {
-            'id': 'column_header_{}'.format(self.day_identifier),
-            'data-day': self.day_identifier,
+            'id': 'column_header_{}'.format(self.weekday),
+            'data-day': self.weekday,
             'transform': 'translate(0,{y})'.format(
                 y=-self.HEADER_HEIGHT
             ),
@@ -149,14 +192,30 @@ class SVGDay(object):
 
     def _to_elem(self):
         elem = ET.Element('g', {
-            'id': 'column_{}'.format(self.day_identifier),
-            'data-day': self.day_identifier,
+            'id': 'column_{}'.format(self.weekday),
+            'data-day': self.weekday,
             'transform': 'translate({x},0)'.format(
                 x=self.day_idx * self.WIDTH
             ),
         })
         stringify_element_attribute(elem)
         return elem
+
+    @staticmethod
+    def _get_weekday_identifier(date):
+        """
+        :type date: datetime.date 
+        :rtype: str
+        """
+        return [
+            "mon",
+            "tue",
+            "wed",
+            "thr",
+            "fri",
+            "sat",
+            "sun",
+        ][date.weekday()]
 
 
 class SVGPeriod(object):
@@ -181,15 +240,15 @@ class SVGPeriod(object):
         :rtype: xml.etree.ElementTree.Element
         """
         elem = ET.Element('g', {
-            'classes': ' '.join(self.classes),
+            'class': ' '.join(self.classes | {'cell'}),
             'data-day': self.day_idx,
             'data-y': self.start_y - y_offset,
             'data-height': self.height,
             'transform': 'translate(0, {})'.format(y_offset),
         })
-        rect = ET.Element('g', {
+        rect = ET.Element('rect', {
             'width': width,
-            'height': SVGDay.WIDTH,
+            'height': self.height,
         })
         stringify_element_attribute(elem)
         stringify_element_attribute(rect)
@@ -197,7 +256,7 @@ class SVGPeriod(object):
         return elem
 
 
-class TimetableType(object):
+class TimetableType(metaclass=abc.ABCMeta):
     display_name = None
     name = None
     route_name = None

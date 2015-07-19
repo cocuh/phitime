@@ -5,8 +5,14 @@ from .base import (
     TimetableType,
 )
 
+from .half_hourly import Day as Holiday
+
 _START_TIME = 800
 _END_TIME = 2300
+
+
+class Period(SVGPeriod):
+    pass
 
 
 class WeekDay(SVGDay):
@@ -66,71 +72,24 @@ class WeekDay(SVGDay):
         return periods
 
 
-class Holiday(SVGDay):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
-
-    splitter = [
-        830,
-        900,
-        930,
-        1000,
-        1030,
-        1100,
-        1130,
-        1200,
-        1230,
-        1300,
-        1330,
-        1400,
-        1430,
-        1500,
-        1530,
-        1600,
-        1630,
-        1700,
-        1730,
-        1800,
-        1830,
-        1900,
-        1930,
-        2000,
-        2030,
-        2100,
-        2130,
-        2200,
-        2230,
-    ]
-
-    def gen_periods(self):
-        return [
-            SVGPeriod(self.day_idx, start_time, end_time)
-            for start_time, end_time
-            in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME])
-            ]
-
-
 class _Timetable(SVGTimetable):
     START_TIME = _START_TIME
     END_TIME = _END_TIME
 
-    def gen_days(self, start_date):
-        # TODO user start_date
-        return [
-            WeekDay(start_date),
-            WeekDay(start_date),
-            WeekDay(start_date),
-            WeekDay(start_date),
-            WeekDay(start_date),
-            Holiday(start_date),
-            Holiday(start_date),
-        ]
+    def gen_day(self, date, day_idx):
+        if date.weekday() in [5, 6]:  # sat or sunday
+            return Holiday(date, day_idx)
+        else:
+            return WeekDay(date, day_idx)
+    
 
 
 class UnivTsukubaTimetable(TimetableType):
     name = 'univ_tsukuba'
-    def __init__(self, start_date):
-        self.timetable = _Timetable(start_date)
+    target_timetable = _Timetable
+
+    def __init__(self, start_date, stylesheet_urls=[], script_urls=[]):
+        self.timetable = _Timetable(start_date, 7, stylesheet_urls, script_urls)
 
     def to_string(self):
         return self.timetable.to_string()
