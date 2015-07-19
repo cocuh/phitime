@@ -1,6 +1,7 @@
 from xml.etree import ElementTree as ET
 import datetime
 import abc
+import math
 
 
 def conv2y(time):
@@ -23,8 +24,8 @@ def stringify_element_attribute(elem):
             raise TypeError('attr has invlaid type key:{} value:{}'.format(key, value))
 
 
-_START_TIME = 800
-_END_TIME = 2300
+_START_TIME = None
+_END_TIME = None
 
 
 class SVGTimetable(metaclass=abc.ABCMeta):
@@ -58,6 +59,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             root.append(stylesheet)
 
         svg = self._to_elem()
+        svg.append(self.gen_row_header())
         for url in self.script_urls:
             script = self._create_script_elem(url)
             svg.append(script)
@@ -69,7 +71,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         row_header_width = self.ROW_HEADER_WIDTH
         column_header_height = SVGDay.HEADER_HEIGHT
         timetable_width = sum(map(lambda day: day.WIDTH, self.days))
-        timetable_height = conv2y(self.END_TIME - self.START_TIME)
+        timetable_height = conv2y(self.END_TIME) - conv2y(self.START_TIME)
         return '-{row_header_width} -{column_header_height} {width} {height}'.format(
             row_header_width=row_header_width,
             column_header_height=column_header_height,
@@ -131,6 +133,46 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         :rtype: SVGDay
         """
         raise NotImplemented()
+
+    def gen_row_header(self):
+        header_elem = ET.Element('g', {
+            'class': 'row_header',
+            'transform': 'translate({},0)'.format(-self.ROW_HEADER_WIDTH)
+        })
+        start_hour = self.START_TIME // 100
+        end_hour = math.ceil(float(self.END_TIME) / 100)
+        y_offset = 0
+        for hour, next_hour in zip(range(start_hour, end_hour), range(start_hour + 1, end_hour + 1)):
+            if hour == start_hour:
+                height = conv2y(next_hour * 100) - conv2y(self.START_TIME)
+            elif next_hour == end_hour:
+                height = conv2y(self.END_TIME) - conv2y(hour * 100)
+            else:
+                height = conv2y(100)
+            elem = self._gen_header_elem(str(hour), height, y_offset)
+            header_elem.append(elem)
+            y_offset += height
+        return header_elem
+
+    def _gen_header_elem(self, header_text, height, y_offset):
+        elem = ET.Element('g', {
+            'transform': 'translate(0, {})'.format(y_offset),
+        })
+        rect = ET.Element('rect', {
+            'width': self.ROW_HEADER_WIDTH,
+            'height': height,
+        })
+        text = ET.Element('text', {
+            'x': self.ROW_HEADER_WIDTH / 2,
+            'y': height / 2,
+        })
+        text.text = header_text
+        stringify_element_attribute(elem)
+        stringify_element_attribute(rect)
+        stringify_element_attribute(text)
+        elem.append(rect)
+        elem.append(text)
+        return elem
 
     @staticmethod
     def _create_script_elem(url):
@@ -198,7 +240,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         })
         text = ET.Element('text', {
             'x': self.WIDTH / 2,
-            'y': 15,
+            'y': self.HEADER_HEIGHT / 2,
         })
         text.text = self.gen_header_text()
         stringify_element_attribute(elem)
