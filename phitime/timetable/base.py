@@ -76,7 +76,10 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             stylesheet = self._create_stylesheet_elem(url)
             root.append(stylesheet)
 
-        svg = self._to_elem(gen_info)
+        svg, main = self._to_elem(gen_info)
+        svg.append(main)
+        for day in self.days:
+            main.append(day.to_elem(gen_info))
         svg.append(self.gen_row_header())
         for url in self.script_urls:
             script = self._create_script_elem(url)
@@ -111,10 +114,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             'id': 'main',
             'data-start': conv2y(self.START_TIME),
         })
-        svg.append(main)
-        for day in self.days:
-            main.append(day.to_elem(gen_info))
-        return svg
+        return svg, main
 
     @staticmethod
     def _create_stylesheet_elem(stylesheet_url):
