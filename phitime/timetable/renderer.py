@@ -16,8 +16,6 @@ class SVGTimetableRendererFactory(object):
 
         event = value.get('event')
         """:type: phitime.models.Event"""
-        if event is not None:
-            timetable.set_event(event)
         
         request = system.get('request')
         """:type: pyramid.request.Request"""
