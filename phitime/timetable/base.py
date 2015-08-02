@@ -261,7 +261,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         elem.append(text)
         return elem
 
-    def _to_elem(self):
+    def _to_elem(self, gen_info):
         elem = SVGElement('g', {
             'data-day': self.weekday,
             'data-day-idx': self.day_idx,
