@@ -1,10 +1,11 @@
 class BaseStrategy():
     def __init__(self, event):
         """
-        :type event: phitime.models.event
+        :type event: phitime.models.Event
         :return:
         """
         self.event = event
+        """:type: phitime.models.Event"""
 
     def gen_period_classes(self, period):
         """
