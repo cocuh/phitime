@@ -58,11 +58,16 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         self.days = self._gen_days()
         """:type: list[SVGDay]"""
 
-    def to_string(self):
-        return ET.tostring(self.to_elem(), 'unicode')
-
-    def to_elem(self):
+    def to_string(self, gen_info=None):
         """
+        :type gen_info: ElementGenerationInfo
+        :rtype: str
+        """
+        return ET.tostring(self.to_elem(gen_info), 'unicode')
+
+    def to_elem(self, gen_info=None):
+        """
+        :type gen_info: ElementGenerationInfo
         :rtype: xml.etree.ElementTree.Element
         """
         root = SVGElement(None)
@@ -71,7 +76,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             stylesheet = self._create_stylesheet_elem(url)
             root.append(stylesheet)
 
-        svg = self._to_elem()
+        svg = self._to_elem(gen_info)
         svg.append(self.gen_row_header())
         for url in self.script_urls:
             script = self._create_script_elem(url)
@@ -92,8 +97,9 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             height=timetable_height + column_header_height,
         )
 
-    def _to_elem(self):
+    def _to_elem(self, gen_info):
         """
+        :type gen_info: ElementGenerationInfo
         :rtype: xml.etree.ElementTree.Element
         """
         svg = SVGElement('svg', {
@@ -107,7 +113,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         })
         svg.append(main)
         for day in self.days:
-            main.append(day.to_elem())
+            main.append(day.to_elem(gen_info))
         return svg
 
     @staticmethod
@@ -209,18 +215,19 @@ class SVGDay(metaclass=abc.ABCMeta):
         self.periods = self.gen_periods()
         """:type: list[SVGPeriod]"""
 
-    def to_elem(self):
+    def to_elem(self, gen_info):
         """
+        :type gen_info: ElementGenerationInfo
         :rtype: xml.etree.ElementTree.Element
         """
-        elem = self._to_elem()
+        elem = self._to_elem(gen_info)
 
         elem_header = self._gen_header_elem(self.weekday)  # fixme header text
         elem.append(elem_header)
 
         y_offset = 0
         for period in self.periods:
-            period_elem = period.to_elem(self.WIDTH, y_offset)
+            period_elem = period.to_elem(gen_info, self.WIDTH, y_offset)
             elem.append(period_elem)
             y_offset += period.height
         return elem
@@ -314,8 +321,9 @@ class SVGPeriod(object):
         """
         return self.end_y - self.start_y
 
-    def to_elem(self, width, y_offset):
+    def to_elem(self, gen_info, width, y_offset):
         """
+        :type gen_info: ElementGenerationInfo
         :rtype: xml.etree.ElementTree.Element
         """
         elem = SVGElement('g', {
@@ -366,9 +374,8 @@ class TimetableType(metaclass=abc.ABCMeta):
     def get_route_name(cls):
         raise NotImplementedError()
 
-    @abc.abstractmethod
-    def to_string(self):
-        raise NotImplementedError()
+    def to_string(self, gen_info):
+        return self.timetable.to_string(gen_info)
 
     @classproperty
     def name(cls):
@@ -381,6 +388,15 @@ class TimetableType(metaclass=abc.ABCMeta):
     @classproperty
     def display_name(cls):
         return cls.get_display_name()
+
+
+class ElementGenerationInfo():
+    def __init__(self):
+        self.event = None
+        """:type: phitime.models.Event | None"""
+
+    def set_event(self, event):
+        self.event = event
 
 
 __all__ = [
