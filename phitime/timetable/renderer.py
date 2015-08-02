@@ -10,7 +10,7 @@ class SVGTimetableRendererFactory(object):
         """:type: phitime.timetable.base.TimetableType"""
         if timetable is None:
             raise TypeError('no timetable argument')
-        elif isinstance(timetable, TimetableType):
+        elif not isinstance(timetable, TimetableType):
             raise TypeError('timetable is not instance of TimetableType')
 
         event = value.get('event')
