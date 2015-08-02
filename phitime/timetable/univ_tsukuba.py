@@ -90,9 +90,6 @@ class UnivTsukubaTimetable(TimetableType):
     def get_target_class(cls):
         return _Timetable
     
-    def to_string(self):
-        return self.timetable.to_string()
-
     @classmethod
     def get_display_name(self):
         return u'筑波大学 時間割'

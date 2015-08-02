@@ -68,9 +68,6 @@ class HalfHourlyTimetable(TimetableType):
     def get_target_class(cls):
         return _Timetable
 
-    def to_string(self):
-        return self.timetable.to_string()
-
     @classmethod
     def get_name(cls):
         return 'half_hourly'
