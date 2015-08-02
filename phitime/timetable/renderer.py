@@ -26,6 +26,6 @@ class SVGTimetableRendererFactory(object):
         strategies = value.get('class_strategies', [])
         """:type: list[phitime.timetable.strategy.BaseStrategy]"""
 
-        class_strategy = ClassStrategyList(strategies, event)
+        class_strategy_list = ClassStrategyList(strategies, event)
 
-        return timetable.to_string(class_strategy)
+        return timetable.to_string(class_strategy_list)
