@@ -87,6 +87,7 @@ class EventView(_EventMixin):
     def edit_proposed_time_post(self):
         event = self.get_event()
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
+
     @view_config(route_name='event.detail', request_method='GET', renderer='templates/event/detail.jinja2')
     def detail_get(self):
         return {
