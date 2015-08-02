@@ -58,16 +58,16 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         self.days = self._gen_days()
         """:type: list[SVGDay]"""
 
-    def to_string(self, gen_info=None):
+    def to_string(self, strategy=None):
         """
-        :type gen_info: ElementGenerationInfo
+        :type strategy: phitime.timetable.strategy.ClassStrategy
         :rtype: str
         """
-        return ET.tostring(self.to_elem(gen_info), 'unicode')
+        return ET.tostring(self.to_elem(strategy), 'unicode')
 
-    def to_elem(self, gen_info=None):
+    def to_elem(self, strategy):
         """
-        :type gen_info: ElementGenerationInfo
+        :type strategy: phitime.timetable.strategy.ClassStrategy
         :rtype: xml.etree.ElementTree.Element
         """
         root = SVGElement(None)
@@ -76,10 +76,10 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             stylesheet = self._create_stylesheet_elem(url)
             root.append(stylesheet)
 
-        svg, main = self._to_elem(gen_info)
+        svg, main = self._to_elem(strategy)
         svg.append(main)
         for day in self.days:
-            main.append(day.to_elem(gen_info))
+            main.append(day.to_elem(strategy))
         svg.append(self.gen_row_header())
         for url in self.script_urls:
             script = self._create_script_elem(url)
@@ -100,9 +100,9 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             height=timetable_height + column_header_height,
         )
 
-    def _to_elem(self, gen_info):
+    def _to_elem(self, strategy):
         """
-        :type gen_info: ElementGenerationInfo
+        :type strategy: phitime.timetable.strategy.ClassStrategy
         :rtype: xml.etree.ElementTree.Element
         """
         svg = SVGElement('svg', {
@@ -215,19 +215,19 @@ class SVGDay(metaclass=abc.ABCMeta):
         self.periods = self.gen_periods()
         """:type: list[SVGPeriod]"""
 
-    def to_elem(self, gen_info):
+    def to_elem(self, strategy):
         """
-        :type gen_info: ElementGenerationInfo
+        :type strategy: phitime.timetable.strategy.ClassStrategy
         :rtype: xml.etree.ElementTree.Element
         """
-        elem = self._to_elem(gen_info)
+        elem = self._to_elem(strategy)
 
         elem_header = self._gen_header_elem(self.weekday)  # fixme header text
         elem.append(elem_header)
 
         y_offset = 0
         for period in self.periods:
-            period_elem = period.to_elem(gen_info, self.WIDTH, y_offset)
+            period_elem = period.to_elem(strategy, self.WIDTH, y_offset)
             elem.append(period_elem)
             y_offset += period.height
         return elem
@@ -261,7 +261,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         elem.append(text)
         return elem
 
-    def _to_elem(self, gen_info):
+    def _to_elem(self, strategy):
         elem = SVGElement('g', {
             'data-day': self.weekday,
             'data-day-idx': self.day_idx,
@@ -321,9 +321,9 @@ class SVGPeriod(object):
         """
         return self.end_y - self.start_y
 
-    def to_elem(self, gen_info, width, y_offset):
+    def to_elem(self, strategy, width, y_offset):
         """
-        :type gen_info: ElementGenerationInfo
+        :type strategy: phitime.timetable.strategy.ClassStrategy
         :rtype: xml.etree.ElementTree.Element
         """
         elem = SVGElement('g', {
@@ -374,8 +374,8 @@ class TimetableType(metaclass=abc.ABCMeta):
     def get_route_name(cls):
         raise NotImplementedError()
 
-    def to_string(self, gen_info):
-        return self.timetable.to_string(gen_info)
+    def to_string(self, strategy):
+        return self.timetable.to_string(strategy)
 
     @classproperty
     def name(cls):
@@ -388,15 +388,6 @@ class TimetableType(metaclass=abc.ABCMeta):
     @classproperty
     def display_name(cls):
         return cls.get_display_name()
-
-
-class ElementGenerationInfo():
-    def __init__(self):
-        self.event = None
-        """:type: phitime.models.Event | None"""
-
-    def set_event(self, event):
-        self.event = event
 
 
 __all__ = [

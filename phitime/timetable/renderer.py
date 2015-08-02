@@ -1,4 +1,5 @@
 from phitime.timetable.base import TimetableType, ElementGenerationInfo
+from phitime.timetable.strategy import ClassStrategy
 
 
 class SVGTimetableRendererFactory(object):
@@ -24,13 +25,9 @@ class SVGTimetableRendererFactory(object):
             response = request.response
             response.content_type = 'image/svg+xml'
 
-        gen_info = self._create_gen_info(event=event)
+        strategies = value.get('class_strategies', [])
+        """:type: list[phitime.timetable.strategy.BaseStrategy]"""
 
-        return timetable.to_string(gen_info)
+        class_strategy = ClassStrategy(strategies, event)
 
-    @staticmethod
-    def _create_gen_info(event=None):
-        gen_info = ElementGenerationInfo()
-        if event is not None:
-            gen_info.set_event(event)
-        return gen_info
+        return timetable.to_string(class_strategy)
