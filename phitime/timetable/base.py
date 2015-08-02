@@ -60,14 +60,14 @@ class SVGTimetable(metaclass=abc.ABCMeta):
 
     def to_string(self, strategy=None):
         """
-        :type strategy: phitime.timetable.strategy.ClassStrategy
+        :type strategy: phitime.timetable.strategy.ClassStrategyList
         :rtype: str
         """
         return ET.tostring(self.to_elem(strategy), 'unicode')
 
     def to_elem(self, strategy):
         """
-        :type strategy: phitime.timetable.strategy.ClassStrategy
+        :type strategy: phitime.timetable.strategy.ClassStrategyList
         :rtype: xml.etree.ElementTree.Element
         """
         root = SVGElement(None)
@@ -102,7 +102,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
 
     def _to_elem(self, strategy):
         """
-        :type strategy: phitime.timetable.strategy.ClassStrategy
+        :type strategy: phitime.timetable.strategy.ClassStrategyList
         :rtype: xml.etree.ElementTree.Element
         """
         svg = SVGElement('svg', {
@@ -217,7 +217,7 @@ class SVGDay(metaclass=abc.ABCMeta):
 
     def to_elem(self, strategy):
         """
-        :type strategy: phitime.timetable.strategy.ClassStrategy
+        :type strategy: phitime.timetable.strategy.ClassStrategyList
         :rtype: xml.etree.ElementTree.Element
         """
         elem = self._to_elem(strategy)
@@ -323,7 +323,7 @@ class SVGPeriod(object):
 
     def to_elem(self, strategy, width, y_offset):
         """
-        :type strategy: phitime.timetable.strategy.ClassStrategy
+        :type strategy: phitime.timetable.strategy.ClassStrategyList
         :rtype: xml.etree.ElementTree.Element
         """
         elem = SVGElement('g', {

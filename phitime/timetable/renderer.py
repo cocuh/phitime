@@ -1,5 +1,5 @@
-from phitime.timetable.base import TimetableType, ElementGenerationInfo
-from phitime.timetable.strategy import ClassStrategy
+from phitime.timetable.base import TimetableType
+from phitime.timetable.strategy import ClassStrategyList
 
 
 class SVGTimetableRendererFactory(object):
@@ -28,6 +28,6 @@ class SVGTimetableRendererFactory(object):
         strategies = value.get('class_strategies', [])
         """:type: list[phitime.timetable.strategy.BaseStrategy]"""
 
-        class_strategy = ClassStrategy(strategies, event)
+        class_strategy = ClassStrategyList(strategies, event)
 
         return timetable.to_string(class_strategy)
