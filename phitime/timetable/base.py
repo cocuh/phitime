@@ -223,7 +223,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         """
         elem = self._to_elem(strategy)
 
-        elem_header = self._gen_column_header_elem(self.weekday)  # fixme header text
+        elem_header = self._gen_column_header_elem(self.weekday)
         elem.append(elem_header)
 
         y_offset = self.START_HHMM
