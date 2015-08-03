@@ -2,20 +2,19 @@
 {% import "../macro/form.jinja2" as form %}
 {% block content %}
     <form method="post" action="">
-        {{ form.input('member.name', member.name) }}
-        {{ form.input('member.comment', member.comment) }}
-        <input type="hidden" value="" name="member.available_times" id="member_available_times">
+        <input type="hidden" value="" name="event.proposed_times" id="event_proposed_times"/>
         <object id="timetable" data="timetable.svg" type="image/svg+xml"
                 height="80%"></object>
         <input type="submit" id="submit">
     </form>
-    <a href="{{ 'event.detail'|route_path(event_scrambled_id=event.scrambled_id) }}">back</a>
+    <a href="{{ 'event.edit' |route_path(event_scrambled_id=event.scrambled_id) }}">event.edit</a><br/>
+    <a href="{{ 'event.detail' |route_path(event_scrambled_id=event.scrambled_id) }}">event.detail</a><br/>
     <script>
         $(document).ready(function () {
             $("#submit").click(function (e) {
                 var available_times = $("#timetable")[0].contentDocument.timetable.getActivePeriods();
                 console.log(JSON.stringify(available_times));
-                $("#member_available_times").val(JSON.stringify(available_times));
+                $("#event_proposed_times").val(JSON.stringify(available_times));
             });
         })
     </script>

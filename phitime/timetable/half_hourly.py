@@ -5,14 +5,14 @@ from .base import (
     TimetableType,
 )
 
-_START_TIME = 800
-_END_TIME = 2300
+_START_HHMM = 800
+_END_HHMM = 2300
 
 
 class Day(SVGDay):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
-    splitter = [
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
+    splitter_hhmm = [
         830,
         900,
         930,
@@ -46,30 +46,27 @@ class Day(SVGDay):
 
     def gen_periods(self):
         periods = []
-        for start, end in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME]):
+        for start, end in zip([self.START_HHMM] + self.splitter_hhmm, self.splitter_hhmm + [self.END_HHMM]):
             classes = []
             if start // 100 % 2 == 1:
                 classes.append('odd')
             elif start // 100 % 2 == 0:
                 classes.append('even')
-            periods.append(SVGPeriod(self.day_idx, start, end, classes))
+            periods.append(SVGPeriod(self.date, self.day_idx, start, end, classes))
         return periods
 
 
 class _Timetable(SVGTimetable):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
 
     def gen_day(self, date, day_idx):
         return Day(date, day_idx)
 
 
 class HalfHourlyTimetable(TimetableType):
-    def __init__(self, start_date, stylesheet_urls=[], script_urls=[]):
-        self.timetable = _Timetable(start_date, 7, stylesheet_urls, script_urls)
-
-    def to_string(self):
-        return self.timetable.to_string()
+    def get_target_class(cls):
+        return _Timetable
 
     @classmethod
     def get_name(cls):

@@ -18,6 +18,10 @@
             <td>{{ event.description }}</td>
         </tr>
         <tr>
+            <th>event.created_at</th>
+            <td>{{ event.created_at }}</td>
+        </tr>
+        <tr>
             <th>event.timetable_type</th>
             <td>{{ event.timetable_type }}</td>
         </tr>
@@ -30,6 +34,8 @@
             </td>
         </tr>
     </table>
+    <object id="timetable" data="timetable.svg" type="image/svg+xml"
+            height="80%"></object>
     <a href="{{ request.route_path('event.edit', event_scrambled_id=event.scrambled_id) }}">event.edit</a><br/>
     <a href="{{ request.route_path('member.create', event_scrambled_id=event.scrambled_id) }}">member.create</a><br/>
 {% endblock %}

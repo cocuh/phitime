@@ -87,7 +87,7 @@
       var activeCellArray = this._getActiveCells();
       for (var activeCellIdx in activeCellArray) {
         var $activeCell = activeCellArray[activeCellIdx];
-        var theDay = this._getCellDay($activeCell);
+        var theDay = this._getCellDate($activeCell);
         var theStartMinutes = this._getCellStartMinutes($activeCell);
         var thePeriodLength = this._getCellPeriodLength($activeCell);
         var theCellData = {startMinutes: theStartMinutes, periodLength: thePeriodLength};
@@ -311,7 +311,7 @@
 
       var minDay = Math.min(this.status.start.day, this.status.end.day);
       var maxDay = Math.max(this.status.start.day, this.status.end.day);
-      var theDay = this._getCellDay($cell);
+      var theDay = this._getCellDayIdx($cell);
 
       if (theDay < minDay || maxDay < theDay) {
         return false;
@@ -335,7 +335,7 @@
      * @returns {int}
      */
     proto._getCellStartMinutes = function ($cell) {
-      return parseInt(getAttrWithLog($cell, 'data-y')) + this.startMinutes;
+      return parseInt(getAttrWithLog($cell, 'data-y'));
     };
     /**
      * @param $cell
@@ -350,8 +350,16 @@
      * @private
      * @returns {int}
      */
-    proto._getCellDay = function ($cell) {
-      return parseInt(getAttrWithLog($cell, 'data-day'));
+    proto._getCellDayIdx = function ($cell) {
+      return parseInt(getAttrWithLog($cell, 'data-day-idx'));
+    }
+    /**
+     * @param $cell
+     * @private
+     * @returns {string}
+     */
+    proto._getCellDate = function ($cell) {
+      return getAttrWithLog($cell, 'data-date');
     }
   })(TimeTable.prototype);
 

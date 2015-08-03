@@ -7,11 +7,11 @@ from .base import (
 
 from .half_hourly import Day as Holiday
 
-_START_TIME = 800
-_END_TIME = 2300
+_START_HHMM = 800
+_END_HHMM = 2300
 
-Holiday.START_TIME = _START_TIME
-Holiday.END_TIME = _END_TIME
+Holiday.START_HHMM = _START_HHMM
+Holiday.END_HHMM = _END_HHMM
 
 
 class Period(SVGPeriod):
@@ -19,10 +19,10 @@ class Period(SVGPeriod):
 
 
 class WeekDay(SVGDay):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
 
-    splitter = [
+    splitter_hhmm = [
         # 1st
         (840, "lesson"),
         (955, "recess"),
@@ -63,21 +63,21 @@ class WeekDay(SVGDay):
                 return time, []
 
         def gen():
-            for start, end in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME]):
+            for start, end in zip([self.START_HHMM] + self.splitter_hhmm, self.splitter_hhmm + [self.END_HHMM]):
                 start, classes = get(start)
                 end, _ = get(end)
                 yield start, end, classes
 
         periods = []
         for start_time, end_time, classes in gen():
-            period = SVGPeriod(self.day_idx, start_time, end_time, classes)
+            period = SVGPeriod(self.date, self.day_idx, start_time, end_time, classes)
             periods.append(period)
         return periods
 
 
 class _Timetable(SVGTimetable):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
 
     def gen_day(self, date, day_idx):
         if date.weekday() in [5, 6]:  # sat or sunday
@@ -87,12 +87,9 @@ class _Timetable(SVGTimetable):
 
 
 class UnivTsukubaTimetable(TimetableType):
-    def __init__(self, start_date, stylesheet_urls=[], script_urls=[]):
-        self.timetable = _Timetable(start_date, 7, stylesheet_urls, script_urls)
-
-    def to_string(self):
-        return self.timetable.to_string()
-
+    def get_target_class(cls):
+        return _Timetable
+    
     @classmethod
     def get_display_name(self):
         return u'筑波大学 時間割'

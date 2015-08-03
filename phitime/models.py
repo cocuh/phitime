@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy import (
     Column,
     Integer,
@@ -77,6 +78,8 @@ class Event(Base):
     sponsor_id = Column(Integer, ForeignKey('users.id'))
     sponsor = relationship(User)
 
+    created_at = Column(Date, nullable=False, default=datetime.date.today)
+
     last_member_position = Column(Integer, nullable=False)
 
     _timetable_type = Column(String, nullable=False, default='')
@@ -98,6 +101,9 @@ class Event(Base):
         }
 
     def _get_timetable_type(self):
+        """
+        :rtype: phitime.timetable.base.TimetableType
+        """
         return TimetableUtils.find_by_name(self._timetable_type)
 
     def _set_timetable_type(self, timetable_type):
@@ -145,18 +151,22 @@ class Event(Base):
             raise ValidationException(
                 'event.timetable_type is not exist: timetable_type:{!r}'.format(self.timetable_type))
 
-    def create_member(self, name, comment):
+    def create_member(self, name, comment, available_times):
         """
         :type name: Unicode, str
         :type comment: Unicode, str 
         :rtype: Member
         """
         self.last_member_position += 1
-        member = Member(self, name, comment, self.last_member_position)
+        member = Member(self, name, comment, self.last_member_position, available_times)
         member.validate()
         DBSession.add(self)
         DBSession.flush()
         return member
+
+    def clear_proposed_times(self):
+        for old_proposed_time in self.proposed_times:
+            DBSession.delete(old_proposed_time)
 
 
 class Member(Base):
@@ -171,11 +181,12 @@ class Member(Base):
     event_id = Column(Integer, ForeignKey('events.id'), nullable=False)
     event = relationship(Event, backref=backref('members'))
 
-    def __init__(self, event, name, comment, position):
+    def __init__(self, event, name, comment, position, available_times):
         self.event = event
         self.name = name
         self.comment = comment
         self.position = position
+        self.available_times = available_times
 
     def __repr__(self):
         return '<Member name="{}" position="{}">'.format(self.name, self.position)
@@ -200,6 +211,10 @@ class Member(Base):
         if self.comment is None:  # TODO Validate length
             raise ValidationException('member.comment is None')
 
+    def clear_available_times(self):
+        for old_available_time in self.available_times:
+            DBSession.delete(old_available_time)
+
 
 class _PeriodTime(object):
     date = Column(Date, nullable=False)
@@ -222,8 +237,15 @@ class _PeriodTime(object):
         :type period_length: int
         :rtype: None
         """
+        self._validate_times(start_minutes, period_length)
         self._start_minutes = start_minutes
         self._period_length = period_length
+
+    def get_start_time(self):
+        return self._start_minutes
+
+    def get_end_time(self):
+        return self._start_minutes + self._period_length
 
     @staticmethod
     def _validate_times(start_minutes, period_length):
@@ -238,7 +260,7 @@ class _PeriodTime(object):
         """
         if not (0 <= start_minutes <= 24 * 60):
             raise ValidationException('minutes should be 0 <= minutes <= 24*60')
-        if not (0 < period_length ):
+        if not (0 < period_length):
             raise ValidationException('length should be 0 < length')
         if not (start_minutes + period_length <= 24 * 60):
             raise ValidationException('length should be start_minutes+period_length <= 24*60')
@@ -252,11 +274,21 @@ class ProposedTime(_PeriodTime, Base):
     event_id = Column(Integer, ForeignKey('events.id'))
     event = relationship(Event, backref=backref('proposed_times'))
 
+    def __init__(self, event, date, start_minutes, period_length):
+        self.event = event
+        self.set_date(date)
+        self.set_times(start_minutes, period_length)
+
 
 class AvailableTime(_PeriodTime, Base):
     __tablename__ = 'available_times'
     query = DBSession.query_property()
     id = Column(Integer, primary_key=True)
 
-    member_id = Column(Integer, ForeignKey('members.id'))
-    member = relationship(Member, backref=backref('available_times'))
+    member_id = Column(Integer, ForeignKey('members.id'), nullable=False)
+    member = relationship(Member, backref=backref('available_times', cascade='delete'))
+
+    def __init__(self, member, date, start_minutes, period_length):
+        self.member = member
+        self.set_date(date)
+        self.set_times(start_minutes, period_length)

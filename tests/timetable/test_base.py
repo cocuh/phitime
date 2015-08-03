@@ -24,8 +24,8 @@ class TestSvgTimetable(BaseTestCase):
         if gen_days is None:
             gen_days = Mock()
             gen_days.return_value = []
-        SVGTimetable.START_TIME = start_time
-        SVGTimetable.END_TIME = end_time
+        SVGTimetable.START_HHMM = start_time
+        SVGTimetable.END_HHMM = end_time
         SVGTimetable._gen_days = gen_days
         SVGTimetable.__abstractmethods__ = {}
         return SVGTimetable(start_date, day_length, stylesheet_urls, script_urls)
@@ -82,12 +82,14 @@ class TestSVGDay(BaseTestCase):
 
     def test_to_elem(self):
         from phitime.timetable.base import SVGPeriod
+        import datetime
+        date = datetime.date(1995, 2, 14)
 
         gen_periods = Mock()
         gen_periods.return_value = [
-            SVGPeriod(0, 800, 900),
-            SVGPeriod(0, 900, 1300),
-            SVGPeriod(0, 1300, 2300),
+            SVGPeriod(date, 0, 800, 900),
+            SVGPeriod(date, 0, 900, 1300),
+            SVGPeriod(date, 0, 1300, 2300),
         ]
 
         day = self._makeOne(gen_periods=gen_periods)
