@@ -182,6 +182,7 @@ class MemberView(BaseView):
             'member': member,
             'class_strategies': [
                 TimetableClassesStrategies.period.is_the_member_available,
+                TimetableClassesStrategies.period.is_unavailable,
             ],
             'is_editable': True,
         }

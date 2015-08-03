@@ -29,6 +29,19 @@ class BaseStrategy():
         pass
 
 
+class _ProposedTimeMixin():
+    def _gen_proposed_time_dic_group_by_date(self):
+        # fixme! using group_by in sqlalchemy
+        res = {}
+        proposed_time_list = ProposedTime.query.filter_by(event=self.event).all()
+        for proposed_time in proposed_time_list:
+            if proposed_time.date in res:
+                res[proposed_time.date].append(proposed_time)
+            else:
+                res[proposed_time.date] = [proposed_time]
+        return res
+
+
 class IsTheMemberAvailable(BaseStrategy):
     def __init__(self, *args):
         super().__init__(*args)
@@ -69,22 +82,11 @@ class IsTheMemberAvailable(BaseStrategy):
         return False
 
 
-class IsTheEventProposed(BaseStrategy):
+class IsTheEventProposed(BaseStrategy, _ProposedTimeMixin):
     def __init__(self, *args):
         super().__init__(*args)
         self.proposed_time_dic = self._gen_proposed_time_dic_group_by_date()
-        """:type: dict[datetime.date, phitime.models.AvailableTime]"""
-
-    def _gen_proposed_time_dic_group_by_date(self):
-        # fixme! using group_by in sqlalchemy
-        res = {}
-        proposed_time_list = ProposedTime.query.filter_by(event=self.event).all()
-        for proposed_time in proposed_time_list:
-            if proposed_time.date in res:
-                res[proposed_time.date].append(proposed_time)
-            else:
-                res[proposed_time.date] = [proposed_time]
-        return res
+        """:type: dict[datetime.date, phitime.models.ProposedTime]"""
 
     def gen_period_classes(self, period):
         """
@@ -98,7 +100,36 @@ class IsTheEventProposed(BaseStrategy):
 
     def _is_active_period(self, period):
         the_day_proposed_times = self.proposed_time_dic.get(period.date.date(), [])
-        """:type: list[phitime.models.AvailableTime]"""
+        """:type: list[phitime.models.ProposedTime]"""
+        for proposed_time in the_day_proposed_times:
+            if proposed_time.get_end_time() <= period.start_y:
+                continue
+            elif period.end_y <= proposed_time.get_start_time():
+                continue
+            else:
+                return True
+        return False
+
+
+class IsUnavailable(BaseStrategy, _ProposedTimeMixin):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.proposed_time_dic = self._gen_proposed_time_dic_group_by_date()
+        """:type: dict[datetime.date, phitime.models.ProposedTime]"""
+
+    def gen_period_classes(self, period):
+        """
+        :type period: phitime.timetable.base.SVGPeriod
+        :rtype: list[str]
+        """
+        if self._is_proposed_period(period):
+            return []
+        else:
+            return ["unavailable"]
+
+    def _is_proposed_period(self, period):
+        the_day_proposed_times = self.proposed_time_dic.get(period.date.date(), [])
+        """:type: list[phitime.models.ProposedTime]"""
         for proposed_time in the_day_proposed_times:
             if proposed_time.get_end_time() <= period.start_y:
                 continue
@@ -113,6 +144,7 @@ class ClassStrategies:
     class period:
         is_the_member_available = IsTheMemberAvailable
         is_the_event_proposed = IsTheEventProposed
+        is_unavailable = IsUnavailable
 
 
 class ClassStrategyList():
