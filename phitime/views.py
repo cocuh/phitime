@@ -14,12 +14,6 @@ class BaseView(object):
         self.request = request
 
 
-class _EventMixin(BaseView):
-    def get_event(self):
-        scrambled_id = self.request.matchdict.get('event_scrambled_id')
-        return Event.find_by_scrambled_id(scrambled_id)
-
-
 class TopView(BaseView):
     @view_config(route_name='top', renderer='templates/top.jinja2')
     def top(self):
@@ -32,7 +26,7 @@ class UserView(BaseView):
     pass
 
 
-class EventView(_EventMixin):
+class EventView(BaseView):
     @view_config(route_name='event.create', request_method='GET', renderer='templates/event/create.jinja2')
     def create_get(self):
         return {
@@ -106,15 +100,21 @@ class EventView(_EventMixin):
             'event': self.get_event(),
         }
 
-
-class EventSVGView(_EventMixin):
     @view_config(route_name='event.edit.proposed_timetable', request_method='GET', renderer='svg_timetable')
     def edit_proposed_timetable(self):
         event = self.get_event()
-        TimetableType = event.timetable_type
         return {
-            'timetable': TimetableType(),
+            'page': 0,
+            'is_editable': True,
+            'event': event,
+            'class_strategies': [
+                TimetableClassesStrategies.period.is_the_event_proposed,
+            ],
         }
+
+    def get_event(self):
+        scrambled_id = self.request.matchdict.get('event_scrambled_id')
+        return Event.find_by_scrambled_id(scrambled_id)
 
 
 class MemberView(BaseView):
@@ -175,7 +175,7 @@ class MemberView(BaseView):
             'event': event,
             'member': member,
             'class_strategies': [
-                TimetableClassesStrategies.is_the_member_active,
+                TimetableClassesStrategies.period.is_the_member_available,
             ],
             'is_editable': True,
         }

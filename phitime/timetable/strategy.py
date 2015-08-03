@@ -1,4 +1,4 @@
-from phitime.models import AvailableTime
+from phitime.models import AvailableTime, ProposedTime
 from collections import Iterable
 
 
@@ -29,7 +29,7 @@ class BaseStrategy():
         pass
 
 
-class IsTheMemberActive(BaseStrategy):
+class IsTheMemberAvailable(BaseStrategy):
     def __init__(self, *args):
         super().__init__(*args)
         self.available_time_dic = self._gen_available_time_dic_group_by_date()
@@ -69,8 +69,50 @@ class IsTheMemberActive(BaseStrategy):
         return False
 
 
+class IsTheEventProposed(BaseStrategy):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.proposed_time_dic = self._gen_proposed_time_dic_group_by_date()
+        """:type: dict[datetime.date, phitime.models.AvailableTime]"""
+
+    def _gen_proposed_time_dic_group_by_date(self):
+        # fixme! using group_by in sqlalchemy
+        res = {}
+        proposed_time_list = ProposedTime.query.filter_by(event=self.event).all()
+        for proposed_time in proposed_time_list:
+            if proposed_time.date in res:
+                res[proposed_time.date].append(proposed_time)
+            else:
+                res[proposed_time.date] = [proposed_time]
+        return res
+
+    def gen_period_classes(self, period):
+        """
+        :type period: phitime.timetable.base.SVGPeriod
+        :rtype: list[str]
+        """
+        if self._is_active_period(period):
+            return ["active"]
+        else:
+            return []
+
+    def _is_active_period(self, period):
+        the_day_proposed_times = self.proposed_time_dic.get(period.date.date(), [])
+        """:type: list[phitime.models.AvailableTime]"""
+        for proposed_time in the_day_proposed_times:
+            if proposed_time.get_end_time() <= period.start_y:
+                continue
+            elif period.end_y <= proposed_time.get_start_time():
+                continue
+            else:
+                return True
+        return False
+
+
 class ClassStrategies:
-    is_the_member_active = IsTheMemberActive
+    class period:
+        is_the_member_available = IsTheMemberAvailable
+        is_the_event_proposed = IsTheEventProposed
 
 
 class ClassStrategyList():
