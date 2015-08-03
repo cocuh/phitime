@@ -26,9 +26,21 @@ class SVGTimetableRendererFactory(object):
             elif not isinstance(timetable, TimetableType):
                 raise TypeError('timetable is not instance of TimetableType')
         else:
+            if 'stylesheet_urls' in value:
+                stylesheet_urls = value.get('stylesheet_urls')
+            else:
+                stylesheet_urls = [request.static_path("phitime:static/timetables/univ_tsukuba_timetable.css")]
+            if 'script_urls' in value:
+                script_urls = value.get('script_urls')
+            else:
+                script_urls = []
+                if value.get('is_editable'):
+                    script_urls.append(request.static_path("phitime:static/timetables/timetable.js"))
+
             page = value.get('page')
-            is_editable = value.get('is_editable')
-            timetable = event.timetable_type.gen_instance(request, event, page, is_editable)
+
+            timetable = event.timetable_type.gen_instance(
+                event, stylesheet_urls, script_urls, page)
 
         strategies = value.get('class_strategies', [])
         """:type: list[phitime.timetable.strategy.BaseStrategy]"""

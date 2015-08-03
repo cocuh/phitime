@@ -395,11 +395,11 @@ class TimetableType(metaclass=abc.ABCMeta):
         return cls.get_display_name()
 
     @classmethod
-    def gen_instance(cls, request, event, page=0, is_editable=True):
+    def gen_instance(cls, event, stylesheet_urls, script_urls, page=0):
         return cls(
             datetime.datetime.today(),
-            [request.static_path("phitime:static/timetables/univ_tsukuba_timetable.css")],
-            [request.static_path("phitime:static/timetables/timetable.js")] if is_editable else [],
+            stylesheet_urls,
+            script_urls,
         )
 
 

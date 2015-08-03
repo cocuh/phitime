@@ -141,10 +141,9 @@ class IsUnavailable(BaseStrategy, _ProposedTimeMixin):
 
 
 class ClassStrategies:
-    class period:
-        is_the_member_available = IsTheMemberAvailable
-        is_the_event_proposed = IsTheEventProposed
-        is_unavailable = IsUnavailable
+    is_the_member_available = IsTheMemberAvailable
+    is_the_event_proposed = IsTheEventProposed
+    is_unavailable = IsUnavailable
 
 
 class ClassStrategyList():

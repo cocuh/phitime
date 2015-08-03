@@ -90,6 +90,18 @@ class EventView(BaseView):
 
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
+    @view_config(route_name='event.edit.proposed.timetable', request_method='GET', renderer='svg_timetable')
+    def edit_proposed_timetable(self):
+        event = self.get_event()
+        return {
+            'page': 0,
+            'is_editable': True,
+            'event': event,
+            'class_strategies': [
+                TimetableClassesStrategies.is_the_event_proposed,
+            ],
+        }
+
     @view_config(route_name='event.detail', request_method='GET', renderer='templates/event/detail.jinja2')
     def detail_get(self):
         return {
@@ -100,22 +112,22 @@ class EventView(BaseView):
     def detail_post(self):
         return {}
 
-    @view_config(route_name='event.api.info', renderer='json')
-    def info(self):
-        return {
-            'event': self.get_event(),
-        }
-
-    @view_config(route_name='event.edit.proposed_timetable', request_method='GET', renderer='svg_timetable')
+    @view_config(route_name='event.detail.timetable', request_method='GET', renderer='svg_timetable')
     def edit_proposed_timetable(self):
         event = self.get_event()
         return {
             'page': 0,
-            'is_editable': True,
+            'is_editable': False,
             'event': event,
             'class_strategies': [
-                TimetableClassesStrategies.period.is_the_event_proposed,
+                TimetableClassesStrategies.is_unavailable,
             ],
+        }
+
+    @view_config(route_name='event.api.info', renderer='json')
+    def info(self):
+        return {
+            'event': self.get_event(),
         }
 
     def get_event(self):
@@ -181,8 +193,8 @@ class MemberView(BaseView):
             'event': event,
             'member': member,
             'class_strategies': [
-                TimetableClassesStrategies.period.is_the_member_available,
-                TimetableClassesStrategies.period.is_unavailable,
+                TimetableClassesStrategies.is_the_member_available,
+                TimetableClassesStrategies.is_unavailable,
             ],
             'is_editable': True,
         }
