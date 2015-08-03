@@ -112,6 +112,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         })
         main = SVGElement('g', {
             'id': 'main',
+            'transform': 'translate(0, {})'.format(-conv2y(self.START_TIME)),
             'data-start': conv2y(self.START_TIME),
         })
         return svg, main
@@ -222,12 +223,12 @@ class SVGDay(metaclass=abc.ABCMeta):
         """
         elem = self._to_elem(strategy)
 
-        elem_header = self._gen_header_elem(self.weekday)  # fixme header text
+        elem_header = self._gen_column_header_elem(self.weekday)  # fixme header text
         elem.append(elem_header)
 
-        y_offset = 0
+        y_offset = self.START_TIME
         for period in self.periods:
-            period_elem = period.to_elem(strategy, self.WIDTH, y_offset)
+            period_elem = period.to_elem(strategy, self.WIDTH)
             elem.append(period_elem)
             y_offset += period.height
         return elem
@@ -240,11 +241,11 @@ class SVGDay(metaclass=abc.ABCMeta):
         """
         raise NotImplementedError()
 
-    def _gen_header_elem(self, header_text):
+    def _gen_column_header_elem(self, header_text):
         elem = SVGElement('g', {
             'data-day': self.weekday,
             'transform': 'translate(0,{y})'.format(
-                y=-self.HEADER_HEIGHT
+                y=-self.HEADER_HEIGHT + conv2y(self.START_TIME)
             ),
             'class': ' '.join(['column_header', 'column_header_{}'.format(self.weekday)]),
         })
@@ -307,6 +308,8 @@ class SVGDay(metaclass=abc.ABCMeta):
 class SVGPeriod(object):
     def __init__(self, day_idx, start_time, end_time, classes=[]):
         self.day_idx = day_idx
+        self.start_time = start_time
+        self.end_time = end_time
         self.start_y = conv2y(start_time)
         self.end_y = conv2y(end_time)
         self.classes = set(classes)
@@ -321,7 +324,7 @@ class SVGPeriod(object):
         """
         return self.end_y - self.start_y
 
-    def to_elem(self, strategy, width, y_offset):
+    def to_elem(self, strategy, width):
         """
         :type strategy: phitime.timetable.strategy.ClassStrategyList
         :rtype: xml.etree.ElementTree.Element
@@ -331,7 +334,7 @@ class SVGPeriod(object):
             'data-day': self.day_idx,
             'data-y': self.start_y,
             'data-height': self.height,
-            'transform': 'translate(0, {})'.format(y_offset),
+            'transform': 'translate(0, {})'.format(self.start_y),
         })
         rect = SVGElement('rect', {
             'width': width,

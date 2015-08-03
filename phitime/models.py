@@ -231,6 +231,12 @@ class _PeriodTime(object):
         self._start_minutes = start_minutes
         self._period_length = period_length
 
+    def get_start_time(self):
+        return self._start_minutes
+
+    def get_end_time(self):
+        return self._start_minutes + self._period_length
+
     @staticmethod
     def _validate_times(start_minutes, period_length):
         """
