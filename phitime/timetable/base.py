@@ -306,7 +306,8 @@ class SVGDay(metaclass=abc.ABCMeta):
 
 
 class SVGPeriod(object):
-    def __init__(self, day_idx, start_hhmm, end_hhmm, classes=[]):
+    def __init__(self, date, day_idx, start_hhmm, end_hhmm, classes=[]):
+        self.date = date
         self.day_idx = day_idx
         self.start_hhmm = start_hhmm
         self.end_hhmm = end_hhmm

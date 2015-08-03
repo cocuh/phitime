@@ -82,12 +82,14 @@ class TestSVGDay(BaseTestCase):
 
     def test_to_elem(self):
         from phitime.timetable.base import SVGPeriod
+        import datetime
+        date = datetime.date(1995, 2, 14)
 
         gen_periods = Mock()
         gen_periods.return_value = [
-            SVGPeriod(0, 800, 900),
-            SVGPeriod(0, 900, 1300),
-            SVGPeriod(0, 1300, 2300),
+            SVGPeriod(date, 0, 800, 900),
+            SVGPeriod(date, 0, 900, 1300),
+            SVGPeriod(date, 0, 1300, 2300),
         ]
 
         day = self._makeOne(gen_periods=gen_periods)

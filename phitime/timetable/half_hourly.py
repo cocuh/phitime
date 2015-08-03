@@ -52,7 +52,7 @@ class Day(SVGDay):
                 classes.append('odd')
             elif start // 100 % 2 == 0:
                 classes.append('even')
-            periods.append(SVGPeriod(self.day_idx, start, end, classes))
+            periods.append(SVGPeriod(self.date, self.day_idx, start, end, classes))
         return periods
 
 

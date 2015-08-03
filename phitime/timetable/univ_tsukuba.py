@@ -70,7 +70,7 @@ class WeekDay(SVGDay):
 
         periods = []
         for start_time, end_time, classes in gen():
-            period = SVGPeriod(self.day_idx, start_time, end_time, classes)
+            period = SVGPeriod(self.date, self.day_idx, start_time, end_time, classes)
             periods.append(period)
         return periods
 
