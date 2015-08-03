@@ -5,7 +5,7 @@
         {{ form.input('member.name', member.name) }}
         {{ form.input('member.comment', member.comment) }}
         <input type="hidden" value="" name="member.available_times" id="member_available_times">
-        <object id="timetable" data="{{ 'svg.timetable.univ_tsukuba'|route_path }}" type="image/svg+xml"
+        <object id="timetable" data="timetable.svg" type="image/svg+xml"
                 height="80%"></object>
         <input type="submit" id="submit">
     </form>

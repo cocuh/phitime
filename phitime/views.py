@@ -6,6 +6,7 @@ from phitime.exceptions import MemberNotFoundException, EventNotFoundException
 from phitime.model_helper import MemberHelper
 from phitime.models import Event, Member
 from phitime.timetable import TimetableUtils
+from phitime.timetable.strategy import ClassStrategies as TimetableClassesStrategies
 
 
 class BaseView(object):
@@ -150,7 +151,7 @@ class MemberView(BaseView):
         member_name = self.request.params.get('member.name')
         member_comment = self.request.params.get('member.comment')
         available_times_json = self.request.params.get('member.available_times')
-        
+
         event = self.get_event()
         member = self.get_member()
         member.clear_available_times()
@@ -165,6 +166,19 @@ class MemberView(BaseView):
         member.validate()
 
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
+
+    @view_config(route_name='member.edit.timetable', renderer='svg_timetable')
+    def edit_timetable(self):
+        event = self.get_event()
+        member = self.get_member()
+        return {
+            'event': event,
+            'member': member,
+            'class_strategies': [
+                TimetableClassesStrategies.is_the_member_active,
+            ],
+            'is_editable': True,
+        }
 
     def get_event(self):
         scrambled_id = self.request.matchdict.get('event_scrambled_id')

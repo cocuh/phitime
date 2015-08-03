@@ -394,6 +394,14 @@ class TimetableType(metaclass=abc.ABCMeta):
     def display_name(cls):
         return cls.get_display_name()
 
+    @classmethod
+    def gen_instance(cls, request, event, page=0, is_editable=True):
+        return cls(
+            datetime.datetime.today(),
+            [request.static_path("phitime:static/timetables/univ_tsukuba_timetable.css")],
+            [request.static_path("phitime:static/timetables/timetable.js")] if is_editable else [],
+        )
+
 
 __all__ = [
     'SVGElement',

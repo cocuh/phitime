@@ -29,7 +29,7 @@ class BaseStrategy():
         pass
 
 
-class IsActive(BaseStrategy):
+class IsTheMemberActive(BaseStrategy):
     def __init__(self, *args):
         super().__init__(*args)
         self.available_time_dic = self._gen_available_time_dic_group_by_date()
@@ -57,12 +57,12 @@ class IsActive(BaseStrategy):
             return []
 
     def _is_active_period(self, period):
-        the_day_available_times = self.available_time_dic[period.date]
+        the_day_available_times = self.available_time_dic.get(period.date.date(), [])
         """:type: list[phitime.models.AvailableTime]"""
         for available_time in the_day_available_times:
-            if available_time.get_end_time() < period.start_y:
+            if available_time.get_end_time() <= period.start_y:
                 continue
-            elif period.end_y < available_time.get_start_time():
+            elif period.end_y <= available_time.get_start_time():
                 continue
             else:
                 return True
@@ -70,7 +70,7 @@ class IsActive(BaseStrategy):
 
 
 class ClassStrategies:
-    is_active = IsActive
+    is_the_member_active = IsTheMemberActive
 
 
 class ClassStrategyList():
@@ -103,7 +103,7 @@ class ClassStrategyList():
     def gen_day_classes(self, day):
         classes = set()
         for strategy in self.strategy_list:
-            the_classes = strategy.gen_period_classes(period)
+            the_classes = strategy.gen_day_classes(day)
             if the_classes and isinstance(the_classes, Iterable):
                 classes.update(set(the_classes))
         return classes

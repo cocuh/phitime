@@ -25,4 +25,6 @@ class TimetableUtils(object):
         return timetable_type == cls.DEFAULT
 
 
-__all__ = ['TimetableUtils']
+__all__ = [
+    'TimetableUtils',
+]
