@@ -5,14 +5,14 @@ from .base import (
     TimetableType,
 )
 
-_START_TIME = 800
-_END_TIME = 2300
+_START_HHMM = 800
+_END_HHMM = 2300
 
 
 class Day(SVGDay):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
-    splitter = [
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
+    splitter_hhmm = [
         830,
         900,
         930,
@@ -46,7 +46,7 @@ class Day(SVGDay):
 
     def gen_periods(self):
         periods = []
-        for start, end in zip([self.START_TIME] + self.splitter, self.splitter + [self.END_TIME]):
+        for start, end in zip([self.START_HHMM] + self.splitter_hhmm, self.splitter_hhmm + [self.END_HHMM]):
             classes = []
             if start // 100 % 2 == 1:
                 classes.append('odd')
@@ -57,8 +57,8 @@ class Day(SVGDay):
 
 
 class _Timetable(SVGTimetable):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
 
     def gen_day(self, date, day_idx):
         return Day(date, day_idx)

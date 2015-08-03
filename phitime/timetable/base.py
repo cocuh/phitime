@@ -4,9 +4,9 @@ import abc
 import math
 
 
-def conv2y(time):
-    hour = time // 100
-    minute = time % 100
+def conv_hhmm2y(hhmm):
+    hour = hhmm // 100
+    minute = hhmm % 100
     assert 0 <= minute < 60
     return hour * 60 + minute
 
@@ -37,13 +37,13 @@ class SVGElement(ET.Element):
         return attrib
 
 
-_START_TIME = None
-_END_TIME = None
+_START_HHMM = None
+_END_HHMM = None
 
 
 class SVGTimetable(metaclass=abc.ABCMeta):
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
     ROW_HEADER_WIDTH = 30
 
     def __init__(self, start_date, day_length, stylesheet_urls, script_urls):
@@ -92,7 +92,7 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         row_header_width = self.ROW_HEADER_WIDTH
         column_header_height = SVGDay.HEADER_HEIGHT
         timetable_width = sum(map(lambda day: day.WIDTH, self.days))
-        timetable_height = conv2y(self.END_TIME) - conv2y(self.START_TIME)
+        timetable_height = conv_hhmm2y(self.END_HHMM) - conv_hhmm2y(self.START_HHMM)
         return '-{row_header_width} -{column_header_height} {width} {height}'.format(
             row_header_width=row_header_width,
             column_header_height=column_header_height,
@@ -112,8 +112,8 @@ class SVGTimetable(metaclass=abc.ABCMeta):
         })
         main = SVGElement('g', {
             'id': 'main',
-            'transform': 'translate(0, {})'.format(-conv2y(self.START_TIME)),
-            'data-start': conv2y(self.START_TIME),
+            'transform': 'translate(0, {})'.format(-conv_hhmm2y(self.START_HHMM)),
+            'data-start': conv_hhmm2y(self.START_HHMM),
         })
         return svg, main
 
@@ -157,16 +157,16 @@ class SVGTimetable(metaclass=abc.ABCMeta):
             'class': 'row_header',
             'transform': 'translate({},0)'.format(-self.ROW_HEADER_WIDTH)
         })
-        start_hour = self.START_TIME // 100
-        end_hour = math.ceil(float(self.END_TIME) / 100)
+        start_hour = self.START_HHMM // 100
+        end_hour = math.ceil(float(self.END_HHMM) / 100)
         y_offset = 0
         for hour, next_hour in zip(range(start_hour, end_hour), range(start_hour + 1, end_hour + 1)):
             if hour == start_hour:
-                height = conv2y(next_hour * 100) - conv2y(self.START_TIME)
+                height = conv_hhmm2y(next_hour * 100) - conv_hhmm2y(self.START_HHMM)
             elif next_hour == end_hour:
-                height = conv2y(self.END_TIME) - conv2y(hour * 100)
+                height = conv_hhmm2y(self.END_HHMM) - conv_hhmm2y(hour * 100)
             else:
-                height = conv2y(100)
+                height = conv_hhmm2y(100)
             elem = self._gen_header_elem(str(hour), height, y_offset)
             header_elem.append(elem)
             y_offset += height
@@ -206,8 +206,8 @@ class SVGTimetable(metaclass=abc.ABCMeta):
 class SVGDay(metaclass=abc.ABCMeta):
     WIDTH = 90
     HEADER_HEIGHT = 30
-    START_TIME = _START_TIME
-    END_TIME = _END_TIME
+    START_HHMM = _START_HHMM
+    END_HHMM = _END_HHMM
 
     def __init__(self, date, day_idx):
         self.date = date
@@ -226,7 +226,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         elem_header = self._gen_column_header_elem(self.weekday)  # fixme header text
         elem.append(elem_header)
 
-        y_offset = self.START_TIME
+        y_offset = self.START_HHMM
         for period in self.periods:
             period_elem = period.to_elem(strategy, self.WIDTH)
             elem.append(period_elem)
@@ -245,7 +245,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         elem = SVGElement('g', {
             'data-day': self.weekday,
             'transform': 'translate(0,{y})'.format(
-                y=-self.HEADER_HEIGHT + conv2y(self.START_TIME)
+                y=-self.HEADER_HEIGHT + conv_hhmm2y(self.START_HHMM)
             ),
             'class': ' '.join(['column_header', 'column_header_{}'.format(self.weekday)]),
         })
@@ -306,12 +306,12 @@ class SVGDay(metaclass=abc.ABCMeta):
 
 
 class SVGPeriod(object):
-    def __init__(self, day_idx, start_time, end_time, classes=[]):
+    def __init__(self, day_idx, start_hhmm, end_hhmm, classes=[]):
         self.day_idx = day_idx
-        self.start_time = start_time
-        self.end_time = end_time
-        self.start_y = conv2y(start_time)
-        self.end_y = conv2y(end_time)
+        self.start_hhmm = start_hhmm
+        self.end_hhmm = end_hhmm
+        self.start_y = conv_hhmm2y(start_hhmm)
+        self.end_y = conv_hhmm2y(end_hhmm)
         self.classes = set(classes)
 
     def add_class(self, classes):

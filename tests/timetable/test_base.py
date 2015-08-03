@@ -24,8 +24,8 @@ class TestSvgTimetable(BaseTestCase):
         if gen_days is None:
             gen_days = Mock()
             gen_days.return_value = []
-        SVGTimetable.START_TIME = start_time
-        SVGTimetable.END_TIME = end_time
+        SVGTimetable.START_HHMM = start_time
+        SVGTimetable.END_HHMM = end_time
         SVGTimetable._gen_days = gen_days
         SVGTimetable.__abstractmethods__ = {}
         return SVGTimetable(start_date, day_length, stylesheet_urls, script_urls)
