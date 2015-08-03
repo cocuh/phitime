@@ -121,6 +121,7 @@ class EventView(BaseView):
             'event': event,
             'class_strategies': [
                 TimetableClassesStrategies.is_unavailable,
+                TimetableClassesStrategies.available_member,
             ],
         }
 

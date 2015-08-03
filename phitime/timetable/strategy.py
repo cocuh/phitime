@@ -30,10 +30,11 @@ class BaseStrategy():
 
 
 class _ProposedTimeMixin():
-    def _gen_proposed_time_dic_group_by_date(self):
+    @staticmethod
+    def _gen_proposed_time_dic_group_by_date(event):
         # fixme! using group_by in sqlalchemy
         res = {}
-        proposed_time_list = ProposedTime.query.filter_by(event=self.event).all()
+        proposed_time_list = ProposedTime.query.filter_by(event=event).all()
         for proposed_time in proposed_time_list:
             if proposed_time.date in res:
                 res[proposed_time.date].append(proposed_time)
@@ -42,22 +43,25 @@ class _ProposedTimeMixin():
         return res
 
 
-class IsTheMemberAvailable(BaseStrategy):
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.available_time_dic = self._gen_available_time_dic_group_by_date()
-        """:type: dict[datetime.date, phitime.models.AvailableTime]"""
-
-    def _gen_available_time_dic_group_by_date(self):
+class _AvailableTimePeriod():
+    @staticmethod
+    def _gen_available_time_dic_group_by_date(member):
         # fixme! using group_by in sqlalchemy
         res = {}
-        available_time_list = AvailableTime.query.filter(AvailableTime.member == self.member).all()
+        available_time_list = AvailableTime.query.filter(AvailableTime.member == member).all()
         for available_time in available_time_list:
             if available_time.date in res:
                 res[available_time.date].append(available_time)
             else:
                 res[available_time.date] = [available_time]
         return res
+
+
+class IsTheMemberAvailable(BaseStrategy, _AvailableTimePeriod):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.available_time_dic = self._gen_available_time_dic_group_by_date(self.member)
+        """:type: dict[datetime.date, phitime.models.AvailableTime]"""
 
     def gen_period_classes(self, period):
         """
@@ -85,7 +89,7 @@ class IsTheMemberAvailable(BaseStrategy):
 class IsTheEventProposed(BaseStrategy, _ProposedTimeMixin):
     def __init__(self, *args):
         super().__init__(*args)
-        self.proposed_time_dic = self._gen_proposed_time_dic_group_by_date()
+        self.proposed_time_dic = self._gen_proposed_time_dic_group_by_date(self.event)
         """:type: dict[datetime.date, phitime.models.ProposedTime]"""
 
     def gen_period_classes(self, period):
@@ -114,7 +118,7 @@ class IsTheEventProposed(BaseStrategy, _ProposedTimeMixin):
 class IsUnavailable(BaseStrategy, _ProposedTimeMixin):
     def __init__(self, *args):
         super().__init__(*args)
-        self.proposed_time_dic = self._gen_proposed_time_dic_group_by_date()
+        self.proposed_time_dic = self._gen_proposed_time_dic_group_by_date(self.event)
         """:type: dict[datetime.date, phitime.models.ProposedTime]"""
 
     def gen_period_classes(self, period):
@@ -140,10 +144,43 @@ class IsUnavailable(BaseStrategy, _ProposedTimeMixin):
         return False
 
 
+class AvailableMember(BaseStrategy, _AvailableTimePeriod):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.data = {
+            member: self._gen_available_time_dic_group_by_date(member)
+            for member in self.event.members
+            }
+        self.member_num = len(self.event.members)
+
+    def gen_period_classes(self, period):
+        active_member = [
+            member
+            for member in self.data.keys()
+            if self.is_the_member_active(member, period)
+            ]
+        percent = "active-percent-{:02d}".format(int(len(active_member) * 100 / self.member_num))
+        return [
+                   percent,
+               ] + [
+                   'active-member-{}'.format(member.position)
+                   for member in active_member
+                   ]
+
+    def is_the_member_active(self, member, period):
+        the_day_available_times = self.data[member].get(period.date.date(), [])
+        for available_time in the_day_available_times:
+            if available_time.get_start_time() <= period.start_y \
+                    and period.end_y <= available_time.get_end_time():
+                return True
+        return False
+
+
 class ClassStrategies:
     is_the_member_available = IsTheMemberAvailable
     is_the_event_proposed = IsTheEventProposed
     is_unavailable = IsUnavailable
+    available_member = AvailableMember
 
 
 class ClassStrategyList():
