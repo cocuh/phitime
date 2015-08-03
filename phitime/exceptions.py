@@ -22,7 +22,7 @@ class EventNotFoundException(Exception):
         return repr(self.msg)
 
 
-class AvailableTimeParseException(Exception):
+class TimetablePeriodsParseException(Exception):
     def __init__(self, msg):
         self.msg = msg
 

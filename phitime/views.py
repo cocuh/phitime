@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from phitime.db import DBSession
 from phitime.exceptions import MemberNotFoundException, EventNotFoundException
-from phitime.model_helper import MemberHelper
+from phitime.model_helper import MemberHelper, EventHelper
 from phitime.models import Event, Member
 from phitime.timetable import TimetableUtils
 from phitime.timetable.strategy import ClassStrategies as TimetableClassesStrategies
@@ -82,6 +82,12 @@ class EventView(BaseView):
     @view_config(route_name='event.edit.proposed', request_method='POST')
     def edit_proposed_time_post(self):
         event = self.get_event()
+        proposed_times_json_str = self.request.params.get('event.proposed_times')
+
+        event.clear_proposed_times()
+        proposed_times = EventHelper.gen_proposed_times(event, proposed_times_json_str)
+        DBSession.add_all(proposed_times)
+
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
 
     @view_config(route_name='event.detail', request_method='GET', renderer='templates/event/detail.jinja2')

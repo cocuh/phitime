@@ -164,6 +164,10 @@ class Event(Base):
         DBSession.flush()
         return member
 
+    def clear_proposed_times(self):
+        for old_proposed_time in self.proposed_times:
+            DBSession.delete(old_proposed_time)
+
 
 class Member(Base):
     __tablename__ = 'members'
@@ -211,8 +215,6 @@ class Member(Base):
         for old_available_time in self.available_times:
             DBSession.delete(old_available_time)
 
-    def append_available_time(self, date, start_minutes, period_length):
-        return AvailableTime(self, date, start_minutes, period_length)
 
 class _PeriodTime(object):
     date = Column(Date, nullable=False)
@@ -271,6 +273,11 @@ class ProposedTime(_PeriodTime, Base):
 
     event_id = Column(Integer, ForeignKey('events.id'))
     event = relationship(Event, backref=backref('proposed_times'))
+
+    def __init__(self, event, date, start_minutes, period_length):
+        self.event = event
+        self.set_date(date)
+        self.set_times(start_minutes, period_length)
 
 
 class AvailableTime(_PeriodTime, Base):
