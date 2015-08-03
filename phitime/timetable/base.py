@@ -332,7 +332,8 @@ class SVGPeriod(object):
         """
         elem = SVGElement('g', {
             'class': ' '.join(self.classes | {'cell'} | strategy.gen_period_classes(self)),
-            'data-day': self.day_idx,
+            'data-date': self.date.strftime('%Y-%m-%d'),
+            'data-day-idx': self.day_idx,
             'data-y': self.start_y,
             'data-height': self.height,
             'transform': 'translate(0, {})'.format(self.start_y),
