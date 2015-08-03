@@ -335,7 +335,7 @@
      * @returns {int}
      */
     proto._getCellStartMinutes = function ($cell) {
-      return parseInt(getAttrWithLog($cell, 'data-y')) + this.startMinutes;
+      return parseInt(getAttrWithLog($cell, 'data-y'));
     };
     /**
      * @param $cell

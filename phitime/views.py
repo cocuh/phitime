@@ -3,6 +3,7 @@ from pyramid.view import view_config
 
 from phitime.db import DBSession
 from phitime.exceptions import MemberNotFoundException, EventNotFoundException
+from phitime.model_helper import MemberHelper
 from phitime.models import Event, Member
 from phitime.timetable import TimetableUtils
 
@@ -127,10 +128,11 @@ class MemberView(BaseView):
     def create_post(self):
         member_name = self.request.params.get('member.name')
         member_comment = self.request.params.get('member.comment')
+        available_times = []  # TODO
 
         event = self.get_event()
 
-        member = event.create_member(member_name, member_comment)
+        member = event.create_member(member_name, member_comment, available_times)
         member.validate()
 
         return HTTPFound(self.request.route_path('event.detail', event_scrambled_id=event.scrambled_id))
@@ -147,12 +149,18 @@ class MemberView(BaseView):
     def edit_post(self):
         member_name = self.request.params.get('member.name')
         member_comment = self.request.params.get('member.comment')
-
+        available_times_json = self.request.params.get('member.available_times')
+        
         event = self.get_event()
         member = self.get_member()
+        member.clear_available_times()
+
+        available_times = MemberHelper.gen_available_times(event, member, available_times_json)
 
         member.name = member_name
         member.comment = member_comment
+
+        DBSession.add_all(available_times)
 
         member.validate()
 

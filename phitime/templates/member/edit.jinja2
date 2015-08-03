@@ -16,7 +16,6 @@
                 var available_times = $("#timetable")[0].contentDocument.timetable.getActivePeriods();
                 console.log(JSON.stringify(available_times));
                 $("#member_available_times").val(JSON.stringify(available_times));
-                e.preventDefault();
             });
         })
     </script>
