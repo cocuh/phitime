@@ -265,7 +265,7 @@ class SVGDay(metaclass=abc.ABCMeta):
         elem = SVGElement('g', {
             'data-day': self.weekday,
             'data-day-idx': self.day_idx,
-            'class': ' '.join(['column', 'column_{}'.format(self.weekday)]),
+            'class': ' '.join(['column', 'column_{}'.format(self.weekday)] + list(strategy.gen_day_classes(self))),
             'transform': 'translate({x},0)'.format(
                 x=self.day_idx * self.WIDTH
             ),
@@ -327,7 +327,7 @@ class SVGPeriod(object):
         :rtype: xml.etree.ElementTree.Element
         """
         elem = SVGElement('g', {
-            'class': ' '.join(self.classes | {'cell'}),
+            'class': ' '.join(self.classes | {'cell'} | strategy.gen_period_classes(self)),
             'data-day': self.day_idx,
             'data-y': self.start_y,
             'data-height': self.height,
